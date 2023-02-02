@@ -79,6 +79,12 @@ async function uploader() {
       <n-h2>使用说明</n-h2>
       <n-p>待更新……</n-p>
 
+      <template #action>
+        <n-space justify="end">
+          <n-a href="https://github.com/XYY-huiji-wiki/Base64-file-uploader">Github</n-a>
+        </n-space>
+      </template>
+
     </n-card>
   </n-config-provider>
 </template>

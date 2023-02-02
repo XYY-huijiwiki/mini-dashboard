@@ -1,40 +1,37 @@
 <script setup>
-import { ref } from 'vue'
-import { darkTheme } from 'naive-ui'
-import { ArchiveOutline as ArchiveIcon } from '@vicons/ionicons5'
+import { ref } from 'vue';
+import { darkTheme } from 'naive-ui';
+import { ArchiveOutline as ArchiveIcon } from '@vicons/ionicons5';
 // import { encode, decode } from 'js-base64';
 // import sleep from 'await-sleep'
 
-var loading = ref(false)
-let file
+var loading = ref(false);
+let file;
 async function uploader() {
-  loading.value = true
+  loading.value = true;
   console.log(file);
-  let reader = new FileReader()
-  reader.readAsDataURL(file)
+  let reader = new FileReader();
+  reader.readAsDataURL(file);
   reader.onload = async (ev) => {
     console.log(file.name);
-    let res = ev.target?.result
+    let res = ev.target?.result;
     if (res?.length > 1024 * 1024 * 2) {
-      loading.value = false
-      $message.error('文件超过1.5MB')
-      return
+      loading.value = false;
+      $message.error('文件超过1.5MB');
+      return;
     }
     console.log(res);
     await new mw.Api()
-    .create(
+      .create(
         `文件:${file.name}/0`,
         { summary: '以Base64编码上传新文件（1/2）' },
         res,
       )
       .done(function () {
-        $message.info('上传成功');
+        $message.success('上传成功');
       })
       .fail(function () {
         $message.error('上传失败，未知错误');
-      })
-      .then(function () {
-        loading.value = false;
       });
 
     await new mw.Api()
@@ -44,17 +41,14 @@ async function uploader() {
         '{{Base64}}\n{{合理使用}}',
       )
       .done(function () {
-        $message.info('文件页面更新成功');
+        $message.success('文件页面更新成功');
       })
       .fail(function () {
         $message.error('文件页面更新失败，未知错误');
-      })
-      .then(function () {
-        loading.value = false;
       });
 
-    loading.value = false
-  }
+    loading.value = false;
+  };
 }
 </script>
 

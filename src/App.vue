@@ -6,49 +6,57 @@ import { ArchiveOutline as ArchiveIcon } from '@vicons/ionicons5';
 // import sleep from 'await-sleep'
 
 var loading = ref(false);
-let file;
+let fileList;
 async function uploader() {
   loading.value = true;
-  console.log(file);
-  let reader = new FileReader();
-  reader.readAsDataURL(file);
-  reader.onload = async (ev) => {
-    console.log(file.name);
-    let res = ev.target?.result;
-    if (res?.length > 1024 * 1024 * 2) {
-      loading.value = false;
-      $message.error('文件超过1.5MB');
-      return;
-    }
-    console.log(res);
-    await new mw.Api()
-      .create(
-        `文件:${file.name}/0`,
-        { summary: '以Base64编码上传新文件（1/2）' },
-        res,
-      )
-      .done(function () {
-        $message.success('上传成功');
-      })
-      .fail(function () {
-        $message.error('上传失败，未知错误');
-      });
+  for (let file in fileList) {
 
-    await new mw.Api()
-      .create(
-        `文件:${file.name}`,
-        { summary: '以Base64编码上传新文件（2/2）' },
-        '{{Base64}}\n{{合理使用}}',
-      )
-      .done(function () {
-        $message.success('文件页面更新成功');
-      })
-      .fail(function () {
-        $message.error('文件页面更新失败，未知错误');
-      });
+    let reader = new FileReader();
+    reader.readAsDataURL(fileList[file]['file']);
+    reader.onload = async (ev) => {
+      let fileName = fileList[file]['name'];
+      let fileContent = ev.target?.result;
+      if (fileContent?.length > 1024 * 1024 * 2) {
+        loading.value = false;
+        $message.error(`文件 ${fileName} 超过1.5MB`);
+        console.log(`文件 ${fileName} 超过1.5MB`);
+        return;
+      }
+      // console.log(fileName);
+      // console.log(fileContent);
 
-    loading.value = false;
-  };
+      try {
+        await new mw.Api()
+          .create(
+            `文件:${fileName}/0`,
+            { summary: 'Base64编码文件内容' },
+            fileContent,
+          )
+          .done(function () {
+            $message.success(`${fileName} 已上传50%`);
+          });
+
+        await new mw.Api()
+          .create(
+            `文件:${fileName}`,
+            { summary: 'Base64编码文件页面' },
+            '{{Base64}}\n{{合理使用}}',
+          )
+          .done(function () {
+            $message.success(`${fileName} 上传成功`);
+          });
+      } catch (err) {
+        $message.error(`未知错误`);
+        console.log(`未知错误`);
+        console.error(`err`);
+      }
+
+    };
+
+  }
+
+  loading.value = false;
+
 }
 </script>
 
@@ -57,8 +65,7 @@ async function uploader() {
     <n-card title="上传特殊文件">
 
       <!-- 上传区域 -->
-      <n-upload :max="1" accept=".mp3" :default-upload="false"
-        :on-change="(UploadFileInfo) => { file = UploadFileInfo.file.file }">
+      <n-upload accept=".mp3" :default-upload="false" :multiple="true" v-model:file-list="fileList">
         <n-upload-dragger>
           <div style="margin-bottom: 12px">
             <n-icon size="48" :depth="3">

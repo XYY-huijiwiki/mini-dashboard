@@ -1,14 +1,21 @@
-import { fileURLToPath, URL } from 'node:url'
+import { fileURLToPath, URL } from 'node:url';
 
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
 
-// https://vitejs.dev/config/
+import Components from 'unplugin-vue-components/vite';
+import { NaiveUiResolver } from 'unplugin-vue-components/resolvers';
+
+// https://vitejs.dev/config/f
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [vue(), Components({
+    resolvers: [
+      NaiveUiResolver(),
+    ],
+  })],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   }
-})
+});

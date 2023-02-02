@@ -3,14 +3,14 @@ import { ref } from 'vue';
 import { darkTheme } from 'naive-ui';
 import { ArchiveOutline as ArchiveIcon } from '@vicons/ionicons5';
 // import { encode, decode } from 'js-base64';
-// import sleep from 'await-sleep'
+import sleep from 'await-sleep';
 
 var loading = ref(false);
 let fileList;
 async function uploader() {
   loading.value = true;
   for (let file in fileList) {
-
+    await sleep(1000);
     let reader = new FileReader();
     reader.readAsDataURL(fileList[file]['file']);
     reader.onload = async (ev) => {

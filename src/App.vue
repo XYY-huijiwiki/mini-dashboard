@@ -41,7 +41,7 @@ async function uploader() {
       .create(
         `文件:${file.name}`,
         { summary: '以Base64编码上传新文件（2/2）' },
-        '{{Base64}}{{合理使用}}',
+        '{{Base64}}\n{{合理使用}}',
       )
       .done(function () {
         $message.info('文件页面更新成功');

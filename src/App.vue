@@ -26,7 +26,7 @@ async function uploader() {
       }
 
       // 如果是mid文件
-      if (((fileName.split('.')).reverse())[0] === 'mid') {
+      if ((fileName.split('.').reverse())[0] === 'mid') {
         fileContent = fileContent.replace(
           'data:application/octet-stream;base64,',
           'data:audio/midi;base64,'

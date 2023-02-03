@@ -15,7 +15,9 @@
                 </template>
             </n-list-item>
         </n-list>
-        <n-button @click="showAllFile()" :loading="loading">{{ fileList.length ? '加载更多' : '点击查看' }}</n-button>
+        <n-button @click="showAllFile()" :loading="loading" v-if="showBtn">{{
+            fileList.length ? '加载更多' : '点击查看'
+        }}</n-button>
     </n-space>
 </template>
 
@@ -24,6 +26,7 @@ import { ref } from 'vue';
 // import sleep from 'await-sleep';
 import { TrashOutline as deleteIcon } from '@vicons/ionicons5';
 
+var showBtn = ref(true);
 var fileList = ref([]);
 var loading = ref(false);
 var cmcontinue = ref('');
@@ -32,64 +35,14 @@ async function showAllFile() {
 
     loading.value = true;
 
-    //测试
-    // await sleep(1000);
-    // fileList.value = fileList.value.concat([
-    //     {
-    //         "pageid": 47765,
-    //         "ns": 10,
-    //         "title": "模板:Base64"
-    //     },
-    //     {
-    //         "pageid": 47828,
-    //         "ns": 6,
-    //         "title": "文件:01-Level-01.mp3"
-    //     },
-    //     {
-    //         "pageid": 47830,
-    //         "ns": 6,
-    //         "title": "文件:02-Level-02.mp3"
-    //     },
-    //     {
-    //         "pageid": 47832,
-    //         "ns": 6,
-    //         "title": "文件:04-Level-04.mp3"
-    //     },
-    //     {
-    //         "pageid": 47834,
-    //         "ns": 6,
-    //         "title": "文件:Bonus levelsong-01.mp3"
-    //     },
-    //     {
-    //         "pageid": 47805,
-    //         "ns": 6,
-    //         "title": "文件:国潮有喜 button.mp3"
-    //     },
-    //     {
-    //         "pageid": 47811,
-    //         "ns": 6,
-    //         "title": "文件:国潮有喜 foot.mp3"
-    //     },
-    //     {
-    //         "pageid": 47809,
-    //         "ns": 6,
-    //         "title": "文件:国潮有喜 game.mp3"
-    //     },
-    //     {
-    //         "pageid": 47801,
-    //         "ns": 6,
-    //         "title": "文件:国潮有喜 gs.mp3"
-    //     },
-    //     {
-    //         "pageid": 47807,
-    //         "ns": 6,
-    //         "title": "文件:国潮有喜 select.mp3"
-    //     }
-    // ]);
-
     let response = await axios.get(encodeURI(`https://xyy.huijiwiki.com/api.php?action=query&list=categorymembers&cmtitle=分类:Base64编码的文件&format=json&cmcontinue=${cmcontinue.value}`));
     fileList.value = fileList.value.concat(response['data']['query']['categorymembers']);
-    cmcontinue.value = response['data']['continue']['cmcontinue']
+    // 如果没有下一页了就直接结束
+    if (typeof response['data']['continue']['cmcontinue'] === 'undefined') {
+        showBtn.value = false;
+        return;
+    }
+    cmcontinue.value = response['data']['continue']['cmcontinue'];
 
     loading.value = false;
 

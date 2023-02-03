@@ -123,7 +123,7 @@ async function uploader() {
 
       <template #action>
         <n-space justify="end">
-          <n-a href="https://github.com/XYY-huiji-wiki/Base64-file-uploader" target="blank">Github</n-a>
+          <n-a href="https://github.com/XYY-huijiwiki/Base64-file-uploader" target="blank">Github</n-a>
         </n-space>
       </template>
 

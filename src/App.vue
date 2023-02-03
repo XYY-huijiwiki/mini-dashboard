@@ -17,7 +17,7 @@ async function uploader() {
       let fileName = file['name'];
       let fileContent = ev.target?.result;
       if (fileContent?.length > 1024 * 1024 * 2) {
-        // $message.error(`文件 ${fileName} 超过1.5MB`);
+        $message.error(`文件 ${fileName} 超过1.5MB`);
         console.log(`文件 ${fileName} 超过1.5MB`);
         return;
       }
@@ -25,15 +25,15 @@ async function uploader() {
       let fileSourceStr = fileSource.value ? `\n{{文件来源|${fileSource.value}}}` : '';
 
       // 测试用
-      console.log(`file`);
-      console.log(file);
-      console.log(`fileName`);
-      console.log(fileName);
-      console.log(`fileContent`);
-      console.log(fileContent);
-      console.log(`fileSourceStr`);
-      console.log(fileSourceStr);
-      return;
+      // console.log(`file`);
+      // console.log(file);
+      // console.log(`fileName`);
+      // console.log(fileName);
+      // console.log(`fileContent`);
+      // console.log(fileContent);
+      // console.log(`fileSourceStr`);
+      // console.log(fileSourceStr);
+      // return;
 
       try {
         await new mw.Api()

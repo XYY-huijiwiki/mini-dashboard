@@ -87,7 +87,6 @@ async function uploader() {
 <template>
   <n-config-provider :theme="darkTheme">
     <n-card title="上传特殊文件">
-
       <!-- 上传区域 -->
       <n-space vertical>
         <n-upload accept="{{ fileExtList.join(',') }}" :default-upload="false" :multiple="true"
@@ -117,6 +116,7 @@ async function uploader() {
         <n-li>单个文件的大小不能超过1.5MB（实际存在一点误差）。</n-li>
         <n-li>上传完成一次后需要刷新页面才能再次上传。</n-li>
         <n-li>最好填写文件来源。文件来源不尽相同的时候需要一个一个上传、一个一个填写。</n-li>
+        <n-li>如果要上传的文件格式是 png，jpg，jpeg，gif，svg，webm，ogg，ttf 中的一种，请<n-a href="https://xyy.huijiwiki.com/wiki/%E7%89%B9%E6%AE%8A:%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6" target="blank">点击这里</n-a>上传。</n-li>
       </n-ul>
 
       <all-file></all-file>

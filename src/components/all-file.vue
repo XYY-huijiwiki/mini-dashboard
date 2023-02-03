@@ -51,9 +51,9 @@ async function showAllFile() {
 </script>
 
 <style scoped>
-li.n-list-item {
-    margin-top: 0px;
-    margin-bottom: 0px;
+#wiki-body li.n-list-item {
+    margin-top: 0;
+    margin-bottom: 0;
     line-height: inherit;
 }
 </style>

@@ -4,6 +4,7 @@ import { darkTheme } from 'naive-ui';
 import { ArchiveOutline as ArchiveIcon } from '@vicons/ionicons5';
 import sleep from 'await-sleep';
 
+var fileExtList = ref(['.mp3', '.mid']);
 var fileSource = ref('');
 var loading = ref(false);
 let fileList;
@@ -16,10 +17,20 @@ async function uploader() {
     reader.onload = async (ev) => {
       let fileName = file['name'];
       let fileContent = ev.target?.result;
+
+      // 如果编码后超过2MB
       if (fileContent?.length > 1024 * 1024 * 2) {
         $message.error(`文件 ${fileName} 超过1.5MB`);
         console.log(`文件 ${fileName} 超过1.5MB`);
         return;
+      }
+
+      // 如果是mid文件
+      if (((fileName.split('.')).reverse())[0] === 'mid') {
+        fileContent = fileContent.replace(
+          'data:application/octet-stream;base64,',
+          'data:audio/midi;base64,'
+        );
       }
 
       let fileSourceStr = fileSource.value ? `\n{{文件来源|${fileSource.value}}}` : '';
@@ -79,7 +90,8 @@ async function uploader() {
 
       <!-- 上传区域 -->
       <n-space vertical>
-        <n-upload accept=".mp3" :default-upload="false" :multiple="true" v-model:file-list="fileList">
+        <n-upload accept="{{ fileExtList.join(',') }}" :default-upload="false" :multiple="true"
+          v-model:file-list="fileList">
           <n-upload-dragger>
             <div style="margin-bottom: 12px">
               <n-icon size="48" :depth="3">
@@ -89,7 +101,7 @@ async function uploader() {
             <n-text style="font-size: 16px">
               点击或者拖动文件到该区域来上传
             </n-text>
-            <n-p>目前只支持mp3文件</n-p>
+            <n-p>目前支持上传的文件类型有：{{ fileExtList.join(' ') }}</n-p>
           </n-upload-dragger>
         </n-upload>
         <!-- 上传按钮 -->
@@ -101,7 +113,11 @@ async function uploader() {
 
       <!-- 说明区域 -->
       <n-h2>使用说明</n-h2>
-      <n-p>待更新……</n-p>
+      <n-ul>
+        <n-li>单个文件的大小不能超过1.5MB（实际存在一点误差）。</n-li>
+        <n-li>上传完成一次后需要刷新页面才能再次上传。</n-li>
+        <n-li>最好填写文件来源。文件来源不尽相同的时候需要一个一个上传、一个一个填写。</n-li>
+      </n-ul>
 
       <all-file></all-file>
 

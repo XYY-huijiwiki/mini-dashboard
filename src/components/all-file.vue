@@ -38,7 +38,7 @@ async function showAllFile() {
     let response = await axios.get(encodeURI(`https://xyy.huijiwiki.com/api.php?action=query&list=categorymembers&cmtitle=分类:Base64编码的文件&format=json&cmcontinue=${cmcontinue.value}`));
     fileList.value = fileList.value.concat(response['data']['query']['categorymembers']);
     // 如果没有下一页了就直接结束
-    if (typeof response['data']['continue']['cmcontinue'] === undefined) {
+    if (typeof response['data']['continue'] === `undefined`) {
         showBtn.value = false;
         return;
     }
@@ -50,7 +50,7 @@ async function showAllFile() {
 
 </script>
 
-<style scoped>
+<style>
 #wiki-body li.n-list-item {
     margin-top: 0;
     margin-bottom: 0;

@@ -49,3 +49,11 @@ async function showAllFile() {
 }
 
 </script>
+
+<style scoped>
+li.n-list-item {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    line-height: inherit;
+}
+</style>

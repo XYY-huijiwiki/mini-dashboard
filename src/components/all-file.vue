@@ -27,7 +27,7 @@
                             target="blank">文件页面</n-button>
 
                         <!-- 删除按钮及其弹出确认框 -->
-                        <delete-btn :input="item.title"></delete-btn>
+                        <menu-btn :input="item.title"></menu-btn>
 
                     </n-space>
                 </template>
@@ -44,8 +44,8 @@ import { ref } from 'vue';
 import sleep from 'await-sleep';
 
 var showBtn = ref(true);
-var fileList = ref([]);
 var loading = ref(false);
+var fileList = ref([]);
 var cmcontinue = ref('');
 var extList = ref({
     audio: ['mp3', 'mid'],

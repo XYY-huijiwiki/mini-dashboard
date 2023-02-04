@@ -22,14 +22,10 @@
 
                 {{ item.title.replace('文件:', '') }}
                 <template #suffix>
-                    <n-space :wrap="false">
-                        <n-button tertiary tag="a" :href="`https://xyy.huijiwiki.com/p/${item.pageid}`"
-                            target="_blank">文件页面</n-button>
 
-                        <!-- 删除按钮及其弹出确认框 -->
-                        <menu-btn :input="item.title"></menu-btn>
+                    <!-- 删除按钮及其弹出确认框 -->
+                    <menu-btn :input="item.title"></menu-btn>
 
-                    </n-space>
                 </template>
             </n-list-item>
         </n-list>
@@ -59,7 +55,7 @@ async function showAllFile() {
     loading.value = true;
 
     // 测试
-    // await sleep(1000);
+    await sleep(1000);
     // fileList.value = [
     //     {
     //         "pageid": 47828,

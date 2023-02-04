@@ -1,9 +1,12 @@
 <template>
-    <n-dropdown trigger="click" :options="options" @select="handleSelect">
-        <n-button tertiary>
-            <MaterialSymbol>more_vert</MaterialSymbol>
-        </n-button>
-    </n-dropdown>
+    <n-button-group>
+        <n-button tertiary tag="a" :href="`https://xyy.huijiwiki.com/wiki/${input}`" target="_blank">文件页面</n-button>
+        <n-dropdown trigger="click" :options="options" @select="handleSelect">
+            <n-button tertiary>
+                <MaterialSymbol>more_vert</MaterialSymbol>
+            </n-button>
+        </n-dropdown>
+    </n-button-group>
 </template>
 
 <script setup>

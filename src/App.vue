@@ -8,6 +8,8 @@ var fileExtList = ref(['.mp3', '.mid', '.mp4']);
 var fileSource = ref('');
 var loading = ref(false);
 let fileList;
+const pathname = window.pathname;
+
 async function uploader() {
   loading.value = true;
   for (let index in fileList) {
@@ -124,7 +126,10 @@ async function uploader() {
 
       <template #action>
         <n-space justify="end">
-          <n-a href="https://github.com/XYY-huijiwiki/Base64-file-uploader" target="blank">Github</n-a>
+          <n-a v-if="pathname === '/wiki/Project:%E4%B8%8A%E4%BC%A0%E7%89%B9%E6%AE%8A%E6%96%87%E4%BB%B6'"
+            href="//xyy.huijiwiki.com/wiki/Project:上传特殊文件（测试版）">进入测试版</n-a>
+          <n-a v-else href="//xyy.huijiwiki.com/wiki/Project:上传特殊文件">返回稳定版</n-a>
+          <n-a href="//github.com/XYY-huijiwiki/Base64-file-uploader" target="_blank">Github</n-a>
         </n-space>
       </template>
 

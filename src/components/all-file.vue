@@ -24,7 +24,7 @@
                 <template #suffix>
                     <n-space :wrap="false">
                         <n-button tertiary tag="a" :href="`https://xyy.huijiwiki.com/p/${item.pageid}`"
-                            target="blank">文件页面</n-button>
+                            target="_blank">文件页面</n-button>
 
                         <!-- 删除按钮及其弹出确认框 -->
                         <menu-btn :input="item.title"></menu-btn>

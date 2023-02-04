@@ -4,6 +4,9 @@
         <n-list hoverable>
             <n-list-item v-for="item in fileList">
 
+                <!-- 列表的主体内容 -->
+                {{ item.title.replace('文件:', '') }}
+
                 <!-- 列表的前置图标 -->
                 <template #prefix>
                     <n-icon color="#70c0e8" v-if="extList['video'].includes((item.title.split('.').reverse())[0])">
@@ -20,13 +23,11 @@
                     </n-icon>
                 </template>
 
-                {{ item.title.replace('文件:', '') }}
-                <template #suffix>
-
-                    <!-- 删除按钮及其弹出确认框 -->
+                <!-- 列表的右侧按钮 -->
+                <template #suffix>                    
                     <menu-btn :input="item.title"></menu-btn>
-
                 </template>
+
             </n-list-item>
         </n-list>
         <n-button @click="showAllFile()" :loading="loading" v-if="showBtn">{{

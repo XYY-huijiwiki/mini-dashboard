@@ -35,7 +35,7 @@ async function uploader() {
         );
       }
 
-      let fileSourceStr = fileSource.value ? `\n{{文件来源|${fileSource.value}}}` : '';
+      let fileSourceStr = fileSource.value ? `\n{{文件来源|内容=${fileSource.value}}}` : '';
 
       // 测试用
       // console.log(`file`);

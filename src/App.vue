@@ -46,11 +46,11 @@
 
       <template #action>
         <n-space justify="end">
-          <n-a v-if="location.pathname === encodeURI('/wiki/Project:上传特殊文件')"
-            href="//xyy.huijiwiki.com/wiki/Project:上传特殊文件（测试版）">进入测试版</n-a>
-          <n-a v-if="location.pathname === encodeURI('/wiki/Project:上传特殊文件（测试版）')"
+          <n-a v-if="pathname === encodeURI('/wiki/Project:上传特殊文件（测试版）')"
+            href="//xyy.huijiwiki.com/wiki/Project:上传特殊文件">进入测试版</n-a>
+          <n-a v-if="pathname === encodeURI('/wiki/Project:上传特殊文件')"
             href="//xyy.huijiwiki.com/wiki/Project:上传特殊文件">返回稳定版</n-a>
-          <n-a v-if="location.pathname === encodeURI('/wiki/Project:上传特殊文件（测试版）')"
+          <n-a v-if="pathname === encodeURI('/wiki/Project:上传特殊文件')"
             href="//purge.jsdelivr.net/gh/XYY-huijiwiki/Base64-file-uploader@文件管理部分更新/xyy/index.js"
             target="_blank">刷新CDN缓存</n-a>
           <n-a href="//github.com/XYY-huijiwiki/Base64-file-uploader" target="_blank">Github</n-a>
@@ -78,6 +78,7 @@ let fileList;
 let fileLicense = ref(null);
 let fileLicenseLaoding = ref(true);
 let fileLicenseOptions = ref([]);
+let pathname = ref(location.pathname);
 
 // 获取羊羊百科授权协议列表
 onMounted(async () => {

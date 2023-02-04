@@ -24,15 +24,21 @@
                 </template>
 
                 <!-- 列表的右侧按钮 -->
-                <template #suffix>                    
+                <template #suffix>
                     <menu-btn :input="item.title"></menu-btn>
                 </template>
 
             </n-list-item>
         </n-list>
-        <n-button @click="showAllFile()" :loading="loading" v-if="showBtn">{{
-            fileList.length ? '加载更多' : '点击查看'
-        }}</n-button>
+
+        <n-input-group>
+            <n-button @click="showAllFile()" :loading="loading" v-if="showBtn">{{
+                fileList.length ? '加载更多' : '点击查看'
+            }}</n-button>
+            <n-slider v-model:value="sliderValue" :format-tooltip="sliderFormatTooltip" :min="10"
+                :disabled="sliderDisabled" :style="{ 'padding-left': '15px', 'padding-top': '15px' }" v-if="showBtn"></n-slider>
+        </n-input-group>
+
     </n-space>
 </template>
 
@@ -47,6 +53,9 @@ var showBtn = ref(true);
 var loading = ref(false);
 var fileList = ref([]);
 var cmcontinue = ref('');
+var sliderDisabled = ref(false);
+var sliderValue = ref('10');
+var sliderFormatTooltip = (num) => { return `每次加载 ${num} 个文件。`; };
 var extList = ref({
     audio: ['mp3', 'mid'],
     video: ['mp4'],
@@ -57,6 +66,7 @@ var extList = ref({
 async function showAllFile() {
 
     loading.value = true;
+    sliderDisabled = true;
 
     // 测试
     if (isTesting) {
@@ -116,7 +126,7 @@ async function showAllFile() {
         return;
     }
 
-    let response = await axios.get(encodeURI(`https://xyy.huijiwiki.com/api.php?action=query&list=categorymembers&cmtitle=分类:Base64编码的文件&format=json&cmlimit=20&cmcontinue=${cmcontinue.value}`));
+    let response = await axios.get(encodeURI(`https://xyy.huijiwiki.com/api.php?action=query&list=categorymembers&cmtitle=分类:Base64编码的文件&format=json&cmlimit=${sliderValue.value}&cmcontinue=${cmcontinue.value}`));
     fileList.value = fileList.value.concat(response['data']['query']['categorymembers']);
     // 如果没有下一页了就直接结束
     if (typeof response['data']['continue'] === `undefined`) {

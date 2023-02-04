@@ -51,7 +51,8 @@
           <n-a v-if="location.pathname === encodeURI('/wiki/Project:上传特殊文件（测试版）')"
             href="//xyy.huijiwiki.com/wiki/Project:上传特殊文件">返回稳定版</n-a>
           <n-a v-if="location.pathname === encodeURI('/wiki/Project:上传特殊文件（测试版）')"
-            href="//purge.jsdelivr.net/gh/XYY-huijiwiki/Base64-file-uploader@文件管理部分更新/xyy/index.js">刷新CDN缓存</n-a>
+            href="//purge.jsdelivr.net/gh/XYY-huijiwiki/Base64-file-uploader@文件管理部分更新/xyy/index.js"
+            target="_blank">刷新CDN缓存</n-a>
           <n-a href="//github.com/XYY-huijiwiki/Base64-file-uploader" target="_blank">Github</n-a>
         </n-space>
       </template>

@@ -11,7 +11,9 @@
                         <material-symbol v-else-if="audioExtList.includes((item.title.split('.').reverse())[0])">
                             audio_file
                         </material-symbol>
-                        <material-symbol v-else>draft</material-symbol>
+                        <material-symbol v-else>
+                            draft
+                        </material-symbol>
                     </n-icon>
                 </template>
                 {{ item.title.replace('文件:', '') }}
@@ -19,9 +21,18 @@
                     <n-space :wrap="false">
                         <n-button tertiary tag="a" :href="`https://xyy.huijiwiki.com/p/${item.pageid}`"
                             target="blank">文件页面</n-button>
-                        <n-button tertiary type="error" disabled>
-                            <template #icon><material-symbol>delete_forever</material-symbol></template>
-                        </n-button>
+
+                        <!-- 删除按钮及其弹出确认框 -->
+                        <n-popconfirm @positive-click="deleteFile(item.title)"
+                            :positive-button-props="{ type: 'error', loading: deleteLoading }">
+                            <template #trigger>
+                                <n-button tertiary type="error">
+                                    <template #icon><material-symbol>delete_forever</material-symbol></template>
+                                </n-button>
+                            </template>
+                            确认要删除吗？
+                        </n-popconfirm>
+
                     </n-space>
                 </template>
             </n-list-item>
@@ -39,10 +50,12 @@ import sleep from 'await-sleep';
 var showBtn = ref(true);
 var fileList = ref([]);
 var loading = ref(false);
+var deleteLoading = ref(false);
 var cmcontinue = ref('');
 var audioExtList = ['mp3', 'mid'];
 var videoExtList = ['mp4'];
 
+// 获取文件列表，展示文件
 async function showAllFile() {
 
     loading.value = true;
@@ -114,6 +127,41 @@ async function showAllFile() {
 
     loading.value = false;
 
+}
+
+// 删除功能
+async function deleteFile(title) {
+
+    $message.loading('正在删除……');
+    console.log('正在删除……');
+
+    await new mw.Api().postWithToken('csrf', {
+        action: 'delete',
+        title: title + '/0',
+        tags: 'Base64文件变更',
+        deletetalk: true,
+    }).fail((err) => {
+        $message.error('文件内容删除失败，未知错误');
+        console.log(err);
+    }).done((msg) => {
+        $message.success('文件内容删除成功');
+        console.log(msg);
+    });
+
+    await new mw.Api().postWithToken('csrf', {
+        action: 'delete',
+        title: title,
+        tags: 'Base64文件变更',
+        deletetalk: true,
+    }).fail((err) => {
+        $message.error('文件页面删除失败，未知错误');
+        console.log(err);
+    }).done((msg) => {
+        $message.success('文件页面删除成功');
+        console.log(msg);
+    });
+
+    $message.info('刷新页面后文件列表才会更新');
 }
 
 </script>

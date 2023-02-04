@@ -13,6 +13,9 @@
 import sleep from 'await-sleep';
 import { ref } from 'vue';
 
+// 如果网页链接不是羊羊百科，自动进入测试模式
+let isTesting = location.host === 'xyy.huijiwiki.com' ? false : true;
+
 const options = ref([
     {
         label: '移动（重命名）',
@@ -39,10 +42,12 @@ function handleSelect(key) {
 async function deleteFile(title) {
 
     // 测试
-    // console.log('正在删除……');
-    // await sleep(1000);
-    // console.log('已删除' + title);
-    // return;
+    if (isTesting) {
+        console.log('正在删除……');
+        await sleep(1000);
+        console.log('已删除' + title);
+        return;
+    }
 
     $message.loading('正在删除……');
     console.log('正在删除……');

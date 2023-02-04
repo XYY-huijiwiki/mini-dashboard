@@ -1,7 +1,8 @@
 <template>
 
-<!-- 添加 Material Symbol 系列图标，仅在本地测试时需要 -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0" />
+  <!-- 添加 Material Symbol 系列图标，仅在本地测试时需要 -->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0" />
 
   <n-config-provider :theme="darkTheme">
     <n-card title="上传特殊文件">
@@ -45,9 +46,12 @@
 
       <template #action>
         <n-space justify="end">
-          <n-a v-if="pathname === '/wiki/Project:%E4%B8%8A%E4%BC%A0%E7%89%B9%E6%AE%8A%E6%96%87%E4%BB%B6'"
+          <n-a v-if="location.pathname === encodeURI('/wiki/Project:上传特殊文件')"
             href="//xyy.huijiwiki.com/wiki/Project:上传特殊文件（测试版）">进入测试版</n-a>
-          <n-a v-else href="//xyy.huijiwiki.com/wiki/Project:上传特殊文件">返回稳定版</n-a>
+          <n-a v-if="location.pathname === encodeURI('/wiki/Project:上传特殊文件（测试版）')"
+            href="//xyy.huijiwiki.com/wiki/Project:上传特殊文件">返回稳定版</n-a>
+          <n-a v-if="location.pathname === encodeURI('/wiki/Project:上传特殊文件（测试版）')"
+            href="//purge.jsdelivr.net/gh/XYY-huijiwiki/Base64-file-uploader@文件管理部分更新/xyy/index.js">刷新CDN缓存</n-a>
           <n-a href="//github.com/XYY-huijiwiki/Base64-file-uploader" target="_blank">Github</n-a>
         </n-space>
       </template>
@@ -70,7 +74,6 @@ let fileExtList = ref(['.mp3', '.mid', '.mp4']);
 let fileSource = ref('');
 let loading = ref(false);
 let fileList;
-let pathname = window.pathname;
 let fileLicense = ref(null);
 let fileLicenseLaoding = ref(true);
 let fileLicenseOptions = ref([]);
@@ -106,29 +109,35 @@ onMounted(async () => {
     return;
   }
 
-  new mw.Api().postWithToken('csrf', {
-    action: 'query',
-    prop: 'revisions',
-    titles: 'MediaWiki:Licenses',
-    rvprop: 'content'
-  }).fail((err) => {
-    $message.error('文件移动失败，未知错误');
-    console.log(err);
-  }).done((msg) => {
-    $message.success('文件移动成功');
-    $message.info('刷新页面后文件列表才会更新');
-    let text = msg.query.pages[188].revisions[0]['*'];
-    text = text + '\n';
-    text = text.replace(/\*\*(.*)\|(.*)\n/g, `{"label":"$2","value":"$1"},`);
-    text = text.replace(/\*(.*)（(.*)\n/g, `]}{"label":"$1","key":"$1","type":"group","children":[`);
-    text = text.slice(2, -1).concat(']}').replace(/},]}{/g, '}]},{');
-    text = '[' + text + ']';
-    text = text.replace(/ /g, '');
-    text = text.replace(`","value":"合理使用"`, `（默认）","value":"合理使用"`);
-    fileLicenseOptions.value = JSON.parse(text);
-    fileLicenseLaoding.value = false;
-  });
-
+  // 设置一个小循环,防止运行这些代码时mw还没准备好
+  (function () {
+    if (typeof mw === 'undefined') {
+      setTimeout(arguments.callee, 3000);
+    } else {
+      new mw.Api().postWithToken('csrf', {
+        action: 'query',
+        prop: 'revisions',
+        titles: 'MediaWiki:Licenses',
+        rvprop: 'content'
+      }).fail((err) => {
+        $message.error('文件移动失败，未知错误');
+        console.log(err);
+      }).done((msg) => {
+        $message.success('文件移动成功');
+        $message.info('刷新页面后文件列表才会更新');
+        let text = msg.query.pages[188].revisions[0]['*'];
+        text = text + '\n';
+        text = text.replace(/\*\*(.*)\|(.*)\n/g, `{"label":"$2","value":"$1"},`);
+        text = text.replace(/\*(.*)（(.*)\n/g, `]}{"label":"$1","key":"$1","type":"group","children":[`);
+        text = text.slice(2, -1).concat(']}').replace(/},]}{/g, '}]},{');
+        text = '[' + text + ']';
+        text = text.replace(/ /g, '');
+        text = text.replace(`","value":"合理使用"`, `（默认）","value":"合理使用"`);
+        fileLicenseOptions.value = JSON.parse(text);
+        fileLicenseLaoding.value = false;
+      });
+    }
+  })();
 });
 
 // 上传按钮的功能

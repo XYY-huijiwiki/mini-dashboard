@@ -59,60 +59,60 @@ async function showAllFile() {
     loading.value = true;
 
     // 测试
-    await sleep(1000);
-    fileList.value = [
-        {
-            "pageid": 47828,
-            "ns": 6,
-            "title": "文件:01-Level-01.mp3"
-        },
-        {
-            "pageid": 47830,
-            "ns": 6,
-            "title": "文件:02-Level-02.mid"
-        },
-        {
-            "pageid": 47832,
-            "ns": 6,
-            "title": "文件:04-Level-04"
-        },
-        {
-            "pageid": 47834,
-            "ns": 6,
-            "title": "文件:Bonus levelsong-01.mp4"
-        },
-        {
-            "pageid": 47805,
-            "ns": 6,
-            "title": "文件:国潮有喜 button.webp"
-        },
-        {
-            "pageid": 47811,
-            "ns": 6,
-            "title": "文件:国潮有喜 foot.mp3"
-        },
-        {
-            "pageid": 47809,
-            "ns": 6,
-            "title": "文件:国潮有喜 game.mp3"
-        },
-        {
-            "pageid": 47801,
-            "ns": 6,
-            "title": "文件:国潮有喜 gs.mp3"
-        },
-        {
-            "pageid": 47807,
-            "ns": 6,
-            "title": "文件:国潮有喜 select.mp3"
-        },
-        {
-            "pageid": 47803,
-            "ns": 6,
-            "title": "文件:国潮有喜 success.mp3"
-        }
-    ];
-    return;
+    // await sleep(1000);
+    // fileList.value = [
+    //     {
+    //         "pageid": 47828,
+    //         "ns": 6,
+    //         "title": "文件:01-Level-01.mp3"
+    //     },
+    //     {
+    //         "pageid": 47830,
+    //         "ns": 6,
+    //         "title": "文件:02-Level-02.mid"
+    //     },
+    //     {
+    //         "pageid": 47832,
+    //         "ns": 6,
+    //         "title": "文件:04-Level-04"
+    //     },
+    //     {
+    //         "pageid": 47834,
+    //         "ns": 6,
+    //         "title": "文件:Bonus levelsong-01.mp4"
+    //     },
+    //     {
+    //         "pageid": 47805,
+    //         "ns": 6,
+    //         "title": "文件:国潮有喜 button.webp"
+    //     },
+    //     {
+    //         "pageid": 47811,
+    //         "ns": 6,
+    //         "title": "文件:国潮有喜 foot.mp3"
+    //     },
+    //     {
+    //         "pageid": 47809,
+    //         "ns": 6,
+    //         "title": "文件:国潮有喜 game.mp3"
+    //     },
+    //     {
+    //         "pageid": 47801,
+    //         "ns": 6,
+    //         "title": "文件:国潮有喜 gs.mp3"
+    //     },
+    //     {
+    //         "pageid": 47807,
+    //         "ns": 6,
+    //         "title": "文件:国潮有喜 select.mp3"
+    //     },
+    //     {
+    //         "pageid": 47803,
+    //         "ns": 6,
+    //         "title": "文件:国潮有喜 success.mp3"
+    //     }
+    // ];
+    // return;
 
     let response = await axios.get(encodeURI(`https://xyy.huijiwiki.com/api.php?action=query&list=categorymembers&cmtitle=分类:Base64编码的文件&format=json&cmlimit=20&cmcontinue=${cmcontinue.value}`));
     fileList.value = fileList.value.concat(response['data']['query']['categorymembers']);

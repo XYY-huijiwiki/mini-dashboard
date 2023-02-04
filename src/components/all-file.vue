@@ -3,25 +3,32 @@
     <n-space vertical>
         <n-list hoverable>
             <n-list-item v-for="item in fileList">
+
+                <!-- 列表的前置图标 -->
                 <template #prefix>
-                    <n-icon>
-                        <material-symbol v-if="videoExtList.includes((item.title.split('.').reverse())[0])">
-                            video_file
-                        </material-symbol>
-                        <material-symbol v-else-if="audioExtList.includes((item.title.split('.').reverse())[0])">
-                            audio_file
-                        </material-symbol>
-                        <material-symbol v-else>draft</material-symbol>
+                    <n-icon color="#70c0e8" v-if="extList['video'].includes((item.title.split('.').reverse())[0])">
+                        <material-symbol> video_file </material-symbol>
+                    </n-icon>
+                    <n-icon color="#63e2b7" v-else-if="extList['audio'].includes((item.title.split('.').reverse())[0])">
+                        <material-symbol> audio_file </material-symbol>
+                    </n-icon>
+                    <n-icon color="#f2c97d" v-else-if="extList['image'].includes((item.title.split('.').reverse())[0])">
+                        <material-symbol> plagiarism </material-symbol>
+                    </n-icon>
+                    <n-icon color="#e88080" v-else>
+                        <material-symbol> draft </material-symbol>
                     </n-icon>
                 </template>
+
                 {{ item.title.replace('文件:', '') }}
                 <template #suffix>
                     <n-space :wrap="false">
                         <n-button tertiary tag="a" :href="`https://xyy.huijiwiki.com/p/${item.pageid}`"
-                            target="blank">文件页面</n-button>
-                        <n-button tertiary type="error" disabled>
-                            <template #icon><material-symbol>delete_forever</material-symbol></template>
-                        </n-button>
+                            target="_blank">文件页面</n-button>
+
+                        <!-- 删除按钮及其弹出确认框 -->
+                        <menu-btn :input="item.title"></menu-btn>
+
                     </n-space>
                 </template>
             </n-list-item>
@@ -37,12 +44,16 @@ import { ref } from 'vue';
 import sleep from 'await-sleep';
 
 var showBtn = ref(true);
-var fileList = ref([]);
 var loading = ref(false);
+var fileList = ref([]);
 var cmcontinue = ref('');
-var audioExtList = ['mp3', 'mid'];
-var videoExtList = ['mp4'];
+var extList = ref({
+    audio: ['mp3', 'mid'],
+    video: ['mp4'],
+    image: ['webp']
+});
 
+// 获取文件列表，展示文件
 async function showAllFile() {
 
     loading.value = true;
@@ -73,7 +84,7 @@ async function showAllFile() {
     //     {
     //         "pageid": 47805,
     //         "ns": 6,
-    //         "title": "文件:国潮有喜 button.mp3"
+    //         "title": "文件:国潮有喜 button.webp"
     //     },
     //     {
     //         "pageid": 47811,

@@ -89,8 +89,7 @@ async function uploader() {
     <n-card title="上传特殊文件">
       <!-- 上传区域 -->
       <n-space vertical>
-        <n-upload accept="{{ fileExtList.join(',') }}" :default-upload="false" :multiple="true"
-          v-model:file-list="fileList">
+        <n-upload :accept="fileExtList.join(',')" :default-upload="false" :multiple="true" v-model:file-list="fileList">
           <n-upload-dragger>
             <div style="margin-bottom: 12px">
               <n-icon size="48" :depth="3">

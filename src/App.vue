@@ -1,8 +1,10 @@
 <template>
 
-  <!-- 添加 Material Symbol 系列图标，仅在本地测试时需要 -->
+  <!-- 添加 Material Symbol 系列图标 -->
+  <!-- 本地测试（开始） -->
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0" />
+  <!-- 本地测试（结束） -->
 
   <n-config-provider :theme="darkTheme">
     <n-card title="上传特殊文件">
@@ -11,9 +13,7 @@
         <n-upload :accept="fileExtList.join(',')" :default-upload="false" :multiple="true" v-model:file-list="fileList">
           <n-upload-dragger>
             <div style="margin-bottom: 12px">
-              <n-icon size="48" :depth="3">
-                <archive-icon />
-              </n-icon>
+              <material-symbol :size="64" style="opacity: 0.52;">cloud_upload</material-symbol>
             </div>
             <n-text style="font-size: 16px">
               点击或者拖动文件到该区域来上传
@@ -25,7 +25,17 @@
         <n-input-group>
           <n-input placeholder="文件来源" v-model:value="fileSource" />
           <n-select :loading="fileLicenseLaoding" placeholder="授权协议" v-model:value="fileLicense"
-            :options="fileLicenseOptions" />
+            :options="fileLicenseOptions" @focus="fileLicenseFocus">
+            <template #empty>
+              <n-empty description="正在加载">
+                <template #icon>
+                  <n-icon>
+                    <material-symbol :size="32">hourglass_empty</material-symbol>
+                  </n-icon>
+                </template>
+              </n-empty>
+            </template>
+          </n-select>
           <n-button @click="uploader()" :loading="loading">上传文件</n-button>
         </n-input-group>
       </n-space>
@@ -44,27 +54,31 @@
       <!-- 展示全部文件 -->
       <all-file></all-file>
 
+      <!-- 底部footer -->
       <template #action>
-        <n-space justify="end">
-          <n-a v-if="pathname === encodeURI('/wiki/Project:上传特殊文件（测试版）')"
-            href="//xyy.huijiwiki.com/wiki/Project:上传特殊文件">进入测试版</n-a>
-          <n-a v-if="pathname === encodeURI('/wiki/Project:上传特殊文件')"
-            href="//xyy.huijiwiki.com/wiki/Project:上传特殊文件">返回稳定版</n-a>
-          <n-a v-if="pathname === encodeURI('/wiki/Project:上传特殊文件')"
-            href="//purge.jsdelivr.net/gh/XYY-huijiwiki/Base64-file-uploader@文件管理部分更新/xyy/index.js"
-            target="_blank">刷新CDN缓存</n-a>
-          <n-a href="//github.com/XYY-huijiwiki/Base64-file-uploader" target="_blank">Github</n-a>
+        <n-space justify="space-between">
+          <!-- 本地测试（开始） -->
+          <n-p>当前为本地测试</n-p>
+          <!-- 本地测试（结束） -->
+          <n-p>最后编译时间：Feb 5, 2023 6:48 PM</n-p>
+          <n-space justify="end">
+            <n-a v-if="pathname === encodeURI('/wiki/Project:上传特殊文件（测试版）')"
+              href="//xyy.huijiwiki.com/wiki/Project:上传特殊文件">返回稳定版</n-a>
+            <n-a v-if="pathname === encodeURI('/wiki/Project:上传特殊文件')"
+              href="//xyy.huijiwiki.com/wiki/Project:上传特殊文件">进入测试版</n-a>
+            <n-a href="//github.com/XYY-huijiwiki/Base64-file-uploader" target="_blank">Github</n-a>
+          </n-space>
         </n-space>
       </template>
 
     </n-card>
   </n-config-provider>
+
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
 import { darkTheme } from 'naive-ui';
-import { ArchiveOutline as ArchiveIcon } from '@vicons/ionicons5';
 import sleep from 'await-sleep';
 
 // 如果网页链接不是羊羊百科，自动进入测试模式
@@ -76,71 +90,67 @@ let fileSource = ref('');
 let loading = ref(false);
 let fileList;
 let fileLicense = ref(null);
-let fileLicenseLaoding = ref(true);
+let fileLicenseLaoding = ref(false);
 let fileLicenseOptions = ref([]);
 let pathname = ref(location.pathname);
 
 // 获取羊羊百科授权协议列表
-onMounted(async () => {
+async function fileLicenseFocus() {
 
-  // 测试
-  if (isTesting) {
-    await sleep(3000);
-    let text = `*合理使用（这个文件受到著作权保护，但在羊羊百科属于合理使用）
+  // 如果已经加载过一次了就不再加载
+  if (fileLicenseOptions.value.length !== 0) { return; }
+
+  // 打开加载动画
+  fileLicenseLaoding.value = true;
+
+  // 本地测试（开始）
+  await sleep(3000);
+  let text = `*合理使用（这个文件受到著作权保护，但在羊羊百科属于合理使用）
 ** 动画截图|《喜羊羊与灰太狼》系列动画的截图
 ** 合理使用|其他合理使用的情况
 *已获授权（这个文件受到著作权保护，著作权方已授权羊羊百科使用）
 ** Permission|著作权方已授权羊羊百科使用
 *公有领域（这个文件属于公有领域）
 ** PD-textlogo|仅包含简单的几何图形与文字`;
+  text = text + '\n';
+  text = text.replace(/\*\*(.*)\|(.*)\n/g, `{"label":"$2","value":"$1"},`);
+  console.log(text);
+  text = text.replace(/\*(.*)（(.*)\n/g, `]}{"label":"$1","key":"$1","type":"group","children":[`);
+  console.log(text);
+  text = text.slice(2, -1).concat(']}').replace(/},]}{/g, '}]},{');
+  console.log(text);
+  text = '[' + text + ']';
+  text = text.replace(/ /g, '');
+  console.log(text);
+  text = text.replace(`","value":"合理使用"`, `（默认）","value":"合理使用"`);
+  console.log(text);
+  fileLicenseOptions.value = JSON.parse(text);
+  console.log(text);
+  fileLicenseLaoding.value = false;
+  return;
+  // 本地测试（结束）
+
+  new mw.Api().postWithToken('csrf', {
+    action: 'query',
+    prop: 'revisions',
+    titles: 'MediaWiki:Licenses',
+    rvprop: 'content'
+  }).fail((err) => {
+    console.log(err);
+  }).done((msg) => {
+    let text = msg.query.pages[188].revisions[0]['*'];
     text = text + '\n';
     text = text.replace(/\*\*(.*)\|(.*)\n/g, `{"label":"$2","value":"$1"},`);
-    console.log(text);
     text = text.replace(/\*(.*)（(.*)\n/g, `]}{"label":"$1","key":"$1","type":"group","children":[`);
-    console.log(text);
     text = text.slice(2, -1).concat(']}').replace(/},]}{/g, '}]},{');
-    console.log(text);
     text = '[' + text + ']';
     text = text.replace(/ /g, '');
-    console.log(text);
     text = text.replace(`","value":"合理使用"`, `（默认）","value":"合理使用"`);
-    console.log(text);
     fileLicenseOptions.value = JSON.parse(text);
-    console.log(text);
     fileLicenseLaoding.value = false;
-    return;
-  }
+  });
 
-  // 设置一个小循环,防止运行这些代码时mw还没准备好
-  (function () {
-    if (typeof mw === 'undefined') {
-      setTimeout(arguments.callee, 3000);
-    } else {
-      new mw.Api().postWithToken('csrf', {
-        action: 'query',
-        prop: 'revisions',
-        titles: 'MediaWiki:Licenses',
-        rvprop: 'content'
-      }).fail((err) => {
-        $message.error('文件移动失败，未知错误');
-        console.log(err);
-      }).done((msg) => {
-        $message.success('文件移动成功');
-        $message.info('刷新页面后文件列表才会更新');
-        let text = msg.query.pages[188].revisions[0]['*'];
-        text = text + '\n';
-        text = text.replace(/\*\*(.*)\|(.*)\n/g, `{"label":"$2","value":"$1"},`);
-        text = text.replace(/\*(.*)（(.*)\n/g, `]}{"label":"$1","key":"$1","type":"group","children":[`);
-        text = text.slice(2, -1).concat(']}').replace(/},]}{/g, '}]},{');
-        text = '[' + text + ']';
-        text = text.replace(/ /g, '');
-        text = text.replace(`","value":"合理使用"`, `（默认）","value":"合理使用"`);
-        fileLicenseOptions.value = JSON.parse(text);
-        fileLicenseLaoding.value = false;
-      });
-    }
-  })();
-});
+}
 
 // 上传按钮的功能
 async function uploader() {
@@ -185,16 +195,15 @@ async function uploader() {
 
       let fileSourceStr = fileSource.value ? `\n{{文件来源|内容=${fileSource.value}}}` : '';
 
-      // 测试
-      if (isTesting) {
-        console.log(`==file==`);
-        console.log(file);
-        console.log(`==文件页面最后内容==`);
-        console.log(`{{Base64}}\n{{${fileLicense.value || '合理使用'}}}` + fileSourceStr);
-        console.log(`==fileContent==`);
-        console.log(fileContent);
-        return;
-      }
+      // 本地测试（开始）
+      console.log(`==file==`);
+      console.log(file);
+      console.log(`==文件页面最后内容==`);
+      console.log(`{{Base64}}\n{{${fileLicense.value || '合理使用'}}}` + fileSourceStr);
+      console.log(`==fileContent==`);
+      console.log(fileContent);
+      return;
+      // 本地测试（结束）
 
       await new mw.Api().postWithToken('csrf', {
         action: 'edit',

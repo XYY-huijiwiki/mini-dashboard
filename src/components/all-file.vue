@@ -32,11 +32,12 @@
         </n-list>
 
         <n-input-group>
-            <n-button @click="showAllFile()" :loading="loading" v-if="showBtn">{{
-                fileList.length ? '加载更多' : '点击查看'
-            }}</n-button>
+            <n-button @click="showAllFile()" :loading="loading" v-if="showBtn">
+                {{ fileList.length ? '加载更多' : '点击查看' }}
+            </n-button>
             <n-slider v-model:value="sliderValue" :format-tooltip="sliderFormatTooltip" :min="10"
-                :disabled="sliderDisabled" :style="{ 'padding-left': '15px', 'padding-top': '15px' }" v-if="showBtn"></n-slider>
+                :disabled="sliderDisabled" :style="{ 'padding-left': '15px', 'padding-top': '15px' }"
+                v-if="showBtn"/>
         </n-input-group>
 
     </n-space>

@@ -60,7 +60,7 @@
           <!-- 本地测试（开始） -->
           <n-p>当前为本地测试</n-p>
           <!-- 本地测试（结束） -->
-          <n-p>最后编译时间：Feb 5, 2023 6:48 PM</n-p>
+          <n-p>最后编译时间：Feb 5, 2023 7:15 PM</n-p>
           <n-space justify="end">
             <n-a v-if="pathname === encodeURI('/wiki/Project:上传特殊文件（测试版）')"
               href="//xyy.huijiwiki.com/wiki/Project:上传特殊文件">返回稳定版</n-a>
@@ -100,8 +100,9 @@ async function fileLicenseFocus() {
   // 如果已经加载过一次了就不再加载
   if (fileLicenseOptions.value.length !== 0) { return; }
 
-  // 打开加载动画
+  // 打开加载动画，强制欣赏加载动画一秒钟，防止加载速度太快出现“闪屏”
   fileLicenseLaoding.value = true;
+  await sleep(1000);
 
   // 本地测试（开始）
   await sleep(3000);

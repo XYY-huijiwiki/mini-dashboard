@@ -83,22 +83,20 @@ async function deleteFile() {
     }).done((msg) => {
         $message.success('文件内容删除成功');
         console.log(msg);
+        new mw.Api().postWithToken('csrf', {
+            action: 'delete',
+            title: props.input,
+            tags: 'Base64文件变更',
+            deletetalk: true,
+        }).fail((err) => {
+            $message.error('文件页面删除失败，未知错误');
+            console.log(err);
+        }).done((msg) => {
+            $message.success('文件页面删除成功');
+            console.log(msg);
+            $message.info('刷新页面后文件列表才会更新');
+        });
     });
-
-    await new mw.Api().postWithToken('csrf', {
-        action: 'delete',
-        title: title,
-        tags: 'Base64文件变更',
-        deletetalk: true,
-    }).fail((err) => {
-        $message.error('文件页面删除失败，未知错误');
-        console.log(err);
-    }).done((msg) => {
-        $message.success('文件页面删除成功');
-        console.log(msg);
-    });
-
-    $message.info('刷新页面后文件列表才会更新');
 
 }
 

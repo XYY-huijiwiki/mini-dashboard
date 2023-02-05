@@ -60,7 +60,7 @@
           <!-- 本地测试（开始） -->
           <n-p>当前为本地测试</n-p>
           <!-- 本地测试（结束） -->
-          <n-p>最后编译时间：Feb 5, 2023 7:45 PM</n-p>
+          <n-p>最后编译时间：Feb 5, 2023 8:07 PM</n-p>
           <n-space justify="end">
             <n-a v-if="pathname === encodeURI('/wiki/Project:上传特殊文件（测试版）')"
               href="//xyy.huijiwiki.com/wiki/Project:上传特殊文件">返回稳定版</n-a>

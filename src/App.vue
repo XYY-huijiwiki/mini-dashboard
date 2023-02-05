@@ -60,7 +60,7 @@
           <!-- 本地测试（开始） -->
           <n-p>当前为本地测试</n-p>
           <!-- 本地测试（结束） -->
-          <n-p>最后编译时间：Feb 5, 2023 7:15 PM</n-p>
+          <n-p>最后编译时间：Feb 5, 2023 7:45 PM</n-p>
           <n-space justify="end">
             <n-a v-if="pathname === encodeURI('/wiki/Project:上传特殊文件（测试版）')"
               href="//xyy.huijiwiki.com/wiki/Project:上传特殊文件">返回稳定版</n-a>
@@ -85,7 +85,7 @@ import sleep from 'await-sleep';
 let isTesting = location.host === 'xyy.huijiwiki.com' ? false : true;
 
 // 定义一些变量
-let fileExtList = ref(['.mp3', '.mid', '.mp4']);
+let fileExtList = ref(['.mp3', '.mid', '.mp4', '.webp']);
 let fileSource = ref('');
 let loading = ref(false);
 let fileList;

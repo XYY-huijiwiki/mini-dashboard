@@ -56,19 +56,7 @@
 
       <!-- 底部footer -->
       <template #action>
-        <n-space justify="space-between">
-          <!-- 本地测试（开始） -->
-          <n-p>当前为本地测试</n-p>
-          <!-- 本地测试（结束） -->
-          <n-p>最后编译时间：Feb 5, 2023 8:10 PM</n-p>
-          <n-space justify="end">
-            <n-a v-if="pathname === encodeURI('/wiki/Project:上传特殊文件（测试版）')"
-              href="//xyy.huijiwiki.com/wiki/Project:上传特殊文件">返回稳定版</n-a>
-            <n-a v-if="pathname === encodeURI('/wiki/Project:上传特殊文件')"
-              href="//xyy.huijiwiki.com/wiki/Project:上传特殊文件">进入测试版</n-a>
-            <n-a href="//github.com/XYY-huijiwiki/Base64-file-uploader" target="_blank">Github</n-a>
-          </n-space>
-        </n-space>
+        <uni-footer></uni-footer>
       </template>
 
     </n-card>

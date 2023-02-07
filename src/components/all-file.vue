@@ -140,14 +140,15 @@ async function showAllFile() {
 
 </script>
 
-<style scoped>
+<style>
 #wiki-body li.n-list-item {
     margin-top: 0;
     margin-bottom: 0;
     line-height: inherit;
 }
 
-.n-list-item {
-    padding: 12px;
+.mw-content-ltr ul,
+.mw-content-rtl .mw-content-ltr ul {
+    margin: 0;
 }
 </style>

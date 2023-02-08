@@ -205,7 +205,6 @@ async function uploader() {
         console.log(err);
       }).done((msg) => {
         $message.success(`${fileName} 上传成功`);
-        $message.loading('正在更新文件页面……');
         console.log(msg);
 
         new mw.Api().postWithToken('csrf', {
@@ -220,7 +219,6 @@ async function uploader() {
           console.log(err);
         }).done((msg) => {
           $message.success(`${fileName} 页面更新成功`);
-          $message.info('刷新页面后文件列表才会更新');
           console.log(msg);
         });
 
@@ -233,6 +231,7 @@ async function uploader() {
 
   }
 
+  isTesting ? console.log('刷新页面后文件列表才会更新') : $message.info('刷新页面后文件列表才会更新');
   loading.value = false;
 
 }

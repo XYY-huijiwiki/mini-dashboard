@@ -57,7 +57,7 @@ var sliderDisabled = ref(false);
 var sliderValue = ref('10');
 var sliderFormatTooltip = (num) => { return `每次加载 ${num} 个文件。`; };
 var extList = ref({
-    audio: ['mp3', 'mid'],
+    audio: ['mp3', 'mid', 'wav'],
     video: ['mp4'],
     image: ['webp']
 });

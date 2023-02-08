@@ -73,14 +73,13 @@ import sleep from 'await-sleep';
 let isTesting = location.host === 'xyy.huijiwiki.com' ? false : true;
 
 // 定义一些变量
-let fileExtList = ref(['.mp3', '.mid', '.mp4', '.webp']);
+let fileExtList = ref(['.mp3', '.mid', 'wav', '.mp4', '.webp']);
 let fileSource = ref('');
 let loading = ref(false);
 let fileList;
 let fileLicense = ref(null);
 let fileLicenseLaoding = ref(false);
 let fileLicenseOptions = ref([]);
-let pathname = ref(location.pathname);
 
 // 获取羊羊百科授权协议列表
 async function fileLicenseFocus() {

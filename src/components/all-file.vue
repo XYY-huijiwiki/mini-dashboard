@@ -149,6 +149,7 @@ async function showAllFile() {
 
 .mw-content-ltr ul,
 .mw-content-rtl .mw-content-ltr ul {
-    margin: 0;
+    margin: inherit;
+    padding: inherit;
 }
 </style>

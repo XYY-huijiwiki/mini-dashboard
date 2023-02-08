@@ -2,7 +2,7 @@
 
     <!-- 按钮组 -->
     <n-button-group>
-        <n-button tertiary tag="a" :href="`https://xyy.huijiwiki.com/wiki/${input}`" target="_blank">文件页面</n-button>
+        <n-button tertiary tag="a" :href="`https://xyy.huijiwiki.com/wiki/${input}`" target="_blank">查看</n-button>
         <n-dropdown trigger="click" :options="options" @select="handleSelect">
             <n-button tertiary>
                 <MaterialSymbol>more_vert</MaterialSymbol>
@@ -61,13 +61,12 @@ function handleSelect(key) {
 // 删除功能
 async function deleteFile() {
 
-    // 测试
-    if (isTesting) {
-        console.log('正在删除……');
-        await sleep(1000);
-        console.log('已删除' + props.input);
-        return;
-    }
+    // 本地测试（开始）
+    console.log('正在删除……');
+    await sleep(1000);
+    console.log('已删除' + props.input);
+    return;
+    // 本地测试（结束）
 
     $message.loading('正在删除……');
     console.log('正在删除……');
@@ -117,14 +116,13 @@ async function moveFile() {
         return;
     }
 
-    // 测试
-    if (isTesting) {
-        console.log('正在移动……');
-        await sleep(1000);
-        console.log('移动成功\nvon ' + props.input + '\nnach ' + moveTo.value);
-        showModal.value = false;
-        return;
-    }
+    // 本地测试（开始）
+    console.log('正在移动……');
+    await sleep(1000);
+    console.log('移动成功\nvon ' + props.input + '\nnach ' + moveTo.value);
+    showModal.value = false;
+    return;
+    // 本地测试（结束）
 
     $message.loading('正在移动……');
 

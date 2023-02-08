@@ -36,8 +36,7 @@
                 {{ fileList.length ? '加载更多' : '点击查看' }}
             </n-button>
             <n-slider v-model:value="sliderValue" :format-tooltip="sliderFormatTooltip" :min="10"
-                :disabled="sliderDisabled" :style="{ 'padding-left': '15px', 'padding-top': '15px' }"
-                v-if="showBtn"/>
+                :disabled="sliderDisabled" :style="{ 'padding-left': '15px', 'padding-top': '15px' }" v-if="showBtn" />
         </n-input-group>
 
     </n-space>
@@ -58,7 +57,7 @@ var sliderDisabled = ref(false);
 var sliderValue = ref('10');
 var sliderFormatTooltip = (num) => { return `每次加载 ${num} 个文件。`; };
 var extList = ref({
-    audio: ['mp3', 'mid'],
+    audio: ['mp3', 'mid', 'wav'],
     video: ['mp4'],
     image: ['webp']
 });
@@ -69,63 +68,62 @@ async function showAllFile() {
     loading.value = true;
     sliderDisabled = true;
 
-    // 测试
-    if (isTesting) {
-        await sleep(1000);
-        fileList.value = [
-            {
-                "pageid": 47828,
-                "ns": 6,
-                "title": "文件:01-Level-01.mp3"
-            },
-            {
-                "pageid": 47830,
-                "ns": 6,
-                "title": "文件:02-Level-02.mid"
-            },
-            {
-                "pageid": 47832,
-                "ns": 6,
-                "title": "文件:04-Level-04"
-            },
-            {
-                "pageid": 47834,
-                "ns": 6,
-                "title": "文件:Bonus levelsong-01.mp4"
-            },
-            {
-                "pageid": 47805,
-                "ns": 6,
-                "title": "文件:国潮有喜 button.webp"
-            },
-            {
-                "pageid": 47811,
-                "ns": 6,
-                "title": "文件:国潮有喜 foot.mp3"
-            },
-            {
-                "pageid": 47809,
-                "ns": 6,
-                "title": "文件:国潮有喜 game.mp3"
-            },
-            {
-                "pageid": 47801,
-                "ns": 6,
-                "title": "文件:国潮有喜 gs.mp3"
-            },
-            {
-                "pageid": 47807,
-                "ns": 6,
-                "title": "文件:国潮有喜 select.mp3"
-            },
-            {
-                "pageid": 47803,
-                "ns": 6,
-                "title": "文件:国潮有喜 success.mp3"
-            }
-        ];
-        return;
-    }
+    // 本地测试（开始）
+    await sleep(1000);
+    fileList.value = [
+        {
+            "pageid": 47828,
+            "ns": 6,
+            "title": "文件:01-Level-01.mp3"
+        },
+        {
+            "pageid": 47830,
+            "ns": 6,
+            "title": "文件:02-Level-02.mid"
+        },
+        {
+            "pageid": 47832,
+            "ns": 6,
+            "title": "文件:04-Level-04"
+        },
+        {
+            "pageid": 47834,
+            "ns": 6,
+            "title": "文件:Bonus levelsong-01.mp4"
+        },
+        {
+            "pageid": 47805,
+            "ns": 6,
+            "title": "文件:国潮有喜 button.webp"
+        },
+        {
+            "pageid": 47811,
+            "ns": 6,
+            "title": "文件:国潮有喜 foot.mp3"
+        },
+        {
+            "pageid": 47809,
+            "ns": 6,
+            "title": "文件:国潮有喜 game.mp3"
+        },
+        {
+            "pageid": 47801,
+            "ns": 6,
+            "title": "文件:国潮有喜 gs.mp3"
+        },
+        {
+            "pageid": 47807,
+            "ns": 6,
+            "title": "文件:国潮有喜 select.mp3"
+        },
+        {
+            "pageid": 47803,
+            "ns": 6,
+            "title": "文件:国潮有喜 success.mp3"
+        }
+    ];
+    return;
+    // 本地测试（结束）
 
     let response = await axios.get(encodeURI(`https://xyy.huijiwiki.com/api.php?action=query&list=categorymembers&cmtitle=分类:Base64编码的文件&format=json&cmlimit=${sliderValue.value}&cmcontinue=${cmcontinue.value}`));
     fileList.value = fileList.value.concat(response['data']['query']['categorymembers']);
@@ -147,5 +145,10 @@ async function showAllFile() {
     margin-top: 0;
     margin-bottom: 0;
     line-height: inherit;
+}
+
+.mw-content-ltr ul,
+.mw-content-rtl .mw-content-ltr ul {
+    margin: 0;
 }
 </style>

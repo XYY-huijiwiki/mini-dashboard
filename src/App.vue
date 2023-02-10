@@ -43,7 +43,7 @@
       <!-- 说明区域 -->
       <n-h2>使用说明</n-h2>
       <n-ul>
-        <n-li>单个文件的大小不能超过1.5MB（实际存在一点误差）。</n-li>
+        <n-li>单个文件的大小不能超过10MB。</n-li>
         <n-li>上传完成一次后需要刷新页面才能再次上传。</n-li>
         <n-li>最好填写文件来源。文件来源不尽相同的时候需要一个一个上传、一个一个填写。</n-li>
         <n-li>如果要上传的文件格式是 png，jpg，jpeg，gif，svg，webm，ogg，ttf 中的一种，请<n-a
@@ -200,7 +200,7 @@ async function uploader() {
             text: element,
             summary: 'Base64编码文件内容',
           });
-          $message.success(`${fileName} 上传成功`);
+          $message.success(`${fileName} 上传中（${index}/${fileContentList.length}）`);
           console.log(res);
         } catch (error) {
           $message.error(`${fileName} 上传失败（${error}）`);
@@ -220,7 +220,7 @@ async function uploader() {
         $message.error(`${fileName} 页面更新失败（${error}）`);
         console.log(error);
       }).done((msg) => {
-        $message.success(`${fileName} 页面更新成功`);
+        $message.success(`${fileName} 上传成功`);
         console.log(msg);
       });
 

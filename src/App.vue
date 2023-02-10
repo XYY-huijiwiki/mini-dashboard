@@ -73,7 +73,7 @@ import sleep from 'await-sleep';
 let isTesting = location.host === 'xyy.huijiwiki.com' ? false : true;
 
 // 定义一些变量
-let fileExtList = ref(['.mp3', '.mid', 'wav', '.mp4', '.webp']);
+let fileExtList = ref(['.mp3', '.mid', '.wav', '.mp4', '.webp']);
 let fileSource = ref('');
 let loading = ref(false);
 let fileList;
@@ -147,13 +147,9 @@ async function uploader() {
 
     let file = fileList[index];
 
-    // 如果编码前超过10MB
+    // 如果文件大小超过10MB
     if (file.file.size > 1024 * 1024 * 10) {
-      if (isTesting) {
-        console.log(`文件 ${fileName} 超过10MB`);
-      } else {
-        $message.error(`文件 ${fileName} 超过10MB`);
-      }
+      isTesting ? console.log(`文件 ${file.file.name} 超过10MB`) : $message.error(`文件 ${fileName} 超过10MB`);
       return;
     }
 

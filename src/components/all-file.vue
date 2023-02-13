@@ -115,6 +115,7 @@ async function loadFileList() {
 watch(page, async (page) => {
     fileListLoading.value = true;
     let offset = (page - 1) * 20;
+    console.log(offset);
     if (isTesting) {
         // 本地测试（开始）
         await sleep(1000);
@@ -353,7 +354,7 @@ watch(page, async (page) => {
         fileListLoading.value = false;
         // 本地测试（结束）
     } else {
-        let response = await fetch(`https://xyy.huijiwiki.com/api.php?action=ask&format=json&query=[[分类:Base64编码的文件]]|limit=20|offset=${offset}}&api_version=3`);
+        let response = await fetch(`https://xyy.huijiwiki.com/api.php?action=ask&format=json&query=[[分类:Base64编码的文件]]|limit=20|offset=${offset}&api_version=3`);
         response = await response.json();
 
         let a = response['query']['results'];

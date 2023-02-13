@@ -196,7 +196,7 @@ async function uploader() {
             text: element,
             summary: 'Base64编码文件内容',
           });
-          $message.success(`${fileName} 上传中（${Math.ceil(index/fileContentList.length)}%）`);
+          $message.success(`${fileName} 上传中（${Math.ceil(index/fileContentList.length*100)}%）`);
           console.log(res);
         } catch (error) {
           $message.error(`${fileName} 上传失败（${error}）`);

@@ -46,7 +46,8 @@ let options = ref([
         children: [{
             label: '确认删除',
             key: 'delete',
-            props: { style: { color: '#e88080' } }
+            props: { style: { color: '#e88080' } },
+            disabled: true
         }]
     },
 ]);

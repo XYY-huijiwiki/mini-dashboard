@@ -43,7 +43,7 @@
       <!-- 说明区域 -->
       <n-h2>使用说明</n-h2>
       <n-ul>
-        <n-li>单个文件的大小不能超过1.5MB（实际存在一点误差）。</n-li>
+        <n-li>单个文件的大小不能超过10MB。</n-li>
         <n-li>上传完成一次后需要刷新页面才能再次上传。</n-li>
         <n-li>最好填写文件来源。文件来源不尽相同的时候需要一个一个上传、一个一个填写。</n-li>
         <n-li>如果要上传的文件格式是 png，jpg，jpeg，gif，svg，webm，ogg，ttf 中的一种，请<n-a
@@ -73,7 +73,7 @@ import sleep from 'await-sleep';
 let isTesting = location.host === 'xyy.huijiwiki.com' ? false : true;
 
 // 定义一些变量
-let fileExtList = ref(['.mp3', '.mid', 'wav', '.mp4', '.webp']);
+let fileExtList = ref(['.mp3', '.mid', '.wav', '.mp4', '.webp']);
 let fileSource = ref('');
 let loading = ref(false);
 let fileList;
@@ -147,13 +147,9 @@ async function uploader() {
 
     let file = fileList[index];
 
-    // 如果编码前超过1.5MB
-    if (file.file.size > 1024 * 1024 * 1.5) {
-      if (isTesting) {
-        console.log(`文件 ${fileName} 超过1.5MB`);
-      } else {
-        $message.error(`文件 ${fileName} 超过1.5MB`);
-      }
+    // 如果文件大小超过10MB
+    if (file.file.size > 1024 * 1024 * 10) {
+      isTesting ? console.log(`文件 ${file.file.name} 超过10MB`) : $message.error(`文件 ${fileName} 超过10MB`);
       return;
     }
 
@@ -163,22 +159,17 @@ async function uploader() {
       let fileName = file['name'];
       let fileContent = ev.target?.result;
 
-      // 如果编码后超过2MB
-      if (fileContent?.length > 1024 * 1024 * 2) {
-        if (isTesting) {
-          console.log(`文件 ${fileName} 超过1.5MB`);
-        } else {
-          $message.error(`文件 ${fileName} 超过1.5MB`);
-        }
-        return;
-      }
-
       // 如果是mid文件
       if ((fileName.split('.').reverse())[0] === 'mid') {
         fileContent = fileContent.replace(
           'data:application/octet-stream;base64,',
           'data:audio/midi;base64,'
         );
+      }
+
+      let fileContentList = [];
+      for (let i = 0; i < fileContent.length; i += 1024 * 1024 * 2) {
+        fileContentList.push(fileContent.slice(i, i + 1024 * 1024 * 2));
       }
 
       let fileSourceStr = fileSource.value ? `\n{{文件来源|内容=${fileSource.value}}}` : '';
@@ -188,51 +179,53 @@ async function uploader() {
       console.log(file);
       console.log(`==文件页面最后内容==`);
       console.log(`{{Base64}}\n{{${fileLicense.value || '合理使用'}}}` + fileSourceStr);
-      console.log(`==fileContent==`);
-      console.log(fileContent);
+      console.log(`==fileContentList==`);
+      console.log(fileContentList);
       return;
       // 本地测试（结束）
 
-      await new mw.Api().postWithToken('csrf', {
-        action: 'edit',
-        createonly: true,
-        tags: 'Base64文件变更',
-        title: `文件:${fileName}/0`,
-        text: fileContent,
-        summary: 'Base64编码文件内容',
-      }).fail((err) => {
-        $message.error(`${fileName} 上传失败，未知错误`);
-        console.log(err);
-      }).done((msg) => {
-        $message.success(`${fileName} 上传成功`);
-        $message.loading('正在更新文件页面……');
-        console.log(msg);
+      for (let index = 0; index < fileContentList.length; index++) {
+        const element = fileContentList[index];
 
-        new mw.Api().postWithToken('csrf', {
+        try {
+          let res = await new mw.Api().postWithToken('csrf', {
+            action: 'edit',
+            createonly: true,
+            tags: 'Base64文件变更',
+            title: `文件:${fileName}/${index}`,
+            text: element,
+            summary: 'Base64编码文件内容',
+          });
+          $message.success(`${fileName} 上传中（${Math.ceil(index/fileContentList.length)}%）`);
+          console.log(res);
+        } catch (error) {
+          $message.error(`${fileName} 上传失败（${error}）`);
+          console.log(error);
+        }
+
+      }
+
+      try {
+        let res = await new mw.Api().postWithToken('csrf', {
           action: 'edit',
           createonly: true,
           tags: 'Base64文件变更',
           title: `文件:${fileName}`,
           text: `{{Base64}}\n{{${fileLicense.value || '合理使用'}}}` + fileSourceStr,
           summary: 'Base64编码文件页面',
-        }).fail((err) => {
-          $message.error(`${fileName} 页面更新失败，未知错误`);
-          console.log(err);
-        }).done((msg) => {
-          $message.success(`${fileName} 页面更新成功`);
-          $message.info('刷新页面后文件列表才会更新');
-          console.log(msg);
         });
-
-      });
+        $message.error(`${fileName} 页面更新失败（${error}）`);
+        console.log(error);
+      } catch (error) {
+        $message.success(`${fileName} 上传成功（100%）`);
+        console.log(msg);
+      }
 
     };
 
-    // for循环最后暂停1秒钟
-    await sleep(1000);
-
   }
 
+  isTesting ? console.log('刷新页面后文件列表才会更新') : $message.info('刷新页面后文件列表才会更新');
   loading.value = false;
 
 }

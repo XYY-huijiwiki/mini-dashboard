@@ -196,7 +196,7 @@ async function uploader() {
             text: element,
             summary: 'Base64编码文件内容',
           });
-          $message.success(`${fileName} 上传中（${index}/${fileContentList.length}）`);
+          $message.success(`${fileName} 上传中（${Math.ceil(index/fileContentList.length)}%）`);
           console.log(res);
         } catch (error) {
           $message.error(`${fileName} 上传失败（${error}）`);
@@ -205,25 +205,23 @@ async function uploader() {
 
       }
 
-      new mw.Api().postWithToken('csrf', {
-        action: 'edit',
-        createonly: true,
-        tags: 'Base64文件变更',
-        title: `文件:${fileName}`,
-        text: `{{Base64}}\n{{${fileLicense.value || '合理使用'}}}` + fileSourceStr,
-        summary: 'Base64编码文件页面',
-      }).fail((error) => {
+      try {
+        let res = await new mw.Api().postWithToken('csrf', {
+          action: 'edit',
+          createonly: true,
+          tags: 'Base64文件变更',
+          title: `文件:${fileName}`,
+          text: `{{Base64}}\n{{${fileLicense.value || '合理使用'}}}` + fileSourceStr,
+          summary: 'Base64编码文件页面',
+        });
         $message.error(`${fileName} 页面更新失败（${error}）`);
         console.log(error);
-      }).done((msg) => {
-        $message.success(`${fileName} 上传成功`);
+      } catch (error) {
+        $message.success(`${fileName} 上传成功（100%）`);
         console.log(msg);
-      });
+      }
 
     };
-
-    // for循环最后暂停1秒钟
-    await sleep(1000);
 
   }
 

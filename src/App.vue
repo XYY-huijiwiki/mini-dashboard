@@ -150,7 +150,7 @@ async function uploader() {
     // 如果文件大小超过10MB
     if (file.file.size > 1024 * 1024 * 10) {
       isTesting ? console.log(`文件 ${file.file.name} 超过10MB`) : $message.error(`文件 ${fileName} 超过10MB`);
-      return;
+      continue;
     }
 
     let reader = new FileReader();
@@ -175,6 +175,7 @@ async function uploader() {
       let fileSourceStr = fileSource.value ? `\n{{文件来源|内容=${fileSource.value}}}` : '';
 
       // 本地测试（开始）
+      await sleep(1000);
       console.log(`==file==`);
       console.log(file);
       console.log(`==文件页面最后内容==`);
@@ -196,7 +197,7 @@ async function uploader() {
             text: element,
             summary: 'Base64编码文件内容',
           });
-          $message.success(`${fileName} 上传中（${Math.ceil(index/fileContentList.length*100)}%）`);
+          $message.success(`${fileName} 上传中（${Math.ceil(index / fileContentList.length * 100)}%）`);
           console.log(res);
         } catch (error) {
           $message.error(`${fileName} 上传失败（${error}）`);
@@ -225,7 +226,6 @@ async function uploader() {
 
   }
 
-  isTesting ? console.log('刷新页面后文件列表才会更新') : $message.info('刷新页面后文件列表才会更新');
   loading.value = false;
 
 }

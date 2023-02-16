@@ -63,8 +63,8 @@ import sleep from 'await-sleep';
 // 如果网页链接不是羊羊百科，自动进入测试模式
 let isTesting = location.host === 'xyy.huijiwiki.com' ? false : true;
 
-var searchText = ref(undefined);
-var searchExt = ref(undefined);
+var searchText = ref(null);
+var searchExt = ref(null);
 var fileList = ref([]);
 var page = ref(undefined);
 var totalPage = ref(undefined);
@@ -84,9 +84,9 @@ var searchExtList = ref([
 var query = computed(() => {
     let query = '';
     // 搜索内容
-    (searchText.value === undefined) ? query += '' : query += `[[~*${searchText.value}*]]`;
+    (searchText.value === null) ? query += '' : query += `[[~*${searchText.value}*]]`;
     // 文件类型
-    (searchExt.value === undefined) ? query += '' : query += `[[${'~*' + extList.value[searchExt.value].join('||~*')}]]`;
+    (searchExt.value === null) ? query += '' : query += `[[${'~*' + extList.value[searchExt.value].join('||~*')}]]`;
     return query;
 });
 

@@ -4,11 +4,14 @@
 
     <n-space vertical>
 
-        <!-- 初始化按钮 -->
-        <n-button @click="loadFileList" v-if="loadFileBtn">点击查看</n-button>
+        <!-- 搜索按钮 -->
+        <n-input-group>
+            <n-input v-model:value="searchTest" :place-holder="`搜索（留空则显示全部）`"></n-input>
+            <n-button @click="loadFileList">点击查看</n-button>
+        </n-input-group>
 
         <!-- 加载中动画 -->
-        <div v-if="!loadFileBtn && fileListLoading">
+        <div v-if="fileListLoading">
             <n-skeleton text :repeat="2" />
             <n-skeleton text style="width: 60%" />
         </div>
@@ -56,16 +59,20 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch, computed } from 'vue';
 import sleep from 'await-sleep';
 
 // 如果网页链接不是羊羊百科，自动进入测试模式
 let isTesting = location.host === 'xyy.huijiwiki.com' ? false : true;
 
+var searchTest = ref(undefined);
+var query = computed(() => {
+    // 处理搜索内容
+    return (searchTest.value === undefined) ? '' : `[[~*${searchTest.value}*]]`;
+});
 var fileList = ref([]);
 var page = ref(undefined);
 var totalPage = ref(undefined);
-var loadFileBtn = ref(true);
 var fileListLoading = ref(true);
 var extList = ref({
     audio: ['mp3', 'mid', 'wav'],
@@ -75,7 +82,8 @@ var extList = ref({
 
 // 展示文件列表
 async function loadFileList() {
-    loadFileBtn.value = false;
+    totalPage.value = undefined;
+    page.value = undefined;
 
     if (isTesting) {
         // 本地测试（开始）
@@ -103,9 +111,17 @@ async function loadFileList() {
         page.value = 1;
         // 本地测试（结束）
     } else {
-        let response = await fetch(encodeURI('https://xyy.huijiwiki.com/api.php?action=query&prop=categoryinfo&titles=分类:Base64编码的文件&format=json'));
-        response = await response.json();
-        let size = response['query']['pages']['47799']['categoryinfo']['size'];
+
+        let response = await fetch(encodeURI(`https://xyy.huijiwiki.com/api/rest_v1/transform/wikitext/to/html?${Date()}`), {
+            method: 'POST',
+            body: {
+                body_only: true,
+                wikitext: `{{#ask:[[分类:Base64编码的文件]]${query.value}|format=count}}`
+            }
+        });
+
+        response = await response.text();
+        let size = (response.split(`id="mwAQ">`)[-1]).split(`</p>`)[0];
         totalPage.value = Math.ceil(size / 20);
         page.value = 1;
     }
@@ -113,6 +129,10 @@ async function loadFileList() {
 
 // 监听页数变化并加载
 watch(page, async (page) => {
+
+    // 如果page是undefined，说明正在刷新，无视他
+    if (page === undefined) { return; }
+
     fileListLoading.value = true;
     let offset = (page - 1) * 20;
     console.log(offset);
@@ -354,7 +374,8 @@ watch(page, async (page) => {
         fileListLoading.value = false;
         // 本地测试（结束）
     } else {
-        let response = await fetch(`https://xyy.huijiwiki.com/api.php?action=ask&format=json&query=[[分类:Base64编码的文件]]|limit=20|offset=${offset}&api_version=3`);
+
+        let response = await fetch(`https://xyy.huijiwiki.com/api.php?action=ask&format=json&query=[[分类:Base64编码的文件]]${query.value}|limit=20|offset=${offset}&api_version=3`);
         response = await response.json();
 
         let a = response['query']['results'];

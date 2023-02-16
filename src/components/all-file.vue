@@ -1,13 +1,14 @@
 <template>
-
     <n-h2>全部特殊文件</n-h2>
 
     <n-space vertical>
 
         <!-- 搜索按钮 -->
         <n-input-group>
-            <n-input v-model:value="searchTest" :placeholder="`搜索（留空则显示全部）`"></n-input>
-            <n-button @click="loadFileList">点击查看</n-button>
+            <n-input v-model:value="searchText" :placeholder="`搜索文件（留空则显示全部）`" clearable></n-input>
+            <n-select v-model:value="searchExt" :options="searchExtList" :placeholder="`文件类型（留空则显示全部）`" clearable></n-select>
+            <n-button @click="loadFileList" :loading="fileListLoading">{{ (searchText === undefined) ? '查看文件' : '点击搜索'
+            }}</n-button>
         </n-input-group>
 
         <!-- 加载中动画 -->
@@ -29,12 +30,10 @@
                     <n-icon color="#70c0e8" v-if="extList['video'].includes((item.fulltext.split('.').reverse())[0])">
                         <material-symbol> video_file </material-symbol>
                     </n-icon>
-                    <n-icon color="#63e2b7"
-                        v-else-if="extList['audio'].includes((item.fulltext.split('.').reverse())[0])">
+                    <n-icon color="#63e2b7" v-else-if="extList['audio'].includes((item.fulltext.split('.').reverse())[0])">
                         <material-symbol> audio_file </material-symbol>
                     </n-icon>
-                    <n-icon color="#f2c97d"
-                        v-else-if="extList['image'].includes((item.fulltext.split('.').reverse())[0])">
+                    <n-icon color="#f2c97d" v-else-if="extList['image'].includes((item.fulltext.split('.').reverse())[0])">
                         <material-symbol> plagiarism </material-symbol>
                     </n-icon>
                     <n-icon color="#e88080" v-else>
@@ -54,8 +53,7 @@
         <!-- 分页 -->
         <n-pagination v-if="totalPage" v-model:page="page" :page-count="totalPage" :disabled="fileListLoading" simple />
 
-    </n-space>
-
+</n-space>
 </template>
 
 <script setup>
@@ -65,11 +63,8 @@ import sleep from 'await-sleep';
 // 如果网页链接不是羊羊百科，自动进入测试模式
 let isTesting = location.host === 'xyy.huijiwiki.com' ? false : true;
 
-var searchTest = ref(undefined);
-var query = computed(() => {
-    // 处理搜索内容
-    return (searchTest.value === undefined) ? '' : `[[~*${searchTest.value}*]]`;
-});
+var searchText = ref(null);
+var searchExt = ref(null);
 var fileList = ref([]);
 var page = ref(undefined);
 var totalPage = ref(undefined);
@@ -79,9 +74,25 @@ var extList = ref({
     video: ['mp4'],
     image: ['webp']
 });
+var searchExtList = ref([
+    { label: '图片', value: 'image' },
+    { label: '音频', value: 'audio' },
+    { label: '视频', value: 'video' },
+]);
+
+// 处理检索
+var query = computed(() => {
+    let query = '';
+    // 搜索内容
+    (searchText.value === null) ? query += '' : query += `[[~*${searchText.value}*]]`;
+    // 文件类型
+    (searchExt.value === null) ? query += '' : query += `[[${'~*' + extList.value[searchExt.value].join('||~*')}]]`;
+    return query;
+});
 
 // 展示文件列表
 async function loadFileList() {
+    fileListLoading.value = true;
     totalPage.value = undefined;
     page.value = undefined;
 

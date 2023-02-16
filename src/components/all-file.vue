@@ -5,9 +5,8 @@
 
         <!-- 搜索按钮 -->
         <n-input-group>
-            <n-input v-model:value="searchText" :placeholder="`搜索文件（留空则显示全部）`"></n-input>
-            <n-select v-model:value="searchExt" :options="searchExtList"
-                :placeholder="`文件类型（留空则显示全部）`"></n-select>
+            <n-input v-model:value="searchText" :placeholder="`搜索文件（留空则显示全部）`" clearable></n-input>
+            <n-select v-model:value="searchExt" :options="searchExtList" :placeholder="`文件类型（留空则显示全部）`" clearable></n-select>
             <n-button @click="loadFileList" :loading="fileListLoading">{{ (searchText === undefined) ? '查看文件' : '点击搜索'
             }}</n-button>
         </n-input-group>

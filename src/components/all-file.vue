@@ -1,13 +1,13 @@
 <template>
-
     <n-h2>全部特殊文件</n-h2>
 
     <n-space vertical>
 
         <!-- 搜索按钮 -->
         <n-input-group>
-            <n-input v-model:value="searchTest" :placeholder="`搜索（留空则显示全部）`"></n-input>
-            <n-button @click="loadFileList">点击查看</n-button>
+            <n-input v-model:value="searchTest" :placeholder="`搜索文件（留空则显示全部）`"></n-input>
+            <n-button @click="loadFileList" :loading="fileListLoading">{{ (searchTest === undefined) ? '查看全部' : '点击搜索'
+            }}</n-button>
         </n-input-group>
 
         <!-- 加载中动画 -->
@@ -29,12 +29,10 @@
                     <n-icon color="#70c0e8" v-if="extList['video'].includes((item.fulltext.split('.').reverse())[0])">
                         <material-symbol> video_file </material-symbol>
                     </n-icon>
-                    <n-icon color="#63e2b7"
-                        v-else-if="extList['audio'].includes((item.fulltext.split('.').reverse())[0])">
+                    <n-icon color="#63e2b7" v-else-if="extList['audio'].includes((item.fulltext.split('.').reverse())[0])">
                         <material-symbol> audio_file </material-symbol>
                     </n-icon>
-                    <n-icon color="#f2c97d"
-                        v-else-if="extList['image'].includes((item.fulltext.split('.').reverse())[0])">
+                    <n-icon color="#f2c97d" v-else-if="extList['image'].includes((item.fulltext.split('.').reverse())[0])">
                         <material-symbol> plagiarism </material-symbol>
                     </n-icon>
                     <n-icon color="#e88080" v-else>
@@ -54,8 +52,7 @@
         <!-- 分页 -->
         <n-pagination v-if="totalPage" v-model:page="page" :page-count="totalPage" :disabled="fileListLoading" simple />
 
-    </n-space>
-
+</n-space>
 </template>
 
 <script setup>

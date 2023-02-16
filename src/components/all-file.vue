@@ -6,7 +6,7 @@
 
         <!-- 搜索按钮 -->
         <n-input-group>
-            <n-input v-model:value="searchTest" :place-holder="`搜索（留空则显示全部）`"></n-input>
+            <n-input v-model:value="searchTest" :placeholder="`搜索（留空则显示全部）`"></n-input>
             <n-button @click="loadFileList">点击查看</n-button>
         </n-input-group>
 
@@ -73,7 +73,7 @@ var query = computed(() => {
 var fileList = ref([]);
 var page = ref(undefined);
 var totalPage = ref(undefined);
-var fileListLoading = ref(true);
+var fileListLoading = ref(false);
 var extList = ref({
     audio: ['mp3', 'mid', 'wav'],
     video: ['mp4'],
@@ -114,10 +114,10 @@ async function loadFileList() {
 
         let response = await fetch(encodeURI(`https://xyy.huijiwiki.com/api/rest_v1/transform/wikitext/to/html?${Date()}`), {
             method: 'POST',
-            body: {
+            body: JSON.stringify({
                 body_only: true,
                 wikitext: `{{#ask:[[分类:Base64编码的文件]]${query.value}|format=count}}`
-            }
+            })
         });
 
         response = await response.text();

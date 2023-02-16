@@ -87,7 +87,7 @@ var query = computed(() => {
     // 搜索内容
     (searchText.value === undefined) ? query += '' : query += `[[~*${searchText.value}*]]`;
     // 文件类型
-    (searchExt.value === undefined) ? query += '' : query += `[[${'~*' + (extList[searchExt.value]).join('||~*')}]]`;
+    (searchExt.value === undefined) ? query += '' : query += `[[${'~*' + extList.value[searchExt.value].join('||~*')}]]`;
     return query;
 });
 

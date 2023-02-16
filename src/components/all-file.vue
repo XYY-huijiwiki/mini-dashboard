@@ -6,7 +6,7 @@
         <!-- 搜索按钮 -->
         <n-input-group>
             <n-input v-model:value="searchTest" :placeholder="`搜索文件（留空则显示全部）`"></n-input>
-            <n-button @click="loadFileList" :loading="fileListLoading">{{ (searchTest === undefined) ? '查看全部' : '点击搜索'
+            <n-button @click="loadFileList">{{ (searchTest === undefined) ? '查看全部' : '点击搜索'
             }}</n-button>
         </n-input-group>
 
@@ -79,6 +79,7 @@ var extList = ref({
 
 // 展示文件列表
 async function loadFileList() {
+    fileListLoading.value = true;
     totalPage.value = undefined;
     page.value = undefined;
 

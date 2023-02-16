@@ -5,8 +5,10 @@
 
         <!-- 搜索按钮 -->
         <n-input-group>
-            <n-input v-model:value="searchTest" :placeholder="`搜索文件（留空则显示全部）`"></n-input>
-            <n-button @click="loadFileList" :loading="fileListLoading">{{ (searchTest === undefined) ? '查看全部' : '点击搜索'
+            <n-input v-model:value="searchText" :placeholder="`搜索文件（留空则显示全部）`"></n-input>
+            <n-select v-model:value="searchExt" :options="searchExtList"
+                :placeholder="`文件类型（留空则显示全部）`"></n-select>
+            <n-button @click="loadFileList" :loading="fileListLoading">{{ (searchText === undefined) ? '查看文件' : '点击搜索'
             }}</n-button>
         </n-input-group>
 
@@ -62,11 +64,8 @@ import sleep from 'await-sleep';
 // 如果网页链接不是羊羊百科，自动进入测试模式
 let isTesting = location.host === 'xyy.huijiwiki.com' ? false : true;
 
-var searchTest = ref(undefined);
-var query = computed(() => {
-    // 处理搜索内容
-    return (searchTest.value === undefined) ? '' : `[[~*${searchTest.value}*]]`;
-});
+var searchText = ref(undefined);
+var searchExt = ref(undefined);
 var fileList = ref([]);
 var page = ref(undefined);
 var totalPage = ref(undefined);
@@ -75,6 +74,21 @@ var extList = ref({
     audio: ['mp3', 'mid', 'wav'],
     video: ['mp4'],
     image: ['webp']
+});
+var searchExtList = ref([
+    { label: '图片', value: 'image' },
+    { label: '音频', value: 'audio' },
+    { label: '视频', value: 'video' },
+]);
+
+// 处理检索
+var query = computed(() => {
+    let query = '';
+    // 搜索内容
+    (searchText.value === undefined) ? query += '' : query += `[[~*${searchText.value}*]]`;
+    // 文件类型
+    (searchExt.value === undefined) ? query += '' : query += `[[${'~*' + extList[searchExt.value].join('||~*')}]]`;
+    return query;
 });
 
 // 展示文件列表

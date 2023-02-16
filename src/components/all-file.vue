@@ -114,6 +114,9 @@ async function loadFileList() {
 
         let response = await fetch(encodeURI(`https://xyy.huijiwiki.com/api/rest_v1/transform/wikitext/to/html?${Date()}`), {
             method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
             body: JSON.stringify({
                 body_only: true,
                 wikitext: `{{#ask:[[分类:Base64编码的文件]]${query.value}|format=count}}`
@@ -121,7 +124,7 @@ async function loadFileList() {
         });
 
         response = await response.text();
-        let size = (response.split(`id="mwAQ">`)[-1]).split(`</p>`)[0];
+        let size = (response.split(`id="mwAQ">`)[1]).split(`</p>`)[0];
         totalPage.value = Math.ceil(size / 20);
         page.value = 1;
     }

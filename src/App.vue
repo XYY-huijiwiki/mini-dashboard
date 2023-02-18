@@ -56,12 +56,14 @@
 
       <!-- 底部footer -->
       <template #action>
-        <uni-footer></uni-footer>
+        <n-space justify="space-between">
+          <n-p>最后编译时间：2023年2月18日 20:53</n-p>
+          <n-a href="//github.com/XYY-huijiwiki" target="_blank">Github</n-a>
+        </n-space>
       </template>
 
     </n-card>
   </n-config-provider>
-
 </template>
 
 <script setup>
@@ -173,17 +175,6 @@ async function uploader() {
       }
 
       let fileSourceStr = fileSource.value ? `\n{{文件来源|内容=${fileSource.value}}}` : '';
-
-      // 本地测试（开始）
-      await sleep(1000);
-      console.log(`==file==`);
-      console.log(file);
-      console.log(`==文件页面最后内容==`);
-      console.log(`{{Base64}}\n{{${fileLicense.value || '合理使用'}}}` + fileSourceStr);
-      console.log(`==fileContentList==`);
-      console.log(fileContentList);
-      return;
-      // 本地测试（结束）
 
       for (let index = 0; index < fileContentList.length; index++) {
         const element = fileContentList[index];

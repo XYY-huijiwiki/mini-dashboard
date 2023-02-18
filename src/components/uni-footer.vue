@@ -5,9 +5,6 @@
         <!-- 本地测试（结束） -->
         <n-p>最后编译时间：2023年2月18日 20:47</n-p>
         <n-space justify="end">
-            <n-a v-if="pathname.includes(encodeURI('测试版'))"
-                :href="`//xyy.huijiwiki.com${pathname.replace(encodeURI('（测试版）'), '')}`">返回稳定版</n-a>
-            <n-a v-else :href="`//xyy.huijiwiki.com${pathname}（测试版）`">进入测试版</n-a>
             <n-a href="//github.com/XYY-huijiwiki" target="_blank">Github</n-a>
         </n-space>
     </n-space>

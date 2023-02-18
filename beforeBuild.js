@@ -1,6 +1,10 @@
+require('moment/locale/zh-cn');
 const fs = require('fs');
 const moment = require('moment');
 const path = require('path');
+
+// 加载moment中文版
+moment.locale('zh-cn');
 
 // 查询所有组件路径
 let files = [path.join(__dirname, 'src', 'App.vue')];

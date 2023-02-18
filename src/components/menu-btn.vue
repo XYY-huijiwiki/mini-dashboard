@@ -47,7 +47,6 @@ let options = ref([
             label: '确认删除',
             key: 'delete',
             props: { style: { color: '#e88080' } },
-            disabled: true
         }]
     },
 ]);
@@ -62,41 +61,27 @@ function handleSelect(key) {
 // 删除功能
 async function deleteFile() {
 
-    // 本地测试（开始）
-    console.log('正在删除……');
-    await sleep(1000);
-    console.log('已删除' + props.input);
-    return;
-    // 本地测试（结束）
-
     $message.loading('正在删除……');
-    console.log('正在删除……');
 
-    await new mw.Api().postWithToken('csrf', {
-        action: 'delete',
-        title: props.input + '/0',
-        tags: 'Base64文件变更',
-        deletetalk: true,
-    }).fail((err) => {
-        $message.error('文件内容删除失败，未知错误');
-        console.log(err);
-    }).done((msg) => {
-        $message.success('文件内容删除成功');
-        console.log(msg);
-        new mw.Api().postWithToken('csrf', {
-            action: 'delete',
-            title: props.input,
-            tags: 'Base64文件变更',
-            deletetalk: true,
-        }).fail((err) => {
-            $message.error('文件页面删除失败，未知错误');
-            console.log(err);
-        }).done((msg) => {
-            $message.success('文件页面删除成功');
-            console.log(msg);
-            $message.info('刷新页面后文件列表才会更新');
-        });
-    });
+
+    for (let index = -1; ; index++) {
+        try {
+            await new mw.Api().postWithToken('csrf', {
+                action: 'delete',
+                title: (index === -1) ? props.input : props.input + '/' + index,
+                tags: 'Base64文件变更',
+                deletetalk: true,
+            });
+        } catch (error) {
+            if (error !== 'missingtitle') {
+                $message.success(`未知错误（${error}）`);
+                console.log(error);
+            }
+            break;
+        }
+    };
+
+    $message.success('删除完成');
 
 }
 
@@ -116,14 +101,6 @@ async function moveFile() {
         isTesting ? console.log(`文件后缀名（${orgFileExt}）不得发生改变`) : $message.error(`文件后缀名（${orgFileExt}）不得发生改变`);
         return;
     }
-
-    // 本地测试（开始）
-    console.log('正在移动……');
-    await sleep(1000);
-    console.log('移动成功\nvon ' + props.input + '\nnach ' + moveTo.value);
-    showModal.value = false;
-    return;
-    // 本地测试（结束）
 
     $message.loading('正在移动……');
 

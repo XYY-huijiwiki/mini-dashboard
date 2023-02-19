@@ -1,6 +1,4 @@
-<template>
-
-  <!-- 添加 Material Symbol 系列图标 -->
+<template><!-- 添加 Material Symbol 系列图标 -->
   <!-- 本地测试（开始） -->
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0" />
@@ -145,6 +143,7 @@ async function fileLicenseFocus() {
 // 上传按钮的功能
 async function uploader() {
   loading.value = true;
+
   for (let index in fileList) {
 
     let file = fileList[index];
@@ -214,10 +213,10 @@ async function uploader() {
       }
 
     };
+    
+  if (index === fileList.length) { loading.value = false; }
 
   }
-
-  loading.value = false;
 
 }
 </script>

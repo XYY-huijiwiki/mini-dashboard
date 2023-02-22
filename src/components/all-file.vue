@@ -148,7 +148,12 @@ watch(page, async (page) => {
     // 如果page是undefined，说明正在刷新，无视他
     if (page === undefined) { return; }
 
+    // 使状态变为“加载中”
     fileListLoading.value = true;
+
+    // 强制等待0.5秒，欣赏加载动画，防止加载速度过快导致“闪屏”
+    await sleep(500);
+
     let offset = (page - 1) * 20;
     console.log(offset);
     if (isTesting) {
@@ -390,7 +395,7 @@ watch(page, async (page) => {
         // 本地测试（结束）
     } else {
 
-        let response = await fetch(`https://xyy.huijiwiki.com/api.php?action=ask&format=json&query=[[分类:Base64编码的文件]]${query.value}|limit=20|offset=${offset}&api_version=3`);
+        let response = await fetch(`https://xyy.huijiwiki.com/api.php?action=ask&format=json&query=[[分类:Base64编码的文件]]${query.value}|limit=20|offset=${offset}&api_version=3&${Date()}`);
         response = await response.json();
 
         let a = response['query']['results'];

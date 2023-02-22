@@ -1,7 +1,8 @@
 <template>
   <!-- 上传区域 -->
   <n-space vertical>
-    <n-upload :accept="fileExtList.join(',')" :default-upload="false" :multiple="true" v-model:file-list="fileList" :show-retry-button="false">
+    <n-upload :accept="fileExtList.join(',')" :default-upload="false" :multiple="true" v-model:file-list="fileList"
+      :show-retry-button="false">
       <n-upload-dragger>
         <div style="margin-bottom: 12px">
           <material-symbol :size="64" style="opacity: 0.52;">cloud_upload</material-symbol>
@@ -124,103 +125,101 @@ async function uploader() {
       continue;
     }
 
-    let reader = new FileReader();
-    reader.readAsDataURL(file['file']);
-    reader.onload = async (ev) => {
-      let fileName = file['name'];
-      let fileContent = ev.target?.result;
+    await new Promise((resolve, reject) => {
+      let reader = new FileReader();
+      reader.readAsDataURL(file['file']);
+      reader.onload = async (ev) => {
+        let fileName = file['name'];
+        let fileContent = ev.target?.result;
 
-      // 如果是mid文件
-      if ((fileName.split('.').reverse())[0] === 'mid') {
-        fileContent = fileContent.replace(
-          'data:application/octet-stream;base64,',
-          'data:audio/midi;base64,'
-        );
-      }
+        // 如果是mid文件
+        if ((fileName.split('.').reverse())[0] === 'mid') {
+          fileContent = fileContent.replace(
+            'data:application/octet-stream;base64,',
+            'data:audio/midi;base64,'
+          );
+        }
 
-      let fileContentList = [];
-      for (let i = 0; i < fileContent.length; i += 1024 * 1024 * 2) {
-        fileContentList.push(fileContent.slice(i, i + 1024 * 1024 * 2));
-      }
+        let fileContentList = [];
+        for (let i = 0; i < fileContent.length; i += 1024 * 1024 * 2) {
+          fileContentList.push(fileContent.slice(i, i + 1024 * 1024 * 2));
+        }
 
-      let fileSourceStr = fileSource.value ? `\n{{文件来源|内容=${fileSource.value}}}` : '';
+        let fileSourceStr = fileSource.value ? `\n{{文件来源|内容=${fileSource.value}}}` : '';
 
-      // 本地测试（开始）
-      console.log('fileList');
-      console.log(fileList);
-      console.log('file');
-      console.log(file);
-      console.log('fileContent');
-      console.log(fileContent);
-      console.log('fileName');
-      console.log(fileName);
-      file.status = 'uploading';
-      file.percentage = 0;
-      await sleep(500);
-      file.percentage = 30;
-      await sleep(500);
-      file.percentage = 90;
-      await sleep(500);
-      file.percentage = 100;
-      await sleep(500);
-      file.url = `https://xyy.huijiwiki.com/wiki/文件:` + fileName;
-      file.status = 'finished';
-      // 每开始一个上传人物后停顿1秒钟，避免同时上传全部文件
-      await sleep(1000);
-      return;
-      // 本地测试（结束）
+        // 本地测试（开始）
+        console.log('fileList');
+        console.log(fileList);
+        console.log('file');
+        console.log(file);
+        console.log('fileContent');
+        console.log(fileContent);
+        console.log('fileName');
+        console.log(fileName);
+        file.status = 'uploading';
+        file.percentage = 0;
+        await sleep(500);
+        file.percentage = 30;
+        await sleep(500);
+        file.percentage = 100;
+        await sleep(500);
+        file.url = `https://xyy.huijiwiki.com/wiki/文件:` + fileName;
+        file.status = 'finished';
+        resolve();
+        return;
+        // 本地测试（结束）
 
-      // 初始化进度条，默认进度为0
-      file.status = 'uploading';
+        // 初始化进度条，默认进度为0
+        file.status = 'uploading';
 
-      for (let index = 0; index < fileContentList.length; index++) {
-        const element = fileContentList[index];
+        for (let index = 0; index < fileContentList.length; index++) {
+          const element = fileContentList[index];
+
+          try {
+            let res = await new mw.Api().postWithToken('csrf', {
+              action: 'edit',
+              createonly: true,
+              tags: 'Base64文件变更',
+              title: `文件:${fileName}/${index}`,
+              text: element,
+              summary: 'Base64编码文件内容',
+            });
+            file.percentage = Math.ceil(index / fileContentList.length * 100); // 更新进度条
+            console.log(res);
+          } catch (error) {
+            $message.error(`${fileName} 上传失败（${error}）`);
+            console.log(error);
+            file.status = 'error';
+          }
+
+        }
 
         try {
           let res = await new mw.Api().postWithToken('csrf', {
             action: 'edit',
             createonly: true,
             tags: 'Base64文件变更',
-            title: `文件:${fileName}/${index}`,
-            text: element,
-            summary: 'Base64编码文件内容',
+            title: `文件:${fileName}`,
+            text: `{{Base64}}\n{{${fileLicense.value || '合理使用'}}}` + fileSourceStr,
+            summary: 'Base64编码文件页面',
           });
-          file.percentage = Math.ceil(index / fileContentList.length * 100); // 更新进度条
+
+          // 更新进度条状态=>上传成功
+          file.url = `https://xyy.huijiwiki.com/wiki/文件:` + fileName;
+          file.status = 'finished';
+
+          $message.success(`${fileName} 上传成功`);
           console.log(res);
         } catch (error) {
-          $message.error(`${fileName} 上传失败（${error}）`);
-          console.log(error);
           file.status = 'error';
+          $message.error(`${fileName} 页面更新失败（${error}）`);
+          console.log(error);
         }
 
-      }
+        resolve();
+      };
 
-      try {
-        let res = await new mw.Api().postWithToken('csrf', {
-          action: 'edit',
-          createonly: true,
-          tags: 'Base64文件变更',
-          title: `文件:${fileName}`,
-          text: `{{Base64}}\n{{${fileLicense.value || '合理使用'}}}` + fileSourceStr,
-          summary: 'Base64编码文件页面',
-        });
-
-        // 更新进度条状态=>上传成功
-        file.url = `https://xyy.huijiwiki.com/wiki/文件:` + fileName;
-        file.status = 'finished';
-
-        $message.success(`${fileName} 上传成功`);
-        console.log(res);
-      } catch (error) {
-        file.status = 'error';
-        $message.error(`${fileName} 页面更新失败（${error}）`);
-        console.log(error);
-      }
-
-    };
-
-    // 每开始一个上传人物后停顿1秒钟，避免同时上传全部文件
-    await sleep(1000);
+    });
 
   }
 

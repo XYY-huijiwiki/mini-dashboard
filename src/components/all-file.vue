@@ -1,74 +1,87 @@
 <template>
-    <n-h2>全部特殊文件</n-h2>
+    <div>
 
-    <n-space vertical>
+        <n-h2>全部特殊文件</n-h2>
 
-        <!-- 搜索按钮 -->
-        <n-input-group>
-            <n-input v-model:value="searchText" :placeholder="`搜索文件（留空则显示全部）`" clearable></n-input>
-            <n-select v-model:value="searchExt" :options="searchExtList" :placeholder="`文件类型（留空则显示全部）`"
-                clearable></n-select>
-            <n-button @click="loadFileList" :loading="fileListLoading">{{ (searchText === undefined) ? '查看文件' : '点击搜索'
-            }}</n-button>
-        </n-input-group>
+        <n-space vertical>
 
-        <!-- 加载中动画 -->
-        <div v-if="fileListLoading">
-            <n-skeleton text :repeat="2" />
-            <n-skeleton text style="width: 60%" />
-        </div>
+            <!-- 搜索按钮 -->
+            <n-input-group>
+                <n-input v-model:value="searchText" :placeholder="`搜索文件（留空则显示全部）`" clearable></n-input>
+                <n-select v-model:value="searchExt" :options="searchExtList" :placeholder="`文件类型（留空则显示全部）`"
+                    clearable></n-select>
+                <n-button @click="loadFileList" :loading="fileListLoading">{{ (searchText === undefined) ? '查看文件' : '点击搜索'
+                }}</n-button>
+            </n-input-group>
 
-        <!-- 文件列表 -->
-        <n-list v-else hoverable>
+            <!-- 加载中动画 -->
+            <div v-if="fileListLoading">
+                <n-skeleton text :repeat="2" />
+                <n-skeleton text :style="{ width: '60%' }" />
+            </div>
 
-            <n-list-item v-for="item in fileList">
+            <!-- 文件列表 -->
+            <n-list v-else hoverable>
 
-                <!-- 列表的主体内容 -->
-                {{ item.fulltext.replace('文件:', '') }}
+                <n-list-item v-for="item in fileList">
 
-                <!-- 列表的前置图标 -->
-                <template #prefix>
-                    <n-icon color="#70c0e8" v-if="extList['video'].includes((item.fulltext.split('.').reverse())[0])">
-                        <material-symbol> video_file </material-symbol>
-                    </n-icon>
-                    <n-icon color="#63e2b7" v-else-if="extList['audio'].includes((item.fulltext.split('.').reverse())[0])">
-                        <material-symbol> audio_file </material-symbol>
-                    </n-icon>
-                    <n-icon color="#f2c97d" v-else-if="extList['image'].includes((item.fulltext.split('.').reverse())[0])">
-                        <material-symbol> plagiarism </material-symbol>
-                    </n-icon>
-                    <n-icon color="#e88080" v-else>
-                        <material-symbol> draft </material-symbol>
-                    </n-icon>
-                </template>
+                    <!-- 列表的主体内容 -->
+                    {{ item.fulltext.replace('文件:', '') }}
 
-                <!-- 列表的右侧按钮 -->
-                <template #suffix>
-                    <menu-btn :input="item.fulltext"></menu-btn>
-                </template>
+                    <!-- 列表的前置图标 -->
+                    <template #prefix>
+                        <n-icon color="#70c0e8" v-if="extList['video'].includes((item.fulltext.split('.').reverse())[0])">
+                            <material-symbol> video_file </material-symbol>
+                        </n-icon>
+                        <n-icon color="#63e2b7"
+                            v-else-if="extList['audio'].includes((item.fulltext.split('.').reverse())[0])">
+                            <material-symbol> audio_file </material-symbol>
+                        </n-icon>
+                        <n-icon color="#f2c97d"
+                            v-else-if="extList['image'].includes((item.fulltext.split('.').reverse())[0])">
+                            <material-symbol> plagiarism </material-symbol>
+                        </n-icon>
+                        <n-icon color="#e88080" v-else>
+                            <material-symbol> draft </material-symbol>
+                        </n-icon>
+                    </template>
 
-            </n-list-item>
+                    <!-- 列表的右侧按钮 -->
+                    <template #suffix>
+                        <menu-btn :input="item.fulltext"></menu-btn>
+                    </template>
 
-        </n-list>
+                </n-list-item>
 
-        <!-- 分页 -->
-        <n-pagination v-if="totalPage" v-model:page="page" :page-count="totalPage" :disabled="fileListLoading" simple />
+            </n-list>
 
-    </n-space>
+            <!-- 分页 -->
+            <n-pagination v-if="totalPage" v-model:page="page" :page-count="totalPage" :disabled="fileListLoading" simple />
+
+        </n-space>
+
+    </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import { ref, watch, computed } from 'vue';
+import type { Ref } from 'vue';
 import sleep from 'await-sleep';
+
+// 定义类型
+interface fileListItem {
+    fulltext: string
+    fullurl: string
+}
 
 // 如果网页链接不是羊羊百科，自动进入测试模式
 let isTesting = location.host === 'xyy.huijiwiki.com' ? false : true;
 
-var searchText = ref(null);
-var searchExt = ref(null);
-var fileList = ref([]);
-var page = ref(undefined);
-var totalPage = ref(undefined);
+var searchText: Ref<null | string> = ref(null);
+var searchExt: Ref<null | 'image' | 'audio' | 'video'> = ref(null);
+var fileList: Ref<Array<fileListItem>> = ref([]);
+var page: Ref<number | undefined> = ref(undefined);
+var totalPage: Ref<number | undefined> = ref(undefined);
 var fileListLoading = ref(false);
 var extList = ref({
     audio: ['mp3', 'mid', 'wav'],
@@ -87,17 +100,19 @@ var query = computed(() => {
     // 搜索内容
     (searchText.value === null) ? query += '' : query += `[[~*${searchText.value}*]]`;
     // 文件类型
-    (searchExt.value === null) ? query += '' : query += `[[${'~*' + extList.value[searchExt.value].join('||~*')}]]`;
+    (searchExt.value === null) ? query += '' : query += `[[~*${extList.value[searchExt.value].join('||~*')}]]`;
     return query;
 });
 
 // 展示文件列表
 async function loadFileList() {
+
     fileListLoading.value = true;
     totalPage.value = undefined;
     page.value = undefined;
 
     if (isTesting) {
+
         // 本地测试（开始）
         await sleep(1000);
         let response = {
@@ -122,6 +137,7 @@ async function loadFileList() {
         totalPage.value = Math.ceil(size / 20);
         page.value = 1;
         // 本地测试（结束）
+
     } else {
 
         let response = await fetch(encodeURI(`https://xyy.huijiwiki.com/api/rest_v1/transform/wikitext/to/html?${Date()}`), {
@@ -135,10 +151,11 @@ async function loadFileList() {
             })
         });
 
-        response = await response.text();
-        let size = (response.split(`id="mwAQ">`)[1]).split(`</p>`)[0];
-        totalPage.value = Math.ceil(size / 20);
+        let responseText = await response.text();
+        let size = (responseText.split(`id="mwAQ">`)[1]).split(`</p>`)[0];
+        totalPage.value = Math.ceil(Number(size) / 20);
         page.value = 1;
+
     }
 }
 
@@ -385,9 +402,9 @@ watch(page, async (page) => {
             }
         };
         let a = response['query']['results'];
-        let b = [];
-        a.forEach((element, index) => {
-            b[index] = element[Object.keys(element)[0]];
+        let b: Array<fileListItem> = [];
+        a.forEach((element: { [x: string]: any; }, index: string | number) => {
+            b[Number(index)] = element[Object.keys(element)[0]];
         });
         console.log(b);
         fileList.value = b;
@@ -396,12 +413,12 @@ watch(page, async (page) => {
     } else {
 
         let response = await fetch(`https://xyy.huijiwiki.com/api.php?action=ask&format=json&query=[[分类:Base64编码的文件]]${query.value}|limit=20|offset=${offset}&api_version=3&${Date()}`);
-        response = await response.json();
+        let responseJSON = await response.json();
 
-        let a = response['query']['results'];
-        let b = [];
-        a.forEach((element, index) => {
-            b[index] = element[Object.keys(element)[0]];
+        let a = responseJSON['query']['results'];
+        let b: Array<fileListItem> = [];
+        a.forEach((element: { [x: string]: any; }, index: string | number) => {
+            b[Number(index)] = element[Object.keys(element)[0]];
         });
         console.log(b);
         fileList.value = b;

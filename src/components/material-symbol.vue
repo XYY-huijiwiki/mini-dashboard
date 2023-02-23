@@ -3,7 +3,7 @@
         <slot></slot>
     </span>
 </template>
-<script setup>
+<script lang="ts" setup>
 const props = defineProps({
     size: {
         type: Number,

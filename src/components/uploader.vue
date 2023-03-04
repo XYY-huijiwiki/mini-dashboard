@@ -39,7 +39,7 @@
 import { ref } from 'vue';
 import type { Ref } from 'vue'
 import sleep from 'await-sleep';
-import type { UploadFileInfo } from 'naive-ui'
+import type { UploadFileInfo, DropdownOption, DropdownGroupOption } from 'naive-ui'
 
 // 如果网页链接不是羊羊百科，自动进入测试模式
 let isTesting = location.host === 'xyy.huijiwiki.com' ? false : true;
@@ -50,11 +50,51 @@ let loading = ref(false);
 let fileList: Ref<Array<UploadFileInfo>> = ref([]);
 let fileLicense = ref(null);
 let fileLicenseLaoding = ref(false);
-let fileLicenseOptions = ref([]);
+let fileLicenseOptions: Ref<Array<DropdownOption | DropdownGroupOption>> = ref([])
 let fileExtList = ref(['.mp3', '.mid', '.wav', '.mp4', '.webp']);
 
 // 获取羊羊百科授权协议列表
 async function fileLicenseFocus() {
+
+  // 授权列表str转obj。代码由 New Bing 改写。
+  function fileLicenseStr2Obj(text: string): DropdownGroupOption[] {
+    // 将字符串分割成行
+    let lines = text.split('\n');
+
+    // 初始化结果数组
+    let result: DropdownGroupOption[] = [];
+
+    // 遍历每一行
+    for (let line of lines) {
+      // 匹配以两个星号开头的行，表示子项
+      if (line.startsWith('**')) {
+        // 使用正则表达式提取子项内容和标签
+        let match = line.match(/\*\*(.*)\|(.*)/);
+        if (match) {
+          // 向最后一个组中添加子项对象
+          result[result.length - 1].children.push({
+            label: match[2],
+            value: match[1]
+          });
+        }
+      } else if (line.startsWith('*')) { // 匹配以一个星号开头的行，表示组项
+        // 使用正则表达式提取组项内容和标签
+        let match = line.match(/\*(.*)（(.*)/);
+        if (match) {
+          // 向结果数组中添加组项对象，并初始化 children 数组用于存储子项对象
+          result.push({
+            label: match[1],
+            key: match[1],
+            type: 'group',
+            children: []
+          });
+        }
+      }
+    }
+
+    console.log(result);
+    return result;
+  }
 
   // 如果已经加载过一次了就不再加载
   if (fileLicenseOptions.value.length !== 0) { return; }
@@ -64,7 +104,7 @@ async function fileLicenseFocus() {
   await sleep(1000);
 
   // 本地测试（开始）
-  await sleep(3000);
+  await sleep(1000);
   let text = `*合理使用（这个文件受到著作权保护，但在羊羊百科属于合理使用）
 ** 动画截图|《喜羊羊与灰太狼》系列动画的截图
 ** 合理使用|其他合理使用的情况
@@ -72,43 +112,20 @@ async function fileLicenseFocus() {
 ** Permission|著作权方已授权羊羊百科使用
 *公有领域（这个文件属于公有领域）
 ** PD-textlogo|仅包含简单的几何图形与文字`;
-  text = text + '\n';
-  text = text.replace(/\*\*(.*)\|(.*)\n/g, `{"label":"$2","value":"$1"},`);
-  console.log(text);
-  text = text.replace(/\*(.*)（(.*)\n/g, `]}{"label":"$1","key":"$1","type":"group","children":[`);
-  console.log(text);
-  text = text.slice(2, -1).concat(']}').replace(/},]}{/g, '}]},{');
-  console.log(text);
-  text = '[' + text + ']';
-  text = text.replace(/ /g, '');
-  console.log(text);
-  text = text.replace(`","value":"合理使用"`, `（默认）","value":"合理使用"`);
-  console.log(text);
-  fileLicenseOptions.value = JSON.parse(text);
-  console.log(text);
+
+  fileLicenseOptions.value = fileLicenseStr2Obj(text);
   fileLicenseLaoding.value = false;
-  // return;
+  return;
   // 本地测试（结束）
 
-  new mw.Api().postWithToken('csrf', {
-    action: 'query',
-    prop: 'revisions',
-    titles: 'MediaWiki:Licenses',
-    rvprop: 'content'
-  }).fail((err: any) => {
-    console.log(err);
-  }).done((msg: any) => {
-    let text = msg.query.pages[188].revisions[0]['*'];
-    text = text + '\n';
-    text = text.replace(/\*\*(.*)\|(.*)\n/g, `{"label":"$2","value":"$1"},`);
-    text = text.replace(/\*(.*)（(.*)\n/g, `]}{"label":"$1","key":"$1","type":"group","children":[`);
-    text = text.slice(2, -1).concat(']}').replace(/},]}{/g, '}]},{');
-    text = '[' + text + ']';
-    text = text.replace(/ /g, '');
-    text = text.replace(`","value":"合理使用"`, `（默认）","value":"合理使用"`);
-    fileLicenseOptions.value = JSON.parse(text);
+  try {
+    let msg = await fetch('https://xyy.huijiwiki.com/wiki/MediaWiki:Licenses?action=raw')
+    let text = (await msg).text()
+    fileLicenseOptions.value = fileLicenseStr2Obj(await text);
     fileLicenseLaoding.value = false;
-  });
+  } catch (err) {
+    console.log(err);
+  }
 
 }
 

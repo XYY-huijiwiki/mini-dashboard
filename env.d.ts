@@ -11,11 +11,16 @@ interface Api {
         title?: string,
         from?: string,
         to?: string,
-        tags: string,
+        tags?: string,
+        createonly?: boolean,
         deletetalk?: boolean,
         movetalk?: boolean,
         movesubpages?: boolean,
-        noredirect?: boolean
+        noredirect?: boolean,
+        titles?: string,
+        rvprop?: string,
+        text?: string,
+        summary?: string
     }): Promise<any>;
 }
 

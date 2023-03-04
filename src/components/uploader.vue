@@ -215,12 +215,13 @@ async function uploader() {
                 text: element,
                 summary: 'Base64编码文件内容',
               });
-              file.percentage = Math.ceil(index / fileContentList.length * 100); // 更新进度条
+              file.percentage = Math.ceil((index + 1) / fileContentList.length * 100); // 更新进度条
               console.log(res);
             } catch (error) {
               $message.error(`${fileName} 上传失败（${error}）`);
               console.log(error);
               file.status = 'error';
+              reject()
             }
 
           }
@@ -245,6 +246,7 @@ async function uploader() {
             file.status = 'error';
             $message.error(`${fileName} 页面更新失败（${error}）`);
             console.log(error);
+            reject()
           }
 
           resolve();

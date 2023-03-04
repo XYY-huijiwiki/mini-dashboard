@@ -30,7 +30,7 @@
         <!-- 底部footer -->
         <template #action>
           <n-space justify="space-between">
-            <n-p>最后编译时间：2023年3月4日 18:56</n-p>
+            <n-p>最后编译时间：2023年3月4日 19:08</n-p>
             <n-a href="//github.com/XYY-huijiwiki" target="_blank">Github</n-a>
           </n-space>
         </template>

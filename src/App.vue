@@ -1,12 +1,6 @@
 <template>
   <div>
 
-    <!-- 添加 Material Symbol 系列图标 -->
-    <!-- 本地测试（开始） -->
-    <link rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0" />
-    <!-- 本地测试（结束） -->
-
     <n-config-provider :theme="darkTheme">
       <n-card title="上传特殊文件">
 

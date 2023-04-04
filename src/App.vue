@@ -1,40 +1,110 @@
 <template>
-  <div>
+  <n-config-provider :theme="darkTheme">
+    <n-card title="特殊文件">
 
-    <n-config-provider :theme="darkTheme">
-      <n-card title="上传特殊文件">
+      <!-- 菜单按钮 -->
+      <template #header-extra>
+        <n-dropdown :options="mainMenu" @select="handleSelect" trigger="click">
+          <n-button circle quaternary>
+            <template #icon>
+              <materialSymbol>menu</materialSymbol>
+            </template>
+          </n-button>
+        </n-dropdown>
+      </template>
 
-        <!-- 上传区域 -->
-        <uploader></uploader>
+      <!-- 内容根据dropdown动态加载组件的模态框 -->
+      <n-modal v-model:show="showModal" :title="modalTitle" style="max-width: 720px" preset="card" :auto-focus="false">
+        <component :is="modalComponent" />
+      </n-modal>
 
-        <!-- 说明区域 -->
-        <n-h2>使用说明</n-h2>
-        <n-ul>
-          <n-li>单个文件的大小不能超过10MB。</n-li>
-          <n-li>最好填写文件来源。文件来源不尽相同的时候需要一个一个上传、一个一个填写。</n-li>
-          <n-li>此处上传的文件无法通过wikitext直接使用，仅作为归档和备份。</n-li>
-          <n-li>如果要上传的文件格式是 png，jpg，jpeg，gif，svg，webm，ogg，ttf 中的一种，请<n-a
-              href="https://xyy.huijiwiki.com/wiki/%E7%89%B9%E6%AE%8A:%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6"
-              target="_blank">点击这里</n-a>上传。</n-li>
-        </n-ul>
+      <n-tabs v-model:value="activeTab" default-value="uploader" animated>
+        <n-tab-pane name="uploader" display-directive="show:lazy" tab="文件上传">
+          <uploader></uploader>
+        </n-tab-pane>
+        <n-tab-pane name="manager" display-directive="show:lazy" tab="文件管理">
+          <all-file></all-file>
+        </n-tab-pane>
+      </n-tabs>
 
-        <!-- 展示全部文件 -->
-        <all-file></all-file>
-
-        <!-- 底部footer -->
-        <template #action>
-          <n-space justify="space-between">
-            <n-p>最后编译时间：2023年3月4日 19:08</n-p>
-            <n-a href="//github.com/XYY-huijiwiki" target="_blank">Github</n-a>
-          </n-space>
-        </template>
-
-      </n-card>
-    </n-config-provider>
-
-  </div>
+    </n-card>
+  </n-config-provider>
 </template>
 
 <script lang="ts" setup>
-import { darkTheme } from 'naive-ui';
+import { darkTheme, type DropdownOption } from 'naive-ui';
+import { ref, h,defineAsyncComponent } from 'vue';
+import type { Ref, Component } from 'vue';
+import materialSymbol from './components/material-symbol.vue';
+import loadingComponent from './components/loading.vue';
+
+function createAsyncComponent(componentName:string) {
+  return defineAsyncComponent({
+    loader: () => import(`./components/${componentName}.vue`),
+    loadingComponent,
+  });
+}
+
+const Uploader = createAsyncComponent('uploader');
+const AllFile = createAsyncComponent('all-file');
+const Setting = createAsyncComponent('setting');
+const About = createAsyncComponent('about');
+
+const activeTab = ref('uploader')
+
+// 创建变量
+const showModal = ref(false);
+const modalTitle = ref('');
+const modalComponent: Ref<Component> = ref({});
+
+// 生成菜单图标
+function iconRender(name: string) {
+  return () => { return h(materialSymbol, { style: { fontSize: '1.5em' } }, name) }
+}
+
+// 菜单
+const mainMenu = ref([
+  {
+    label: '设置',
+    key: 'setting',
+    icon: iconRender('settings'),
+  },
+  {
+    label: '关于',
+    key: 'about',
+    icon: iconRender('info'),
+  },
+  {
+    label: '刷新',
+    key: 'refresh',
+    icon: iconRender('refresh'),
+  },
+])
+
+// 处理菜单点击事件
+async function handleSelect(key: string | number, option: DropdownOption) {
+  switch (key) {
+    case 'setting':
+      // 动态导入vue组件
+      modalComponent.value = Setting
+      // 设置模态框标题
+      modalTitle.value = <string>option.label;
+      // 显示模态框
+      showModal.value = true;
+      break;
+    case 'refresh':
+      location.reload();
+      break;
+    case 'about':
+      // 动态导入vue组件about
+      modalComponent.value = About
+      // 设置模态框标题
+      modalTitle.value = <string>option.label;
+      // 显示模态框
+      showModal.value = true;
+      break;
+    default:
+      break;
+  }
+}
 </script>

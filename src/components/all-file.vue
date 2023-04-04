@@ -1,8 +1,6 @@
 <template>
     <div>
 
-        <n-h2>全部特殊文件</n-h2>
-
         <n-space vertical>
 
             <!-- 搜索按钮 -->

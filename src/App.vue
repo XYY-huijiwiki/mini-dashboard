@@ -78,11 +78,13 @@ const mainMenu = ref([
     label: "设置",
     key: "setting",
     icon: iconRender("settings"),
+    disabled: true,
   },
   {
     label: "关于",
     key: "about",
     icon: iconRender("info"),
+    disabled: true,
   },
   {
     label: "刷新",

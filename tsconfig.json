@@ -1,17 +1,10 @@
 {
-  "extends": "@vue/tsconfig/tsconfig.web.json",
-  "include": ["env.d.ts", "src/**/*", "src/**/*.vue"],
   "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./src/*"]
-    },
-    "ignoreDeprecations": "5.0",
-    "verbatimModuleSyntax": true
+    // 编译选项
+    "esModuleInterop": true
   },
-  "references": [
-    {
-      "path": "./tsconfig.config.json"
-    }
+  "include": [
+    "src/**/*",
+    "src/ts/env.d.ts" // 添加.d.ts文件所在的目录
   ]
 }

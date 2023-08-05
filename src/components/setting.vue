@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { useLocalStorage } from '@vueuse/core'
-import { ref } from 'vue'
 
 const defaultSettings = {
     enableBeta: false,

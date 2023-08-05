@@ -56,9 +56,7 @@ import type {
   DropdownOption,
   DropdownGroupOption,
 } from "naive-ui";
-
-// 如果网页链接不是羊羊百科，自动进入测试模式
-let isTesting = location.host === "xyy.huijiwiki.com" ? false : true;
+import message from "@/ts/message";
 
 // 定义一些变量
 let fileSource = ref("");
@@ -149,25 +147,19 @@ async function uploader() {
 
     // 如果因为未知原因file.file不存在
     if (file.file === null || file.file === undefined) {
-      isTesting
-        ? console.log(`file.file不存在，未知错误`)
-        : $message.error(`file.file不存在，未知错误`);
+      message.error(`file.file不存在，未知错误`);
       continue;
     }
 
     // 如果文件大小超过10MB
     if (file.file.size > 1024 * 1024 * 10) {
-      isTesting
-        ? console.log(`文件 ${file.file.name} 超过10MB`)
-        : $message.error(`文件 ${file.file.name} 超过10MB`);
+      message.error(`文件 ${file.file.name} 超过10MB`);
       continue;
     }
 
     await new Promise<void>((resolve, reject) => {
       if (file.file === null || file.file === undefined) {
-        isTesting
-          ? console.log(`file.file不存在，未知错误`)
-          : $message.error(`file.file不存在，未知错误`);
+        message.error(`file.file不存在，未知错误`);
         reject();
       } else {
         let reader = new FileReader();
@@ -213,7 +205,7 @@ async function uploader() {
               ); // 更新进度条
               console.log(res);
             } catch (error) {
-              $message.error(`${fileName} 上传失败（${error}）`);
+              message.error(`${fileName} 上传失败（${error}）`);
               console.log(error);
               file.status = "error";
               reject();
@@ -236,11 +228,11 @@ async function uploader() {
             file.url = `https://xyy.huijiwiki.com/wiki/文件:` + fileName;
             file.status = "finished";
 
-            $message.success(`${fileName} 上传成功`);
+            message.success(`${fileName} 上传成功`);
             console.log(res);
           } catch (error) {
             file.status = "error";
-            $message.error(`${fileName} 页面更新失败（${error}）`);
+            message.error(`${fileName} 页面更新失败（${error}）`);
             console.log(error);
             reject();
           }

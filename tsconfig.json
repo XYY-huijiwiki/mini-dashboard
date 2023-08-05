@@ -1,10 +1,11 @@
 {
-  "compilerOptions": {
-    // 编译选项
-    "esModuleInterop": true
-  },
-  "include": [
-    "src/**/*",
-    "src/ts/env.d.ts" // 添加.d.ts文件所在的目录
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    },
+    {
+      "path": "./tsconfig.app.json"
+    }
   ]
 }

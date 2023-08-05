@@ -92,9 +92,6 @@ interface fileListItem {
   fullurl: string;
 }
 
-// 如果网页链接不是羊羊百科，自动进入测试模式
-let isTesting = location.host === "xyy.huijiwiki.com" ? false : true;
-
 var searchText: Ref<null | string> = ref(null);
 var searchExt: Ref<null | "image" | "audio" | "video"> = ref(null);
 var fileList: Ref<Array<fileListItem>> = ref([]);

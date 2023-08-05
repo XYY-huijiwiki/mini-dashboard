@@ -24,10 +24,10 @@
 </template>
 
 <script lang="ts" setup>
-import sleep from 'await-sleep';
 import { ref } from 'vue';
 import type { Ref } from 'vue';
 import type { MenuOption } from 'naive-ui';
+import message from "@/ts/message";
 
 // 导入props
 const props = defineProps({
@@ -36,9 +36,6 @@ const props = defineProps({
         required: true
     }
 });
-
-// 如果网页链接不是羊羊百科，自动进入测试模式
-let isTesting = location.host === 'xyy.huijiwiki.com' ? false : true;
 
 // 定义一些变量
 let showModal = ref(false);
@@ -71,7 +68,7 @@ function handleSelect(key: String) {
 // 删除功能
 async function deleteFile() {
 
-    $message.loading('正在删除……');
+    message.loading('正在删除……');
 
 
     for (let index = -1; ; index++) {
@@ -84,14 +81,14 @@ async function deleteFile() {
             });
         } catch (error) {
             if (error !== 'missingtitle') {
-                $message.success(`未知错误（${error}）`);
+                message.success(`未知错误（${error}）`);
                 console.log(error);
             }
             break;
         }
     };
 
-    $message.success('删除完成');
+    message.success('删除完成');
 
 }
 
@@ -100,7 +97,7 @@ async function moveFile() {
 
     // 检查文件移动前后是否同名
     if (props.input === moveTo.value) {
-        isTesting ? console.log('文件名不能和原来的相同') : $message.error('文件名不能和原来的相同');
+        message.error('文件名不能和原来的相同');
         return;
     }
 
@@ -108,11 +105,11 @@ async function moveFile() {
     let orgFileExt = (props.input.split('.').reverse())[0];
     let newFileExt = (moveTo.value.split('.').reverse())[0];
     if (orgFileExt !== newFileExt) {
-        isTesting ? console.log(`文件后缀名（${orgFileExt}）不得发生改变`) : $message.error(`文件后缀名（${orgFileExt}）不得发生改变`);
+        message.error(`文件后缀名（${orgFileExt}）不得发生改变`);
         return;
     }
 
-    $message.loading('正在移动……');
+    message.loading('正在移动……');
 
     try {
         let msg = await new mw.Api().postWithToken('csrf', {
@@ -124,11 +121,11 @@ async function moveFile() {
             movesubpages: true,
             noredirect: true,
         });
-        $message.success('文件移动成功');
-        $message.info('刷新页面后文件列表才会更新');
+        message.success('文件移动成功');
+        message.info('刷新页面后文件列表才会更新');
         console.log(msg);
     } catch (error) {
-        $message.error('文件移动失败，未知错误');
+        message.error('文件移动失败，未知错误');
         console.log(error);
     }
 

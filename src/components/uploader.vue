@@ -67,7 +67,7 @@ let fileLicenseLaoding = ref(false);
 let fileLicenseOptions: Ref<Array<DropdownOption | DropdownGroupOption>> = ref(
   []
 );
-let fileExtList = ref([".mp3", ".mid", ".wav", ".mp4", ".webp"]);
+let fileExtList = ref([".mp3", ".mid", ".wav", ".mp4", ".webp", ".aac"]);
 
 // 获取羊羊百科授权协议列表
 async function fileLicenseFocus() {

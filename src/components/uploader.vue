@@ -70,7 +70,7 @@ let fileLicenseLaoding = ref(false);
 let fileLicenseOptions: Ref<Array<DropdownOption | DropdownGroupOption>> = ref(
   []
 );
-let fileExtList = ref([".mp3", ".mid", ".wav", ".mp4", ".webp", ".aac"]);
+let fileExtList = ref([".mp3", ".mid", ".wav", ".mp4", ".webp"]);
 
 // 获取羊羊百科授权协议列表
 async function fileLicenseFocus() {
@@ -176,14 +176,6 @@ async function uploader() {
             fileContent = fileContent?.replace(
               "data:application/octet-stream;base64,",
               "data:audio/midi;base64,"
-            );
-          }
-
-          // 如果是acc文件
-          if (fileName.split(".").reverse()[0] === "acc") {
-            fileContent = fileContent?.replace(
-              "data:application/octet-stream;base64,",
-              "data:audio/acc;base64,"
             );
           }
 

@@ -99,7 +99,7 @@ var page: Ref<number | undefined> = ref(undefined);
 var totalPage: Ref<number | undefined> = ref(undefined);
 var fileListLoading = ref(false);
 var extList = ref({
-  audio: ["mp3", "mid", "wav", "aac"],
+  audio: ["mp3", "mid", "wav"],
   video: ["mp4"],
   image: ["webp"],
 });

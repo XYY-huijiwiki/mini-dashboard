@@ -49,14 +49,6 @@
             >
               <material-symbol> audio_file </material-symbol>
             </n-icon>
-            <n-icon
-              color="#f2c97d"
-              v-else-if="
-                extList['image'].includes(item.fulltext.split('.').reverse()[0])
-              "
-            >
-              <material-symbol> plagiarism </material-symbol>
-            </n-icon>
             <n-icon color="#e88080" v-else>
               <material-symbol> draft </material-symbol>
             </n-icon>
@@ -93,7 +85,7 @@ interface fileListItem {
 }
 
 var searchText: Ref<null | string> = ref(null);
-var searchExt: Ref<null | "image" | "audio" | "video"> = ref(null);
+var searchExt: Ref<null | "audio" | "video"> = ref(null);
 var fileList: Ref<Array<fileListItem>> = ref([]);
 var page: Ref<number | undefined> = ref(undefined);
 var totalPage: Ref<number | undefined> = ref(undefined);
@@ -101,10 +93,8 @@ var fileListLoading = ref(false);
 var extList = ref({
   audio: ["mp3", "mid", "wav"],
   video: ["mp4"],
-  image: ["webp"],
 });
 var searchExtList = ref([
-  { label: "图片", value: "image" },
   { label: "音频", value: "audio" },
   { label: "视频", value: "video" },
 ]);

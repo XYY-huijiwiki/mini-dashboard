@@ -29,7 +29,7 @@
           placeholder="授权协议"
           v-model:value="fileLicense"
           :options="fileLicenseOptions"
-          @focus="fileLicenseFocus"
+          @focus.once="fileLicenseFocus"
         >
           <template #empty>
             <n-empty description="正在加载">
@@ -57,6 +57,9 @@ import type {
   DropdownGroupOption,
 } from "naive-ui";
 import message from "@/ts/message";
+
+// 定义测试环境
+let debug = import.meta.env.DEV;
 
 // 定义一些变量
 let fileSource = ref("");
@@ -112,11 +115,6 @@ async function fileLicenseFocus() {
     return result;
   }
 
-  // 如果已经加载过一次了就不再加载
-  if (fileLicenseOptions.value.length !== 0) {
-    return;
-  }
-
   // 打开加载动画，强制欣赏加载动画一秒钟，防止加载速度太快出现“闪屏”
   fileLicenseLaoding.value = true;
   await sleep(1000);
@@ -168,11 +166,24 @@ async function uploader() {
           let fileName = file["name"];
           let fileContent: String = <String>ev.target?.result;
 
+          // log前100个字符
+          if (debug) {
+            console.log(fileContent?.slice(0, 100));
+          }
+
           // 如果是mid文件
           if (fileName.split(".").reverse()[0] === "mid") {
             fileContent = fileContent?.replace(
               "data:application/octet-stream;base64,",
               "data:audio/midi;base64,"
+            );
+          }
+
+          // 如果是acc文件
+          if (fileName.split(".").reverse()[0] === "acc") {
+            fileContent = fileContent?.replace(
+              "data:application/octet-stream;base64,",
+              "data:audio/acc;base64,"
             );
           }
 

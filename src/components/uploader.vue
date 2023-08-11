@@ -1,52 +1,3 @@
-<template>
-  <div>
-    <!-- 上传区域 -->
-    <n-space vertical>
-      <n-upload
-        :accept="fileExtList.join(',')"
-        :default-upload="false"
-        :multiple="true"
-        v-model:file-list="fileList"
-        :show-retry-button="false"
-      >
-        <n-upload-dragger>
-          <div style="margin-bottom: 12px">
-            <material-symbol :size="64" style="opacity: 0.52"
-              >cloud_upload</material-symbol
-            >
-          </div>
-          <n-text :style="{ 'font-size': '16px' }">
-            点击或者拖动文件到该区域来上传
-          </n-text>
-          <n-p>目前支持上传的文件类型有：{{ fileExtList.join(" ") }}</n-p>
-        </n-upload-dragger>
-      </n-upload>
-      <!-- 上传按钮 -->
-      <n-input-group>
-        <n-input placeholder="文件来源" v-model:value="fileSource" />
-        <n-select
-          :loading="fileLicenseLaoding"
-          placeholder="授权协议"
-          v-model:value="fileLicense"
-          :options="fileLicenseOptions"
-          @focus.once="fileLicenseFocus"
-        >
-          <template #empty>
-            <n-empty description="正在加载">
-              <template #icon>
-                <n-icon>
-                  <material-symbol :size="32">hourglass_empty</material-symbol>
-                </n-icon>
-              </template>
-            </n-empty>
-          </template>
-        </n-select>
-        <n-button @click="uploader()" :loading="loading">上传文件</n-button>
-      </n-input-group>
-    </n-space>
-  </div>
-</template>
-
 <script lang="ts" setup>
 import { ref } from "vue";
 import type { Ref } from "vue";
@@ -57,6 +8,7 @@ import type {
   DropdownGroupOption,
 } from "naive-ui";
 import message from "@/ts/message";
+import getPageContent from "@/ts/getPageContent";
 
 // 定义测试环境
 let debug = import.meta.env.DEV;
@@ -73,9 +25,9 @@ let fileLicenseOptions: Ref<Array<DropdownOption | DropdownGroupOption>> = ref(
 let fileExtList = ref([".mp3", ".mid", ".wav", ".mp4"]);
 
 // 获取羊羊百科授权协议列表
-async function fileLicenseFocus() {
+async function getLicenseList() {
   // 授权列表str转obj。代码由 New Bing 改写。
-  function fileLicenseStr2Obj(text: string): DropdownGroupOption[] {
+  function licenseStr2Obj(text: string): DropdownGroupOption[] {
     // 将字符串分割成行
     let lines = text.split("\n");
 
@@ -120,14 +72,12 @@ async function fileLicenseFocus() {
   await sleep(1000);
 
   try {
-    let msg = await fetch(
-      "https://xyy.huijiwiki.com/wiki/MediaWiki:Licenses?action=raw"
-    );
-    let text = (await msg).text();
-    fileLicenseOptions.value = fileLicenseStr2Obj(await text);
-    fileLicenseLaoding.value = false;
+    let rawText = await getPageContent("MediaWiki:Licenses");
+    fileLicenseOptions.value = licenseStr2Obj(await rawText);
   } catch (err) {
-    console.log(err);
+    message.error(`获取授权协议列表失败（${err}）`);
+  } finally {
+    fileLicenseLaoding.value = false;
   }
 }
 
@@ -250,3 +200,52 @@ async function uploader() {
   loading.value = false;
 }
 </script>
+
+<template>
+  <div>
+    <!-- 上传区域 -->
+    <n-space vertical>
+      <n-upload
+        :accept="fileExtList.join(',')"
+        :default-upload="false"
+        :multiple="true"
+        v-model:file-list="fileList"
+        :show-retry-button="false"
+      >
+        <n-upload-dragger>
+          <div style="margin-bottom: 12px">
+            <material-symbol :size="64" style="opacity: 0.52"
+              >cloud_upload</material-symbol
+            >
+          </div>
+          <n-text :style="{ 'font-size': '16px' }">
+            点击或者拖动文件到该区域来上传
+          </n-text>
+          <n-p>目前支持上传的文件类型有：{{ fileExtList.join(" ") }}</n-p>
+        </n-upload-dragger>
+      </n-upload>
+      <!-- 上传按钮 -->
+      <n-input-group>
+        <n-input placeholder="文件来源" v-model:value="fileSource" />
+        <n-select
+          :loading="fileLicenseLaoding"
+          placeholder="授权协议"
+          v-model:value="fileLicense"
+          :options="fileLicenseOptions"
+          @focus.once="getLicenseList()"
+        >
+          <template #empty>
+            <n-empty description="正在加载">
+              <template #icon>
+                <n-icon>
+                  <material-symbol :size="32">hourglass_empty</material-symbol>
+                </n-icon>
+              </template>
+            </n-empty>
+          </template>
+        </n-select>
+        <n-button @click="uploader()" :loading="loading">上传文件</n-button>
+      </n-input-group>
+    </n-space>
+  </div>
+</template>

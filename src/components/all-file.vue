@@ -1,82 +1,8 @@
-<template>
-  <div>
-    <n-space vertical>
-      <!-- 搜索按钮 -->
-      <n-input-group>
-        <n-input
-          v-model:value="searchText"
-          :placeholder="`搜索文件（留空则显示全部）`"
-          clearable
-        ></n-input>
-        <n-select
-          v-model:value="searchExt"
-          :options="searchExtList"
-          :placeholder="`文件类型（留空则显示全部）`"
-          clearable
-        ></n-select>
-        <n-button @click="loadFileList" :loading="fileListLoading">{{
-          searchText === null ? "查看文件" : "点击搜索"
-        }}</n-button>
-      </n-input-group>
-
-      <!-- 加载中动画 -->
-      <div v-if="fileListLoading">
-        <n-skeleton text :repeat="2" />
-        <n-skeleton text :style="{ width: '60%' }" />
-      </div>
-
-      <!-- 文件列表 -->
-      <n-list v-else hoverable>
-        <n-list-item v-for="item in fileList">
-          <!-- 列表的主体内容 -->
-          {{ item.fulltext.replace("文件:", "") }}
-
-          <!-- 列表的前置图标 -->
-          <template #prefix>
-            <n-icon
-              color="#70c0e8"
-              v-if="
-                extList['video'].includes(item.fulltext.split('.').reverse()[0])
-              "
-            >
-              <material-symbol> video_file </material-symbol>
-            </n-icon>
-            <n-icon
-              color="#63e2b7"
-              v-else-if="
-                extList['audio'].includes(item.fulltext.split('.').reverse()[0])
-              "
-            >
-              <material-symbol> audio_file </material-symbol>
-            </n-icon>
-            <n-icon color="#e88080" v-else>
-              <material-symbol> draft </material-symbol>
-            </n-icon>
-          </template>
-
-          <!-- 列表的右侧按钮 -->
-          <template #suffix>
-            <menu-btn :input="item.fulltext"></menu-btn>
-          </template>
-        </n-list-item>
-      </n-list>
-
-      <!-- 分页 -->
-      <n-pagination
-        v-if="totalPage"
-        v-model:page="page"
-        :page-count="totalPage"
-        :disabled="fileListLoading"
-        simple
-      />
-    </n-space>
-  </div>
-</template>
-
 <script lang="ts" setup>
 import { ref, watch, computed } from "vue";
 import type { Ref } from "vue";
 import sleep from "await-sleep";
+import fileTypeList from "@/ts/fileTypeList";
 
 // 定义类型
 interface fileListItem {
@@ -84,34 +10,38 @@ interface fileListItem {
   fullurl: string;
 }
 
-var searchText: Ref<null | string> = ref(null);
-var searchExt: Ref<null | "audio" | "video"> = ref(null);
-var fileList: Ref<Array<fileListItem>> = ref([]);
+let searchTextValue: Ref<null | string> = ref(null);
+let searchTypeOptions = ref(
+  Object.keys(fileTypeList)
+    .filter((item) => fileTypeList[item].ext.length !== 0)
+    .map((item) => ({
+      label: fileTypeList[item].name,
+      value: item,
+    }))
+);
+let searchTypeValue: Ref<null | string> = ref(null);
+
+var fileList: Ref<fileListItem[]> = ref([]);
 var page: Ref<number | undefined> = ref(undefined);
 var totalPage: Ref<number | undefined> = ref(undefined);
 var fileListLoading = ref(false);
-var extList = ref({
-  audio: ["mp3", "mid", "wav"],
-  video: ["mp4"],
-});
-var searchExtList = ref([
-  { label: "音频", value: "audio" },
-  { label: "视频", value: "video" },
-]);
 
 // 处理检索
-var query = computed(() => {
+function getQueryStr(): string {
   let query = "";
   // 搜索内容
-  searchText.value === null
-    ? (query += "")
-    : (query += `[[~*${searchText.value}*]]`);
+  if (searchTextValue.value !== null) {
+    query += `[[~*${searchTextValue.value}*]]`;
+  }
   // 文件类型
-  searchExt.value === null
-    ? (query += "")
-    : (query += `[[~*${extList.value[searchExt.value].join("||~*")}]]`);
+  if (
+    searchTypeValue.value !== null &&
+    fileTypeList[searchTypeValue.value].ext.length !== 0
+  ) {
+    query += `[[~*${fileTypeList[searchTypeValue.value].ext.join("||~*")}]]`;
+  }
   return query;
-});
+}
 
 // 展示文件列表
 async function loadFileList() {
@@ -130,7 +60,7 @@ async function loadFileList() {
       },
       body: JSON.stringify({
         body_only: true,
-        wikitext: `{{#ask:[[分类:Base64编码的文件]]${query.value}|format=count}}`,
+        wikitext: `{{#ask:[[分类:Base64编码的文件]]${getQueryStr()}|format=count}}`,
       }),
     }
   );
@@ -159,7 +89,7 @@ watch(page, async (page) => {
 
   let response = await fetch(
     `https://xyy.huijiwiki.com/api.php?action=ask&format=json&query=[[分类:Base64编码的文件]]${
-      query.value
+      getQueryStr()
     }|limit=20|offset=${offset}&api_version=3&${Date()}`
   );
   let responseJSON = await response.json();
@@ -174,6 +104,95 @@ watch(page, async (page) => {
   fileListLoading.value = false;
 });
 </script>
+
+<template>
+  <div>
+    <n-space vertical>
+      <!-- 搜索按钮 -->
+      <n-input-group>
+        <n-input
+          v-model:value="searchTextValue"
+          :placeholder="`搜索文件（留空则显示全部）`"
+          clearable
+        ></n-input>
+        <n-select
+          v-model:value="searchTypeValue"
+          :options="searchTypeOptions"
+          :placeholder="`文件类型（留空则显示全部）`"
+          clearable
+          style="max-width: 16em"
+        ></n-select>
+        <n-button @click="loadFileList" :loading="fileListLoading">{{
+          searchTextValue === null ? "查看文件" : "点击搜索"
+        }}</n-button>
+      </n-input-group>
+
+      <!-- 加载中动画 -->
+      <div v-if="fileListLoading">
+        <loading></loading>
+      </div>
+
+      <!-- 文件列表 -->
+      <n-list v-else hoverable>
+        <n-list-item v-for="item in fileList">
+          <!-- 列表的主体内容 -->
+          {{ item.fulltext.replace("文件:", "") }}
+
+          <!-- 列表的前置图标 -->
+          <template #prefix>
+            <n-icon
+              color="#70c0e8"
+              v-if="
+                fileTypeList['video'].ext.includes(
+                  item.fulltext.split('.').reverse()[0]
+                )
+              "
+            >
+              <material-symbol> video_file </material-symbol>
+            </n-icon>
+            <n-icon
+              color="#63e2b7"
+              v-else-if="
+                fileTypeList['audio'].ext.includes(
+                  item.fulltext.split('.').reverse()[0]
+                )
+              "
+            >
+              <material-symbol> audio_file </material-symbol>
+            </n-icon>
+            <n-icon
+              color="#f2c97d"
+              v-else-if="
+                fileTypeList['image'].ext.includes(
+                  item.fulltext.split('.').reverse()[0]
+                )
+              "
+            >
+              <material-symbol> plagiarism </material-symbol>
+            </n-icon>
+            <n-icon color="#e88080" v-else>
+              <material-symbol> draft </material-symbol>
+            </n-icon>
+          </template>
+
+          <!-- 列表的右侧按钮 -->
+          <template #suffix>
+            <menu-btn :input="item.fulltext"></menu-btn>
+          </template>
+        </n-list-item>
+      </n-list>
+
+      <!-- 分页 -->
+      <n-pagination
+        v-if="totalPage"
+        v-model:page="page"
+        :page-count="totalPage"
+        :disabled="fileListLoading"
+        simple
+      />
+    </n-space>
+  </div>
+</template>
 
 <style>
 #wiki-body li.n-list-item {

@@ -1,44 +1,3 @@
-<template>
-  <n-config-provider :theme="darkTheme">
-    <n-card title="特殊文件">
-      <!-- 菜单按钮 -->
-      <template #header-extra>
-        <n-dropdown :options="mainMenu" @select="handleSelect">
-          <n-button circle quaternary>
-            <template #icon>
-              <materialSymbol>more_horiz</materialSymbol>
-            </template>
-          </n-button>
-        </n-dropdown>
-      </template>
-
-      <!-- 内容根据dropdown动态加载组件的模态框 -->
-      <n-modal
-        v-model:show="showModal"
-        :title="modalTitle"
-        style="max-width: 720px"
-        preset="card"
-        :auto-focus="false"
-      >
-        <component :is="modalComponent" />
-      </n-modal>
-
-      <n-tabs v-model:value="activeTab" default-value="uploader" animated>
-        <n-tab-pane
-          name="uploader"
-          display-directive="show:lazy"
-          tab="文件上传"
-        >
-          <uploader></uploader>
-        </n-tab-pane>
-        <n-tab-pane name="manager" display-directive="show:lazy" tab="文件管理">
-          <all-file></all-file>
-        </n-tab-pane>
-      </n-tabs>
-    </n-card>
-  </n-config-provider>
-</template>
-
 <script lang="ts" setup>
 import { darkTheme, type DropdownOption } from "naive-ui";
 import { ref, h, defineAsyncComponent } from "vue";
@@ -120,3 +79,44 @@ async function handleSelect(key: string | number, option: DropdownOption) {
   }
 }
 </script>
+
+<template>
+  <n-config-provider :theme="darkTheme">
+    <n-card title="特殊文件">
+      <!-- 菜单按钮 -->
+      <template #header-extra>
+        <n-dropdown :options="mainMenu" @select="handleSelect">
+          <n-button circle quaternary>
+            <template #icon>
+              <materialSymbol>more_horiz</materialSymbol>
+            </template>
+          </n-button>
+        </n-dropdown>
+      </template>
+
+      <!-- 内容根据dropdown动态加载组件的模态框 -->
+      <n-modal
+        v-model:show="showModal"
+        :title="modalTitle"
+        style="max-width: 720px"
+        preset="card"
+        :auto-focus="false"
+      >
+        <component :is="modalComponent" />
+      </n-modal>
+
+      <n-tabs v-model:value="activeTab" default-value="uploader" animated>
+        <n-tab-pane
+          name="uploader"
+          display-directive="show:lazy"
+          tab="文件上传"
+        >
+          <uploader></uploader>
+        </n-tab-pane>
+        <n-tab-pane name="manager" display-directive="show:lazy" tab="文件管理">
+          <all-file></all-file>
+        </n-tab-pane>
+      </n-tabs>
+    </n-card>
+  </n-config-provider>
+</template>

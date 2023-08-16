@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, watch, computed } from "vue";
+import { ref, watch } from "vue";
 import type { Ref } from "vue";
 import sleep from "await-sleep";
 import fileTypeList from "@/ts/fileTypeList";
@@ -88,9 +88,7 @@ watch(page, async (page) => {
   console.log(offset);
 
   let response = await fetch(
-    `https://xyy.huijiwiki.com/api.php?action=ask&format=json&query=[[分类:Base64编码的文件]]${
-      getQueryStr()
-    }|limit=20|offset=${offset}&api_version=3&${Date()}`
+    `https://xyy.huijiwiki.com/api.php?action=ask&format=json&query=[[分类:Base64编码的文件]]${getQueryStr()}|limit=20|offset=${offset}&api_version=3&${Date()}`
   );
   let responseJSON = await response.json();
 
@@ -164,6 +162,16 @@ watch(page, async (page) => {
               color="#f2c97d"
               v-else-if="
                 fileTypeList['image'].ext.includes(
+                  item.fulltext.split('.').reverse()[0]
+                )
+              "
+            >
+              <material-symbol> plagiarism </material-symbol>
+            </n-icon>
+            <n-icon
+              color="#e88080"
+              v-else-if="
+                fileTypeList['model'].ext.includes(
                   item.fulltext.split('.').reverse()[0]
                 )
               "

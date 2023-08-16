@@ -18,6 +18,10 @@ let fileTypeList: FileTypeList = {
     name: "视频",
     ext: ["mp4"],
   },
+  model: {
+    name: "模型",
+    ext: ["glb"],
+  },
 };
 
 export default fileTypeList;

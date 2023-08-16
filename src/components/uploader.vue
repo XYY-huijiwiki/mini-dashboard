@@ -9,6 +9,7 @@ import type {
 } from "naive-ui";
 import message from "@/ts/message";
 import getPageContent from "@/ts/getPageContent";
+import fileTypeList from "@/ts/fileTypeList";
 
 // 定义测试环境
 let debug = import.meta.env.DEV;
@@ -22,7 +23,12 @@ let fileLicenseLaoding = ref(false);
 let fileLicenseOptions: Ref<Array<DropdownOption | DropdownGroupOption>> = ref(
   []
 );
-let fileExtList = ref([".mp3", ".mid", ".wav", ".mp4"]);
+let fileExtList = ref(
+  Object.values(fileTypeList)
+    .map((item) => item.ext)
+    .flat()
+    .sort()
+);
 
 // 获取羊羊百科授权协议列表
 async function getLicenseList() {
@@ -116,17 +122,25 @@ async function uploader() {
           let fileName = file["name"];
           let fileContent: String = <String>ev.target?.result;
 
-          // log前100个字符
-          if (debug) {
-            console.log(fileContent?.slice(0, 100));
-          }
-
           // 如果是mid文件
           if (fileName.split(".").reverse()[0] === "mid") {
             fileContent = fileContent?.replace(
               "data:application/octet-stream;base64,",
               "data:audio/midi;base64,"
             );
+          }
+
+          // 如果是glb文件
+          if (fileName.split(".").reverse()[0] === "glb") {
+            fileContent = fileContent?.replace(
+              "data:application/octet-stream;base64,",
+              "data:model/gltf-binary;base64,"
+            );
+          }
+
+          // log前100个字符
+          if (debug) {
+            console.log(fileContent?.slice(0, 100));
           }
 
           let fileContentList = [];
@@ -221,7 +235,7 @@ async function uploader() {
           <n-text :style="{ 'font-size': '16px' }">
             点击或者拖动文件到该区域来上传
           </n-text>
-          <n-p>目前支持上传的文件类型有：{{ fileExtList.join(" ") }}</n-p>
+          <n-p>目前支持上传的文件类型有：{{ fileExtList.join(", ") }}</n-p>
         </n-upload-dragger>
       </n-upload>
       <!-- 上传按钮 -->

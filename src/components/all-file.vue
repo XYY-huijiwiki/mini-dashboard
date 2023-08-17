@@ -146,7 +146,7 @@ watch(page, async (page) => {
                 )
               "
             >
-              <material-symbol> video_file </material-symbol>
+              <material-symbol> movie </material-symbol>
             </n-icon>
             <n-icon
               color="#63e2b7"
@@ -156,7 +156,7 @@ watch(page, async (page) => {
                 )
               "
             >
-              <material-symbol> audio_file </material-symbol>
+              <material-symbol> music_note </material-symbol>
             </n-icon>
             <n-icon
               color="#f2c97d"
@@ -166,7 +166,7 @@ watch(page, async (page) => {
                 )
               "
             >
-              <material-symbol> plagiarism </material-symbol>
+              <material-symbol> image </material-symbol>
             </n-icon>
             <n-icon
               color="#e88080"
@@ -176,7 +176,7 @@ watch(page, async (page) => {
                 )
               "
             >
-              <material-symbol> plagiarism </material-symbol>
+              <material-symbol> view_in_ar </material-symbol>
             </n-icon>
             <n-icon color="#e88080" v-else>
               <material-symbol> draft </material-symbol>

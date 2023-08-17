@@ -10,6 +10,7 @@ import type {
 import message from "@/ts/message";
 import getPageContent from "@/ts/getPageContent";
 import fileTypeList from "@/ts/fileTypeList";
+import file2base64 from "@/ts/file2base64";
 
 // 定义测试环境
 let debug = import.meta.env.DEV;
@@ -17,12 +18,10 @@ let debug = import.meta.env.DEV;
 // 定义一些变量
 let fileSource = ref("");
 let loading = ref(false);
-let fileList: Ref<Array<UploadFileInfo>> = ref([]);
+let fileList: Ref<UploadFileInfo[]> = ref([]);
 let fileLicense = ref(null);
 let fileLicenseLaoding = ref(false);
-let fileLicenseOptions: Ref<Array<DropdownOption | DropdownGroupOption>> = ref(
-  []
-);
+let fileLicenseOptions: Ref<DropdownOption[] | DropdownGroupOption[]> = ref([]);
 let fileExtList = ref(
   Object.values(fileTypeList)
     .map((item) => item.ext)
@@ -91,6 +90,7 @@ async function getLicenseList() {
 async function uploader() {
   loading.value = true;
 
+  // 第一层循环：遍历文件列表
   for (let index in fileList.value) {
     let file = fileList.value[index];
 
@@ -111,103 +111,71 @@ async function uploader() {
       continue;
     }
 
-    await new Promise<void>((resolve, reject) => {
-      if (file.file === null || file.file === undefined) {
-        message.error(`file.file不存在，未知错误`);
-        reject();
-      } else {
-        let reader = new FileReader();
-        reader.readAsDataURL(file.file);
-        reader.onload = async (ev) => {
-          let fileName = file["name"];
-          let fileContent: String = <String>ev.target?.result;
+    // 将file.file转换为base64编码
+    let fileBase64 = await file2base64(file.file);
 
-          // 如果是mid文件
-          if (fileName.split(".").reverse()[0] === "mid") {
-            fileContent = fileContent?.replace(
-              "data:application/octet-stream;base64,",
-              "data:audio/midi;base64,"
-            );
-          }
+    // 将base64编码的字符串分割为2MB一份
+    let fileBase64List = [];
+    for (let i = 0; i < fileBase64?.length; i += 1024 * 1024 * 2) {
+      fileBase64List.push(fileBase64?.slice(i, i + 1024 * 1024 * 2));
+    }
 
-          // 如果是glb文件
-          if (fileName.split(".").reverse()[0] === "glb") {
-            fileContent = fileContent?.replace(
-              "data:application/octet-stream;base64,",
-              "data:model/gltf-binary;base64,"
-            );
-          }
+    // 如果填写了文件来源，就加上文件来源模板
+    let fileSourceStr = fileSource.value
+      ? `\n{{文件来源|内容=${fileSource.value}}}`
+      : "";
 
-          // log前100个字符
-          if (debug) {
-            console.log(fileContent?.slice(0, 100));
-          }
+    // 初始化进度条，默认进度为0
+    file.status = "uploading";
 
-          let fileContentList = [];
-          for (let i = 0; i < fileContent?.length; i += 1024 * 1024 * 2) {
-            fileContentList.push(fileContent?.slice(i, i + 1024 * 1024 * 2));
-          }
+    // 第二层循环：遍历分割后的base64编码字符串
+    for (let index = 0; index < fileBase64List.length; index++) {
+      const element = fileBase64List[index];
 
-          let fileSourceStr = fileSource.value
-            ? `\n{{文件来源|内容=${fileSource.value}}}`
-            : "";
-
-          // 初始化进度条，默认进度为0
-          file.status = "uploading";
-
-          for (let index = 0; index < fileContentList.length; index++) {
-            const element = fileContentList[index];
-
-            try {
-              let res = await new mw.Api().postWithToken("csrf", {
-                action: "edit",
-                createonly: true,
-                tags: "Base64文件变更",
-                title: `文件:${fileName}/${index}`,
-                text: element,
-                summary: "Base64编码文件内容",
-              });
-              file.percentage = Math.ceil(
-                ((index + 1) / fileContentList.length) * 100
-              ); // 更新进度条
-              console.log(res);
-            } catch (error) {
-              message.error(`${fileName} 上传失败（${error}）`);
-              console.log(error);
-              file.status = "error";
-              reject();
-            }
-          }
-
-          try {
-            let res = await new mw.Api().postWithToken("csrf", {
-              action: "edit",
-              createonly: true,
-              tags: "Base64文件变更",
-              title: `文件:${fileName}`,
-              text:
-                `{{Base64}}\n{{${fileLicense.value || "合理使用"}}}` +
-                fileSourceStr,
-              summary: "Base64编码文件页面",
-            });
-
-            // 更新进度条状态=>上传成功
-            file.url = `https://xyy.huijiwiki.com/wiki/文件:` + fileName;
-            file.status = "finished";
-
-            message.success(`${fileName} 上传成功`);
-            console.log(res);
-          } catch (error) {
-            file.status = "error";
-            message.error(`${fileName} 页面更新失败（${error}）`);
-            console.log(error);
-            reject();
-          }
-
-          resolve();
-        };
+      // try上传base64编码的文件
+      try {
+        let res = await new mw.Api().postWithToken("csrf", {
+          action: "edit",
+          createonly: true,
+          tags: "Base64文件变更",
+          title: `文件:${file.name}/${index}`,
+          text: element,
+          summary: "Base64编码文件内容",
+        });
+        file.percentage = Math.ceil(
+          ((index + 1) / fileBase64List.length) * 100
+        ); // 更新进度条
+        console.log(res);
+      } catch (error) {
+        message.error(`${file.name} 上传失败（${error}）`);
+        console.log(error);
+        file.status = "error";
       }
-    });
+    }
+
+    // try更新文件页面
+    try {
+      let res = await new mw.Api().postWithToken("csrf", {
+        action: "edit",
+        createonly: true,
+        tags: "Base64文件变更",
+        title: `文件:${file.name}`,
+        text:
+          `{{Base64}}\n{{${fileLicense.value || "合理使用"}}}` + fileSourceStr,
+        summary: "Base64编码文件页面",
+      });
+
+      // 更新进度条状态=>上传成功
+      file.url = `https://xyy.huijiwiki.com/wiki/文件:` + file.name;
+      file.status = "finished";
+
+      message.success(`${file.name} 上传成功`);
+      console.log(res);
+    } catch (error) {
+      file.status = "error";
+      message.error(`${file.name} 页面更新失败（${error}）`);
+      console.log(error);
+    }
   }
 
   // 结束加载状态
@@ -220,7 +188,7 @@ async function uploader() {
     <!-- 上传区域 -->
     <n-space vertical>
       <n-upload
-        :accept="fileExtList.join(',')"
+        :accept="`.${fileExtList.join(', .')}`"
         :default-upload="false"
         :multiple="true"
         v-model:file-list="fileList"

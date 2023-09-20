@@ -7,9 +7,8 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
-    About: typeof import('./src/components/about.vue')['default']
-    AllFile: typeof import('./src/components/all-file.vue')['default']
-    Loading: typeof import('./src/components/loading.vue')['default']
+    HuijiApi: typeof import('./src/components/huiji-api.vue')['default']
+    HuijiApiWrap: typeof import('./src/components/huiji-api-wrap.vue')['default']
     MaterialSymbol: typeof import('./src/components/material-symbol.vue')['default']
     MenuBtn: typeof import('./src/components/menu-btn.vue')['default']
     NA: typeof import('naive-ui')['NA']
@@ -17,6 +16,7 @@ declare module 'vue' {
     NButtonGroup: typeof import('naive-ui')['NButtonGroup']
     NCard: typeof import('naive-ui')['NCard']
     NConfigProvider: typeof import('naive-ui')['NConfigProvider']
+    NDialogProvider: typeof import('naive-ui')['NDialogProvider']
     NDropdown: typeof import('naive-ui')['NDropdown']
     NEmpty: typeof import('naive-ui')['NEmpty']
     NForm: typeof import('naive-ui')['NForm']
@@ -27,7 +27,10 @@ declare module 'vue' {
     NLi: typeof import('naive-ui')['NLi']
     NList: typeof import('naive-ui')['NList']
     NListItem: typeof import('naive-ui')['NListItem']
+    NLoadingBarProvider: typeof import('naive-ui')['NLoadingBarProvider']
+    NMessageProvider: typeof import('naive-ui')['NMessageProvider']
     NModal: typeof import('naive-ui')['NModal']
+    NNotificationProvider: typeof import('naive-ui')['NNotificationProvider']
     NP: typeof import('naive-ui')['NP']
     NPagination: typeof import('naive-ui')['NPagination']
     NPopconfirm: typeof import('naive-ui')['NPopconfirm']
@@ -40,7 +43,6 @@ declare module 'vue' {
     NUl: typeof import('naive-ui')['NUl']
     NUpload: typeof import('naive-ui')['NUpload']
     NUploadDragger: typeof import('naive-ui')['NUploadDragger']
-    Setting: typeof import('./src/components/setting.vue')['default']
-    Uploader: typeof import('./src/components/uploader.vue')['default']
+    UesHuijiApi: typeof import('./src/components/ues-huiji-api.vue')['default']
   }
 }

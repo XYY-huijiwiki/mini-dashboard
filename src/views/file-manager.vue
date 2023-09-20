@@ -17,7 +17,7 @@ let searchTypeOptions = ref(
     .map((item) => ({
       label: fileTypeList[item].name,
       value: item,
-    }))
+    })),
 );
 let searchTypeValue: Ref<null | string> = ref(null);
 
@@ -51,7 +51,7 @@ async function loadFileList() {
 
   let response = await fetch(
     encodeURI(
-      `https://xyy.huijiwiki.com/api/rest_v1/transform/wikitext/to/html?${Date()}`
+      `https://xyy.huijiwiki.com/api/rest_v1/transform/wikitext/to/html?${Date()}`,
     ),
     {
       method: "POST",
@@ -62,7 +62,7 @@ async function loadFileList() {
         body_only: true,
         wikitext: `{{#ask:[[分类:Base64编码的文件]]${getQueryStr()}|format=count}}`,
       }),
-    }
+    },
   );
 
   let responseText = await response.text();
@@ -88,12 +88,12 @@ watch(page, async (page) => {
   console.log(offset);
 
   let response = await fetch(
-    `https://xyy.huijiwiki.com/api.php?action=ask&format=json&query=[[分类:Base64编码的文件]]${getQueryStr()}|limit=20|offset=${offset}&api_version=3&${Date()}`
+    `https://xyy.huijiwiki.com/api.php?action=ask&format=json&query=[[分类:Base64编码的文件]]${getQueryStr()}|limit=20|offset=${offset}&api_version=3&${Date()}`,
   );
   let responseJSON = await response.json();
 
   let a = responseJSON["query"]["results"];
-  let b: Array<fileListItem> = [];
+  let b: fileListItem[] = [];
   a.forEach((element: { [x: string]: any }, index: string | number) => {
     b[Number(index)] = element[Object.keys(element)[0]];
   });
@@ -132,7 +132,7 @@ watch(page, async (page) => {
 
       <!-- 文件列表 -->
       <n-list v-else hoverable>
-        <n-list-item v-for="item in fileList">
+        <n-list-item v-for="(item, index) in fileList" :key="index">
           <!-- 列表的主体内容 -->
           {{ item.fulltext.replace("文件:", "") }}
 
@@ -142,7 +142,7 @@ watch(page, async (page) => {
               color="#70c0e8"
               v-if="
                 fileTypeList['video'].ext.includes(
-                  item.fulltext.split('.').reverse()[0]
+                  item.fulltext.split('.').reverse()[0],
                 )
               "
             >
@@ -152,7 +152,7 @@ watch(page, async (page) => {
               color="#63e2b7"
               v-else-if="
                 fileTypeList['audio'].ext.includes(
-                  item.fulltext.split('.').reverse()[0]
+                  item.fulltext.split('.').reverse()[0],
                 )
               "
             >
@@ -162,7 +162,7 @@ watch(page, async (page) => {
               color="#f2c97d"
               v-else-if="
                 fileTypeList['image'].ext.includes(
-                  item.fulltext.split('.').reverse()[0]
+                  item.fulltext.split('.').reverse()[0],
                 )
               "
             >
@@ -172,7 +172,7 @@ watch(page, async (page) => {
               color="#e88080"
               v-else-if="
                 fileTypeList['model'].ext.includes(
-                  item.fulltext.split('.').reverse()[0]
+                  item.fulltext.split('.').reverse()[0],
                 )
               "
             >

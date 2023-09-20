@@ -14,8 +14,17 @@ interface Settings {
   };
 }
 
-// 定义灰机wiki的$message
-declare const $message: MessageApiInjection
+// declare api from huiji for production environment
+interface Window {
+  $message: MessageApiInjection;
+  $dialog: DialogApiInjection;
+  $loadingBar: LoadingBarApiInjection;
+  $notification: NotificationApiInjection;
+}
+declare const $message: MessageApiInjection;
+declare const $dialog: DialogApiInjection;
+declare const $loadingBar: LoadingBarApiInjection;
+declare const $notification: NotificationApiInjection;
 
 // 定义请求的返回值
 interface ResponseData {
@@ -28,26 +37,29 @@ interface ResponseData {
 }
 
 // 定义xlsx的类型
-declare module 'xlsx/xlsx.mjs';
+declare module "xlsx/xlsx.mjs";
 
 // 定义 mw
 interface Api {
-  postWithToken(token: string, params: {
-      action: string,
-      title?: string,
-      from?: string,
-      to?: string,
-      tags?: string,
-      createonly?: boolean,
-      deletetalk?: boolean,
-      movetalk?: boolean,
-      movesubpages?: boolean,
-      noredirect?: boolean,
-      titles?: string,
-      rvprop?: string,
-      text?: string,
-      summary?: string
-  }): Promise<any>;
+  postWithToken(
+    token: string,
+    params: {
+      action: string;
+      title?: string;
+      from?: string;
+      to?: string;
+      tags?: string;
+      createonly?: boolean;
+      deletetalk?: boolean;
+      movetalk?: boolean;
+      movesubpages?: boolean;
+      noredirect?: boolean;
+      titles?: string;
+      rvprop?: string;
+      text?: string;
+      summary?: string;
+    }
+  ): Promise<any>;
 }
 
 declare const mw: {

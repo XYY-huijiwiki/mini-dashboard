@@ -7,13 +7,9 @@ import type {
   DropdownOption,
   DropdownGroupOption,
 } from "naive-ui";
-import message from "@/ts/message";
 import getPageContent from "@/ts/getPageContent";
 import fileTypeList from "@/ts/fileTypeList";
 import file2base64 from "@/ts/file2base64";
-
-// 定义测试环境
-let debug = import.meta.env.DEV;
 
 // 定义一些变量
 let fileSource = ref("");
@@ -26,7 +22,7 @@ let fileExtList = ref(
   Object.values(fileTypeList)
     .map((item) => item.ext)
     .flat()
-    .sort()
+    .sort(),
 );
 
 // 获取羊羊百科授权协议列表
@@ -80,7 +76,7 @@ async function getLicenseList() {
     let rawText = await getPageContent("MediaWiki:Licenses");
     fileLicenseOptions.value = licenseStr2Obj(await rawText);
   } catch (err) {
-    message.error(`获取授权协议列表失败（${err}）`);
+    $message.error(`获取授权协议列表失败（${err}）`);
   } finally {
     fileLicenseLaoding.value = false;
   }
@@ -101,13 +97,13 @@ async function uploader() {
 
     // 如果因为未知原因file.file不存在
     if (file.file === null || file.file === undefined) {
-      message.error(`file.file不存在，未知错误`);
+      $message.error(`file.file不存在，未知错误`);
       continue;
     }
 
     // 如果文件大小超过10MB
     if (file.file.size > 1024 * 1024 * 10) {
-      message.error(`文件 ${file.file.name} 超过10MB`);
+      $message.error(`文件 ${file.file.name} 超过10MB`);
       continue;
     }
 
@@ -143,11 +139,11 @@ async function uploader() {
           summary: "Base64编码文件内容",
         });
         file.percentage = Math.ceil(
-          ((index + 1) / fileBase64List.length) * 100
+          ((index + 1) / fileBase64List.length) * 100,
         ); // 更新进度条
         console.log(res);
       } catch (error) {
-        message.error(`${file.name} 上传失败（${error}）`);
+        $message.error(`${file.name} 上传失败（${error}）`);
         console.log(error);
         file.status = "error";
       }
@@ -169,11 +165,11 @@ async function uploader() {
       file.url = `https://xyy.huijiwiki.com/wiki/文件:` + file.name;
       file.status = "finished";
 
-      message.success(`${file.name} 上传成功`);
+      $message.success(`${file.name} 上传成功`);
       console.log(res);
     } catch (error) {
       file.status = "error";
-      message.error(`${file.name} 页面更新失败（${error}）`);
+      $message.error(`${file.name} 页面更新失败（${error}）`);
       console.log(error);
     }
   }
@@ -231,3 +227,4 @@ async function uploader() {
     </n-space>
   </div>
 </template>
+@/ts/huijiApi

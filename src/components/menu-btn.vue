@@ -2,7 +2,6 @@
 import { ref } from "vue";
 import type { Ref } from "vue";
 import type { MenuOption } from "naive-ui";
-import message from "@/ts/message";
 
 // 导入props
 const props = defineProps({
@@ -14,12 +13,12 @@ const props = defineProps({
 
 // 定义一些变量
 let showModal = ref(false);
-let moveTo = ref(props.input);
+let moveTo = ref("");
 
 // 定义菜单的内容
-let options: Ref<Array<MenuOption>> = ref([
+let options: Ref<MenuOption[]> = ref([
   {
-    label: "移动（重命名）",
+    label: "重命名",
     key: "move",
   },
   {
@@ -41,12 +40,12 @@ function handleSelect(key: String) {
     ? deleteFile()
     : key === "move"
     ? (showModal.value = true)
-    : message.error(`未知错误（handleSelect(${key}）`);
+    : $message.error(`未知错误（handleSelect(${key}）`);
 }
 
 // 删除功能
 async function deleteFile() {
-  message.loading("正在删除……");
+  $message.loading("正在删除……");
   let ok = true;
 
   for (let index = -1; ; index++) {
@@ -59,9 +58,9 @@ async function deleteFile() {
       });
     } catch (error) {
       if (error === "missingtitle") {
-        message.error("文件不存在");
+        $message.error("文件不存在");
       } else {
-        message.error(`未知错误（${error}）`);
+        $message.error(`未知错误（${error}）`);
       }
       ok = false;
       break;
@@ -69,14 +68,14 @@ async function deleteFile() {
   }
 
   if (!ok) return;
-  message.success("删除完成");
+  $message.success("删除完成");
 }
 
 // 移动功能
 async function moveFile() {
   // 检查文件移动前后是否同名
   if (props.input === moveTo.value) {
-    message.error("文件名不能和原来的相同");
+    $message.error("文件名不能和原来的相同");
     return;
   }
 
@@ -84,11 +83,11 @@ async function moveFile() {
   let orgFileExt = props.input.split(".").reverse()[0];
   let newFileExt = moveTo.value.split(".").reverse()[0];
   if (orgFileExt !== newFileExt) {
-    message.error(`文件后缀名（${orgFileExt}）不得发生改变`);
+    $message.error(`文件后缀名（${orgFileExt}）不得发生改变`);
     return;
   }
 
-  message.loading("正在移动……");
+  $message.loading("正在移动……");
 
   try {
     let msg = await new mw.Api().postWithToken("csrf", {
@@ -100,11 +99,11 @@ async function moveFile() {
       movesubpages: true,
       noredirect: true,
     });
-    message.success("文件移动成功");
-    message.info("刷新页面后文件列表才会更新");
+    $message.success("文件移动成功");
+    $message.info("刷新页面后文件列表才会更新");
     console.log(msg);
   } catch (error) {
-    message.error("文件移动失败，未知错误");
+    $message.error("文件移动失败，未知错误");
     console.log(error);
   }
 
@@ -138,12 +137,13 @@ async function moveFile() {
       :autoFocus="false"
     >
       <template #header>
-        <div>移动至？（重命名为？）</div>
+        <div>重命名为？</div>
       </template>
       <n-input-group>
-        <n-input v-model:value="moveTo"></n-input>
+        <n-input v-model:value="moveTo" :default-value="props.input"></n-input>
         <n-button @click="moveFile()">确定</n-button>
       </n-input-group>
     </n-modal>
   </div>
 </template>
+@/ts/huijiApi

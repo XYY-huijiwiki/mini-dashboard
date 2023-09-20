@@ -5,7 +5,7 @@ type FileTypeList = {
   };
 };
 
-let fileTypeList: FileTypeList = {
+const fileTypeList: FileTypeList = {
   image: {
     name: "图片",
     ext: [],

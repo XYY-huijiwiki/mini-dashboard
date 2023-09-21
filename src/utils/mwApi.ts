@@ -46,18 +46,10 @@ async function editWikiPage(editParams: {
 async function uploadFile(uploadParams: {
   file: File;
   filename?: string;
-  summary?: string;
-  tags?: string;
-  createonly?: boolean;
 }) {
-  return await new mw.Api().postWithToken("csrf", {
-    action: "upload",
+  return await new mw.Api().upload(uploadParams.file, {
     format: "json",
     filename: uploadParams.file.name || uploadParams.filename,
-    file: uploadParams.file,
-    summary: uploadParams.summary,
-    tags: uploadParams.tags,
-    createonly: uploadParams.createonly,
   });
 }
 

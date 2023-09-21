@@ -182,9 +182,6 @@ async function uploader() {
             type: "image/png",
           }),
           filename: `文件:${file.name}/poster.png`,
-          summary: "Base64编码文件封面",
-          tags: "Base64文件变更",
-          createonly: true,
         });
         console.log(res);
       } catch (error) {

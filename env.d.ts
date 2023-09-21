@@ -54,5 +54,5 @@ interface Api {
 }
 
 declare const mw: {
-  Api: new () => Api;
+  Api: any
 };

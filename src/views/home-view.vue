@@ -18,7 +18,7 @@ import loadingComponent from "@/views/loading-view.vue";
 // define async views
 function createAsyncComponent(name: string) {
   return defineAsyncComponent({
-    loader: () => import(`./${name}.vue`),
+    loader: () => import(`../views/${name}.vue`),
     loadingComponent,
   });
 }

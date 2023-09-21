@@ -1,28 +1,19 @@
 <script lang="ts" setup>
-import { darkTheme, type DropdownOption } from "naive-ui";
+import { darkTheme, zhCN, dateZhCN, type DropdownOption } from "naive-ui";
 import { ref, h, defineAsyncComponent } from "vue";
 import type { Ref, Component } from "vue";
 import materialSymbol from "./components/material-symbol.vue";
 import loadingComponent from "./views/loading-view.vue";
-import huijiApiWrap from "./components/huiji-api-wrap.vue";
-import {} from "naive-ui";
 
-// define dev mode
-let debug = ref(import.meta.env.DEV);
-
-function createAsyncComponent(componentName: string) {
+// define async views
+function createAsyncComponent(name: string) {
   return defineAsyncComponent({
-    loader: () => import(`./views/${componentName}.vue`),
+    loader: () => import(`./views/${name}.vue`),
     loadingComponent,
   });
 }
-
-const Uploader = createAsyncComponent("file-uploader");
-const AllFile = createAsyncComponent("file-manager");
-const Setting = createAsyncComponent("setting-view");
-const About = createAsyncComponent("about-view");
-
-const activeTab = ref("uploader");
+const settingView = createAsyncComponent("setting-view");
+const aboutView = createAsyncComponent("about-view");
 
 // 创建变量
 const showModal = ref(false);
@@ -62,7 +53,7 @@ function handleSelect(key: string | number): void {
   switch (key) {
     case "setting":
       // 动态导入vue组件
-      modalComponent.value = Setting;
+      modalComponent.value = settingView;
       // 设置模态框标题
       modalTitle.value = "设置";
       // 显示模态框
@@ -73,7 +64,7 @@ function handleSelect(key: string | number): void {
       break;
     case "about":
       // 动态导入vue组件about
-      modalComponent.value = About;
+      modalComponent.value = aboutView;
       // 设置模态框标题
       modalTitle.value = "关于";
       // 显示模态框
@@ -84,48 +75,40 @@ function handleSelect(key: string | number): void {
 </script>
 
 <template>
-  <n-config-provider :theme="darkTheme">
-    <component :is="debug ? huijiApiWrap : 'div'">
-      <n-card title="特殊文件">
-        <!-- 菜单按钮 -->
-        <template #header-extra>
-          <n-dropdown :options="mainMenu" @select="handleSelect">
-            <n-button circle quaternary>
-              <template #icon>
-                <materialSymbol>more_horiz</materialSymbol>
+  <n-config-provider :theme="darkTheme" :locale="zhCN" :date-Locale="dateZhCN">
+    <n-message-provider>
+      <n-dialog-provider>
+        <n-loading-bar-provider>
+          <n-notification-provider>
+            <n-card title="特殊文件" id="drawer-target">
+              <!-- 菜单按钮 -->
+              <template #header-extra>
+                <n-dropdown :options="mainMenu" @select="handleSelect">
+                  <n-button circle quaternary>
+                    <template #icon>
+                      <materialSymbol>more_horiz</materialSymbol>
+                    </template>
+                  </n-button>
+                </n-dropdown>
               </template>
-            </n-button>
-          </n-dropdown>
-        </template>
 
-        <!-- 内容根据dropdown动态加载组件的模态框 -->
-        <n-modal
-          v-model:show="showModal"
-          :title="modalTitle"
-          style="max-width: 720px"
-          preset="card"
-          :auto-focus="false"
-        >
-          <component :is="modalComponent" />
-        </n-modal>
+              <!-- 内容根据dropdown动态加载组件的模态框 -->
+              <n-modal
+                v-model:show="showModal"
+                :title="modalTitle"
+                style="max-width: 720px"
+                preset="card"
+                :auto-focus="false"
+              >
+                <component :is="modalComponent" />
+              </n-modal>
 
-        <n-tabs v-model:value="activeTab" default-value="uploader" animated>
-          <n-tab-pane
-            name="uploader"
-            display-directive="show:lazy"
-            tab="文件上传"
-          >
-            <uploader></uploader>
-          </n-tab-pane>
-          <n-tab-pane
-            name="manager"
-            display-directive="show:lazy"
-            tab="文件管理"
-          >
-            <all-file></all-file>
-          </n-tab-pane>
-        </n-tabs>
-      </n-card>
-    </component>
+              <!-- 路由 -->
+              <router-view></router-view>
+            </n-card>
+          </n-notification-provider>
+        </n-loading-bar-provider>
+      </n-dialog-provider>
+    </n-message-provider>
   </n-config-provider>
 </template>

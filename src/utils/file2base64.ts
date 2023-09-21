@@ -14,7 +14,6 @@ async function file2base64(file: File): Promise<string> {
   const fileExt = file.name.split(".").reverse()[0];
   const fileMIME = mime.getType(fileExt);
   if (!fileMIME) {
-    $message.error(`未知文件类型：${fileExt}`);
     throw new Error(`未知文件类型：${fileExt}`);
   }
   const fileBase64Url = `data:${fileMIME};base64,${fileBase64}`;

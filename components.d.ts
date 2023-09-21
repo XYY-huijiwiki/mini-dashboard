@@ -7,8 +7,7 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
-    HuijiApi: typeof import('./src/components/huiji-api.vue')['default']
-    HuijiApiWrap: typeof import('./src/components/huiji-api-wrap.vue')['default']
+    FileInfo: typeof import('./src/components/file-info.vue')['default']
     MaterialSymbol: typeof import('./src/components/material-symbol.vue')['default']
     MenuBtn: typeof import('./src/components/menu-btn.vue')['default']
     NA: typeof import('naive-ui')['NA']
@@ -36,6 +35,7 @@ declare module 'vue' {
     NPopconfirm: typeof import('naive-ui')['NPopconfirm']
     NSelect: typeof import('naive-ui')['NSelect']
     NSpace: typeof import('naive-ui')['NSpace']
+    NStatistic: typeof import('naive-ui')['NStatistic']
     NSwitch: typeof import('naive-ui')['NSwitch']
     NTabPane: typeof import('naive-ui')['NTabPane']
     NTabs: typeof import('naive-ui')['NTabs']
@@ -43,6 +43,7 @@ declare module 'vue' {
     NUl: typeof import('naive-ui')['NUl']
     NUpload: typeof import('naive-ui')['NUpload']
     NUploadDragger: typeof import('naive-ui')['NUploadDragger']
-    UesHuijiApi: typeof import('./src/components/ues-huiji-api.vue')['default']
+    RouterLink: typeof import('vue-router')['RouterLink']
+    RouterView: typeof import('vue-router')['RouterView']
   }
 }

@@ -14,18 +14,6 @@ interface Settings {
   };
 }
 
-// declare api from huiji for production environment
-interface Window {
-  $message: MessageApiInjection;
-  $dialog: DialogApiInjection;
-  $loadingBar: LoadingBarApiInjection;
-  $notification: NotificationApiInjection;
-}
-declare const $message: MessageApiInjection;
-declare const $dialog: DialogApiInjection;
-declare const $loadingBar: LoadingBarApiInjection;
-declare const $notification: NotificationApiInjection;
-
 // 定义请求的返回值
 interface ResponseData {
   _id: string;
@@ -58,6 +46,9 @@ interface Api {
       rvprop?: string;
       text?: string;
       summary?: string;
+      format?: string;
+      filename?: string;
+      file?: File;
     }
   ): Promise<any>;
 }

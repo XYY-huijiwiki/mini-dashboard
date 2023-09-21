@@ -2,7 +2,7 @@
 import { ref, watch } from "vue";
 import type { Ref } from "vue";
 import sleep from "await-sleep";
-import fileTypeList from "@/ts/fileTypeList";
+import fileTypeList from "@/utils/fileTypeList";
 
 // 定义类型
 interface fileListItem {
@@ -185,7 +185,7 @@ watch(page, async (page) => {
 
           <!-- 列表的右侧按钮 -->
           <template #suffix>
-            <menu-btn :input="item.fulltext"></menu-btn>
+            <menu-btn :fulltext="item.fulltext"></menu-btn>
           </template>
         </n-list-item>
       </n-list>
@@ -215,3 +215,4 @@ watch(page, async (page) => {
   padding: inherit;
 }
 </style>
+@/utils/fileTypeList

@@ -183,7 +183,9 @@ async function uploader() {
       // 上传封面
       try {
         let res = await uploadFile({
-          file: new File([Metadata.poster], `${file.name}/poster.png`),
+          file: new File([Metadata.poster], "poster.png", {
+            type: "image/png",
+          }),
           filename: `文件:${file.name}/poster.png`,
           summary: "Base64编码文件封面",
           tags: "Base64文件变更",
@@ -209,7 +211,7 @@ async function uploader() {
             size: fileBase64?.length,
             count: fileBase64List.length,
           },
-          dataType:'base64'
+          dataType: "base64",
         };
         console.log(dataObj);
         let res = await editWikiPage({

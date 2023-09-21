@@ -122,11 +122,6 @@ async function uploader() {
       fileBase64List.push(fileBase64?.slice(i, i + 1024 * 1024 * 2));
     }
 
-    // 如果填写了文件来源，就加上文件来源模板
-    let fileSourceStr = fileSource.value
-      ? `\n{{文件来源|内容=${fileSource.value}}}`
-      : "";
-
     // 初始化进度条，默认进度为0
     file.status = "uploading";
 
@@ -159,7 +154,7 @@ async function uploader() {
       let res = await editWikiPage({
         title: `文件:${file.name}`,
         text:
-          `{{Base64}}\n{{${fileLicense.value || "合理使用"}}}` + fileSourceStr,
+          `#重定向 [[文件:${file.name}/poster.png]]\n{{Base64}}`,
         summary: "Base64编码文件页面",
         tags: "Base64文件变更",
         createonly: true,
@@ -207,6 +202,7 @@ async function uploader() {
             mime: Metadata.mime,
           },
           fileSource: fileSource.value,
+          fileLicense: fileLicense.value,
           base64Info: {
             size: fileBase64?.length,
             count: fileBase64List.length,

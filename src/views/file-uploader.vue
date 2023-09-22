@@ -1,26 +1,19 @@
 <script lang="ts" setup>
-import { ref, type Ref } from "vue";
-import sleep from "await-sleep";
+import { ref, onMounted, type Ref } from "vue";
 import {
-  useMessage,
   type UploadFileInfo,
   type DropdownOption,
   type DropdownGroupOption,
 } from "naive-ui";
-import { getWikiPage, editWikiPage, uploadFile } from "@/utils/mwApi";
+import { getPage, editPage, uploadFile } from "@/utils/mwApi/index";
 import fileTypeList from "@/utils/fileTypeList";
-import file2base64 from "@/utils/file2base64";
 import getVideoMetadata from "@/utils/getVideoMetadata";
-
-const message = useMessage();
+import { base64ToFile, fileToBase64 } from "file64";
 
 // 定义一些变量
 let fileSource = ref("");
 let loading = ref(false);
 let fileList: Ref<UploadFileInfo[]> = ref([]);
-let fileLicense = ref(null);
-let fileLicenseLaoding = ref(false);
-let fileLicenseOptions: Ref<DropdownOption[] | DropdownGroupOption[]> = ref([]);
 let fileExtList = ref(
   Object.values(fileTypeList)
     .map((item) => item.ext)
@@ -29,6 +22,9 @@ let fileExtList = ref(
 );
 
 // 获取羊羊百科授权协议列表
+let fileLicense = ref(null);
+let fileLicenseLaoding = ref(true);
+let fileLicenseOptions: Ref<DropdownOption[] | DropdownGroupOption[]> = ref([]);
 async function getLicenseList() {
   // 授权列表str转obj。代码由 New Bing 改写。
   function licenseStr2Obj(text: string): DropdownGroupOption[] {
@@ -47,8 +43,8 @@ async function getLicenseList() {
         if (match) {
           // 向最后一个组中添加子项对象
           result[result.length - 1].children.push({
-            label: match[2],
-            value: match[1],
+            label: match[2].trim(),
+            value: match[1].trim(),
           });
         }
       } else if (line.startsWith("*")) {
@@ -71,22 +67,21 @@ async function getLicenseList() {
     return result;
   }
 
-  // 打开加载动画，强制欣赏加载动画一秒钟，防止加载速度太快出现“闪屏”
-  fileLicenseLaoding.value = true;
-  await sleep(1000);
-
   try {
-    let rawText = (await getWikiPage("MediaWiki:Licenses"))?.content;
+    let rawText = (await getPage("MediaWiki:Licenses"))?.content;
     if (rawText === undefined) {
       throw new Error("获取授权协议列表失败（未知错误）");
     }
     fileLicenseOptions.value = licenseStr2Obj(await rawText);
   } catch (err) {
-    message.error(`获取授权协议列表失败（${err}）`);
+    $message.error(`获取授权协议列表失败（${err}）`);
   } finally {
     fileLicenseLaoding.value = false;
   }
 }
+onMounted(() => {
+  getLicenseList();
+});
 
 // 点击上传按钮时：
 async function uploader() {
@@ -103,18 +98,18 @@ async function uploader() {
 
     // 如果因为未知原因file.file不存在
     if (file.file === null || file.file === undefined) {
-      message.error(`file.file不存在，未知错误`);
+      $message.error(`file.file不存在，未知错误`);
       continue;
     }
 
     // 如果文件大小超过20MB
     if (file.file.size > 1024 * 1024 * 20) {
-      message.error(`文件 ${file.file.name} 超过20MB`);
+      $message.error(`文件 ${file.file.name} 超过20MB`);
       continue;
     }
 
     // 将file.file转换为base64编码
-    let fileBase64 = await file2base64(file.file);
+    let fileBase64 = await fileToBase64(file.file);
 
     // 将base64编码的字符串分割为2MB一份
     let fileBase64List = [];
@@ -129,101 +124,70 @@ async function uploader() {
     for (let index = 0; index < fileBase64List.length; index++) {
       const element = fileBase64List[index];
 
-      // try上传base64编码的文件
-      try {
-        let res = await editWikiPage({
-          title: `Data:${file.name}/${index}`,
-          text: element,
-          summary: "Base64编码文件内容",
-          tags: "Base64文件变更",
-          createonly: true,
-        });
-        file.percentage = Math.ceil(
-          ((index + 1) / fileBase64List.length) * 100
-        ); // 更新进度条
-        console.log(res);
-      } catch (error) {
-        message.error(`${file.name} 上传失败（${error}）`);
-        console.log(error);
-        file.status = "error";
-      }
-    }
-
-    // try更新文件页面
-    try {
-      let res = await editWikiPage({
-        title: `文件:${file.name}`,
-        text:
-          `#重定向 [[文件:${file.name}/poster.png]]\n{{Base64}}`,
-        summary: "Base64编码文件页面",
+      // 上传base64编码的文件
+      (await editPage({
+        title: `Data:${file.name}/${index}`,
+        text: element,
+        summary: "Base64编码文件内容",
         tags: "Base64文件变更",
         createonly: true,
-      });
-
-      // 更新进度条状态=>上传成功
-      file.url = `https://xyy.huijiwiki.com/wiki/文件:` + file.name;
-      file.status = "finished";
-
-      message.success(`${file.name} 上传成功`);
-      console.log(res);
-    } catch (error) {
-      file.status = "error";
-      message.error(`${file.name} 页面更新失败（${error}）`);
-      console.log(error);
+      }))
+        ? (file.percentage = Math.ceil(
+            ((index + 1) / fileBase64List.length) * 100
+          )) // 处理进度条
+        : (file.status = "error");
     }
 
     // 如果是视频文件，上传封面及其data页面
     if (file.file.type.startsWith("video/")) {
       let Metadata = await getVideoMetadata(file.file);
+      let poster = await base64ToFile(Metadata.poster, `${file.name}.png`);
+
       // 上传封面
-      try {
-        let res = await uploadFile({
-          file: new File([Metadata.poster], "poster.png", {
-            type: "image/png",
-          }),
-          filename: `文件:${file.name}/poster.png`,
-        });
-        console.log(res);
-      } catch (error) {
-        message.error(`${file.name} 上传封面失败（${error}）`);
-        console.log(error);
-      }
+      (await uploadFile(poster)) ? null : (file.status = "error");
       // 上传data页面
-      try {
-        let dataObj = {
-          metadata: {
-            duration: Metadata.duration,
-            width: Metadata.width,
-            height: Metadata.height,
-            size: Metadata.size,
-            mime: Metadata.mime,
-          },
-          fileSource: fileSource.value,
-          fileLicense: fileLicense.value,
-          base64Info: {
-            size: fileBase64?.length,
-            count: fileBase64List.length,
-          },
-          dataType: "base64",
-        };
-        console.log(dataObj);
-        let res = await editWikiPage({
-          title: `Data:${file.name}.json`,
-          text: JSON.stringify(dataObj),
-          summary: "Base64编码文件data页面",
-          tags: "Base64文件变更",
-          createonly: true,
-        });
-        console.log(res);
-      } catch (error) {
-        message.error(`${file.name} 上传data页面失败（${error}）`);
-        console.log(error);
-      }
+      let dataObj = {
+        metadata: {
+          duration: Metadata.duration,
+          width: Metadata.width,
+          height: Metadata.height,
+          size: Metadata.size,
+          mime: Metadata.mime,
+        },
+        fileSource: fileSource.value,
+        fileLicense: fileLicense.value,
+        base64Info: {
+          size: fileBase64?.length,
+          count: fileBase64List.length,
+        },
+        dataType: "base64",
+      };
+      (await editPage({
+        title: `Data:${file.name}.json`,
+        text: JSON.stringify(dataObj),
+        summary: "Base64编码文件data页面",
+        tags: "Base64文件变更",
+        createonly: true,
+      }))
+        ? null
+        : (file.status = "error");
     }
 
-    // 结束加载状态
-    loading.value = false;
+    // 更新文件页面
+    (await editPage({
+      title: `文件:${file.name}`,
+      text: `#重定向 [[文件:${file.name}.png]]\n{{Base64}}`,
+      summary: "Base64编码文件页面",
+      tags: "Base64文件变更",
+      createonly: true,
+    }))
+      ? ((file.url = `https://xyy.huijiwiki.com/wiki/文件:` + file.name),
+        (file.status = "finished"))
+      : (file.status = "error");
   }
+
+  // 结束加载状态
+  loading.value = false;
 }
 </script>
 
@@ -258,7 +222,6 @@ async function uploader() {
           placeholder="授权协议"
           v-model:value="fileLicense"
           :options="fileLicenseOptions"
-          @focus.once="getLicenseList()"
         >
           <template #empty>
             <n-empty description="正在加载">

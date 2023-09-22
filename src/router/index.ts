@@ -6,17 +6,26 @@ import {
 
 const filePreview = () => import("@/views/file-preview.vue");
 const homeView = () => import("@/views/home-view.vue");
+const sttingsView = () => import("@/views/settings-view.vue");
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
     name: "home",
     component: homeView,
+    meta: {
+      keepAlive: true,
+    },
   },
   {
     path: "/preview/:fileName",
     name: "filePreview",
     component: filePreview,
+  },
+  {
+    path: "/settings",
+    name: "settings",
+    component: sttingsView,
   },
 ];
 

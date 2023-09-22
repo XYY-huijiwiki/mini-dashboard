@@ -6,14 +6,6 @@ declare module "await-sleep" {
   export default sleep;
 }
 
-// 定义localStorage中存储的配置信息
-interface Settings {
-  backup: boolean;
-  config: {
-    list: Array<SelectOption | SelectGroupOption>;
-  };
-}
-
 // 定义请求的返回值
 interface ResponseData {
   _id: string;
@@ -23,9 +15,6 @@ interface ResponseData {
     [key: string]: any;
   }>;
 }
-
-// 定义xlsx的类型
-declare module "xlsx/xlsx.mjs";
 
 // 定义 mw
 interface Api {
@@ -54,5 +43,12 @@ interface Api {
 }
 
 declare const mw: {
-  Api: any
+  Api: any;
+  huijiApi: any;
 };
+
+// define naive-ui api from huijiWiji
+declare const $message: MessageApiInjection;
+declare const $dialog: DialogApiInjection;
+declare const $loadingBar: LoadingBarApiInjection;
+declare const $notification: NotificationApiInjection;

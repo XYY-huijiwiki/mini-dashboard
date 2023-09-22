@@ -1,17 +1,13 @@
 <script lang="ts" setup>
 import { ref, computed, h, type Ref } from "vue";
-import { useMessage, useDialog, type MenuOption } from "naive-ui";
-import sleep from "await-sleep";
+import { type MenuOption } from "naive-ui";
 import materialSymbol from "@/components/material-symbol.vue";
-import { getWikiPage } from "@/utils/mwApi";
+import { getPage } from "@/utils/mwApi/index";
 import { useRouter } from "vue-router";
+import { renamePage } from "@/utils/mwApi/index";
 
 // use router
 const router = useRouter();
-
-// use message and dialog
-const message = useMessage();
-const dialog = useDialog();
 
 // import props
 const props = defineProps({
@@ -26,9 +22,13 @@ let showRenameDialog = ref(false);
 // props.fulltext is designed to be immutable, so we disable eslint here
 // eslint-disable-next-line vue/no-setup-props-destructure
 let fulltext = ref(props.fulltext);
-let filePrefix = ref(fulltext.value.split(":").slice(1).join(":"));
+let filePrefix = ref(fulltext.value.split(":")[0]);
 let fileName = ref(
-  fulltext.value.split(":").slice(1).join(":").split(".").slice(0, -1).join(".")
+  fulltext.value
+    .replace(filePrefix.value + ":", "")
+    .split(".")
+    .slice(0, -1)
+    .join(".")
 );
 let fileExt = ref(fulltext.value.split(".").slice(-1)[0]);
 let newName = computed(
@@ -37,27 +37,9 @@ let newName = computed(
 let renameLoading = ref(false);
 async function rename() {
   renameLoading.value = true;
-  await sleep(5000);
-  try {
-    let msg = await new mw.Api().postWithToken("csrf", {
-      action: "move",
-      from: props.fulltext,
-      to: newName.value,
-      tags: "Base64文件变更",
-      movetalk: true,
-      movesubpages: true,
-      noredirect: true,
-    });
-    message.success("文件移动成功");
-    message.info("刷新页面后文件列表才会更新");
-    console.log(msg);
-  } catch (error) {
-    message.error("文件移动失败，未知错误");
-    console.log(error);
-  } finally {
-    renameLoading.value = false;
-    showRenameDialog.value = false;
-  }
+  await renamePage(props.fulltext, newName.value);
+  renameLoading.value = false;
+  showRenameDialog.value = false;
 }
 
 // info function
@@ -79,11 +61,13 @@ let options: Ref<MenuOption[]> = ref([
     label: "重命名",
     icon: () => h(materialSymbol, { size: 20 }, "edit"),
     key: "rename",
+    disabled: true,
   },
   {
     label: "删除",
     key: "delete",
     icon: () => h(materialSymbol, { size: 20 }, "delete"),
+    disabled: true,
   },
   {
     label: "详细信息",
@@ -97,10 +81,10 @@ let options: Ref<MenuOption[]> = ref([
 async function handleSelect(key: string) {
   switch (key) {
     case "preview":
-      router.push(`/preview/${fileName.value}`);
+      router.push(`/preview/${fileName.value}.${fileExt.value}`);
       break;
     case "delete":
-      dialog.error({
+      $dialog.error({
         autoFocus: false,
         title: "删除文件",
         content: "确定要永久删除这个文件吗？",
@@ -113,10 +97,10 @@ async function handleSelect(key: string) {
       navigator.clipboard.writeText(
         encodeURI(
           `https://xyy.huijiwiki.com/p/
-          ${(await getWikiPage(props.fulltext))?.id}`
+          ${(await getPage(props.fulltext))?.id}`
         )
       );
-      message.success("已复制到剪贴板");
+      $message.success("已复制到剪贴板");
       break;
     case "rename":
       showRenameDialog.value = true;
@@ -125,13 +109,13 @@ async function handleSelect(key: string) {
       showInfoDrawer.value = true;
       break;
     default:
-      message.error(`未知错误（handleSelect(${key}）`);
+      $message.error(`未知错误（handleSelect(${key}）`);
   }
 }
 
 // 删除功能
 async function deleteFile() {
-  message.loading("正在删除……");
+  $message.loading("正在删除……");
   let ok = true;
 
   for (let index = -1; ; index++) {
@@ -144,9 +128,9 @@ async function deleteFile() {
       });
     } catch (error) {
       if (error === "missingtitle") {
-        message.error("文件不存在");
+        $message.error("文件不存在");
       } else {
-        message.error(`未知错误（${error}）`);
+        $message.error(`未知错误（${error}）`);
       }
       ok = false;
       break;
@@ -154,7 +138,7 @@ async function deleteFile() {
   }
 
   if (!ok) return;
-  message.success("删除完成");
+  $message.success("删除完成");
 }
 </script>
 
@@ -175,14 +159,6 @@ async function deleteFile() {
         </n-button>
       </n-dropdown>
     </n-button-group>
-
-    <!-- drawer for file info -->
-    <!-- <file-info
-      v-model:show="showInfoDrawer"
-      :filePrefix="filePrefix"
-      :fileName="fileName"
-      :fileExt="fileExt"
-    ></file-info> -->
 
     <!-- modal to rename file -->
     <n-modal
@@ -219,4 +195,3 @@ async function deleteFile() {
     </n-modal>
   </div>
 </template>
-@/utils/mwApi

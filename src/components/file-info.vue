@@ -20,7 +20,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted } from "vue";
-import { getWikiPage } from "@/utils/mwApi";
+import { getPage } from "@/utils/mwApi/index";
 const props = defineProps({
   show: {
     type: Boolean,
@@ -49,8 +49,7 @@ const show = computed({
   },
 });
 onMounted(async () => {
-  let content = (await getWikiPage("Data:" + props.fileName + ".json"))
-    ?.content;
+  let content = (await getPage("Data:" + props.fileName + ".json"))?.content;
   console.log(content);
 });
 </script>

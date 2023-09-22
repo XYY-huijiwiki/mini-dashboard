@@ -58,7 +58,7 @@
               {{
                 floor(
                   ((data.metadata.size / data.metadata.duration) * 8) / 1000,
-                  2
+                  2,
                 )
               }}
             </template>
@@ -130,7 +130,7 @@ onMounted(async () => {
   }
   posterSrc.value = mw.huijiApi.getImageUrl(
     (route.params.fileName as string).replace(/ /g, "_") + ".png",
-    "xyy"
+    "xyy",
   );
 
   // 定义base64字符串
@@ -139,13 +139,13 @@ onMounted(async () => {
   // 获取base64字符串
   for (let index = 0; index < data.value.base64Info.count; index++) {
     let response = await fetch(
-      `https://xyy.huijiwiki.com/wiki/Data:${route.params.fileName}/${index}?action=raw`
+      `https://xyy.huijiwiki.com/wiki/Data:${route.params.fileName}/${index}?action=raw`,
     );
     if (response.ok) {
       base64Str = base64Str + (await response.text());
     } else {
       console.log(
-        "通过循环遍历获取base64字符串，直到找不到下一份字符串为止。所以出现一次404请求是正常的。"
+        "通过循环遍历获取base64字符串，直到找不到下一份字符串为止。所以出现一次404请求是正常的。",
       );
       break;
     }

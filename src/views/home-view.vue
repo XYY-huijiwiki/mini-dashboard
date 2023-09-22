@@ -7,7 +7,11 @@
       <n-tab-pane name="manager" display-directive="show:lazy" tab="文件管理">
         <file-manager></file-manager>
       </n-tab-pane>
-      <n-tab-pane name="manager-old" display-directive="show:lazy" tab="文件管理（旧）">
+      <n-tab-pane
+        name="manager-old"
+        display-directive="show:lazy"
+        tab="文件管理（旧）"
+      >
         <file-manager-old></file-manager-old>
       </n-tab-pane>
     </n-tabs>

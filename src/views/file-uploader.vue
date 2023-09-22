@@ -18,7 +18,7 @@ let fileExtList = ref(
   Object.values(fileTypeList)
     .map((item) => item.ext)
     .flat()
-    .sort()
+    .sort(),
 );
 
 // 获取羊羊百科授权协议列表
@@ -133,7 +133,7 @@ async function uploader() {
         createonly: true,
       }))
         ? (file.percentage = Math.ceil(
-            ((index + 1) / fileBase64List.length) * 100
+            ((index + 1) / fileBase64List.length) * 100,
           )) // 处理进度条
         : (file.status = "error");
     }

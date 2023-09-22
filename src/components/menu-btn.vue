@@ -28,11 +28,11 @@ let fileName = ref(
     .replace(filePrefix.value + ":", "")
     .split(".")
     .slice(0, -1)
-    .join(".")
+    .join("."),
 );
 let fileExt = ref(fulltext.value.split(".").slice(-1)[0]);
 let newName = computed(
-  () => `${filePrefix.value}:${fileName.value}.${fileExt.value}`
+  () => `${filePrefix.value}:${fileName.value}.${fileExt.value}`,
 );
 let renameLoading = ref(false);
 async function rename() {
@@ -97,8 +97,8 @@ async function handleSelect(key: string) {
       navigator.clipboard.writeText(
         encodeURI(
           `https://xyy.huijiwiki.com/p/
-          ${(await getPage(props.fulltext))?.id}`
-        )
+          ${(await getPage(props.fulltext))?.id}`,
+        ),
       );
       $message.success("已复制到剪贴板");
       break;

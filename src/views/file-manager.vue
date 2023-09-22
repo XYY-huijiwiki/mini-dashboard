@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, h, onMounted, type Ref } from "vue";
+import { ref, h, onMounted, type Ref, type VNodeChild } from "vue";
 import {
   NText,
   NA,
@@ -16,7 +16,7 @@ type RowData = {
     width: number;
     height: number;
     size: number;
-    mime: string | null;
+    mime: string;
   };
   fileSource: string;
   base64Info: {
@@ -43,7 +43,7 @@ async function query(page: number, sorter?: DataTableSortState): Promise<void> {
       : sorter.columnKey === "name"
       ? (newKey = "_id")
       : null;
-      console.log(sorter);
+    console.log(sorter);
     console.log(newKey);
     // new sortBy
     if (newKey && newKey === "_id") {
@@ -70,7 +70,7 @@ async function query(page: number, sorter?: DataTableSortState): Promise<void> {
     _: new Date().toISOString(),
   });
   let response = await fetch(
-    `https://xyy.huijiwiki.com/api/rest_v1/namespace/data?${params.toString()}`
+    `https://xyy.huijiwiki.com/api/rest_v1/namespace/data?${params.toString()}`,
   );
   let json = await response.json();
   console.log(json);
@@ -83,10 +83,11 @@ async function query(page: number, sorter?: DataTableSortState): Promise<void> {
 
 let data: Ref<RowData[]> = ref([]);
 
-let columns: Ref<DataTableColumns> = ref([
+let columns: Ref<DataTableColumns<RowData>> = ref([
   {
     type: "selection",
-    disabled: (rowData: RowData) => {
+    key: "selection",
+    disabled: (/*rowData: RowData*/) => {
       return true;
     },
   },
@@ -94,12 +95,11 @@ let columns: Ref<DataTableColumns> = ref([
     title: "Name",
     key: "name",
     sorter: true,
-    sortOrder: true,
-    render: (rowData: RowData) => {
+    render: (rowData: RowData): VNodeChild => {
       return h(
         RouterLink,
         { to: "/preview/" + rowData._id.slice(5, -5) },
-        h(NA, rowData._id.slice(5, -5))
+        h(NA, rowData._id.slice(5, -5)),
       );
     },
   },
@@ -107,7 +107,6 @@ let columns: Ref<DataTableColumns> = ref([
     title: "Dateityp",
     key: "type",
     sorter: true,
-    sortOrder: true,
     render: (rowData: RowData) => {
       return h(NText, rowData.metadata.mime);
     },
@@ -116,7 +115,6 @@ let columns: Ref<DataTableColumns> = ref([
     title: "Dateigröße",
     key: "size",
     sorter: true,
-    sortOrder: true,
     render: (rowData: RowData) => {
       return h(NText, filesize(rowData.metadata.size, { locale: "de-de" }));
     },
@@ -128,7 +126,7 @@ let pagination = ref({
   pageCount: undefined,
   page: 1,
   showSizePicker: true,
-  pageSizes: [ 10, 20, 50, 100],
+  pageSizes: [10, 20, 50, 100],
   pageSize: 10,
 });
 

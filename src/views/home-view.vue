@@ -1,10 +1,18 @@
 <template>
   <div>
     <n-tabs v-model:value="activeTab" default-value="uploader" animated>
-      <n-tab-pane name="uploader" display-directive="show:lazy" tab="文件上传">
+      <n-tab-pane
+        name="uploader"
+        display-directive="show:lazy"
+        :tab="t('file-uploader.title')"
+      >
         <file-uploader></file-uploader>
       </n-tab-pane>
-      <n-tab-pane name="manager" display-directive="show:lazy" tab="文件管理">
+      <n-tab-pane
+        name="manager"
+        display-directive="show:lazy"
+        :tab="t('file-manager.title')"
+      >
         <file-manager></file-manager>
       </n-tab-pane>
       <n-tab-pane
@@ -21,6 +29,9 @@
 <script setup lang="ts">
 import { ref, defineAsyncComponent } from "vue";
 import loadingComponent from "@/views/loading-view.vue";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 // define async views
 function createAsyncComponent(name: string) {

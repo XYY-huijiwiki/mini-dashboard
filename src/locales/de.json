@@ -1,0 +1,54 @@
+{
+  "language": "Deutesch",
+  "dev-tag": "Dev",
+  "general": {
+    "loading": "Laden",
+    "info": "Info",
+    "error": "Fehler",
+    "warning": "Warnung",
+    "success": "Erfolg",
+    "btn-ok": "OK",
+    "btn-cancel": "Abbrechen",
+    "btn-yes": "Ja",
+    "btn-no": "Nein",
+    "btn-confirm": "Bestätigen"
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "label-connect-to-dev-server": "Mit Dev-Server verbinden",
+    "btn-connect": "Verbinden",
+    "btn-connected": "Verbunden",
+    "label-restore-defaults": "Standardwerte wiederherstellen",
+    "btn-restore": "Wiederherstellen",
+    "text-confirm-restore": "Möchten Sie die Standardeinstellungen wiederherstellen?",
+    "label-language": "Sprache"
+  },
+  "home": {
+    "title": "Home"
+  },
+  "preview": {
+    "title": "Vorschau",
+    "label-file-type": "Typ",
+    "label-file-name": "Name",
+    "label-file-size": "Größe",
+    "label-file-size-on-disk": "Größe auf Datenträger",
+    "label-video-frame-width": "Bildbreite",
+    "label-video-frame-height": "Bildhöhe",
+    "label-video-total-bitrate": "Gesamtbitrate",
+    "label-video-length": "Länge"
+  },
+  "file-manager": {
+    "title": "Dateimanager",
+    "label-file-name": "Name",
+    "label-file-type": "Dateityp",
+    "label-file-size": "Dateigröße"
+  },
+  "file-uploader": {
+    "title": "Datei hochladen",
+    "label-file-source": "Dateiquelle",
+    "label-file-license": "Dateilizenz",
+    "btn-upload": "Hochladen",
+    "label-drop-files-here": "Klicken oder ziehen Sie Dateien in diesen Bereich, um sie hochzuladen",
+    "label-supported-file-types": "Derzeit unterstützte Dateitypen zum Hochladen: {0}"
+  }
+}

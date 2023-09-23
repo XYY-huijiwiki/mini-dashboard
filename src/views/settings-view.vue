@@ -1,5 +1,10 @@
 <script lang="ts" setup>
 import { useLocalStorage } from "@vueuse/core";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
+
+let dev = import.meta.env.DEV;
 
 const defaultSettings = {
   dev: {
@@ -12,10 +17,10 @@ const settings = useLocalStorage("settings", defaultSettings);
 
 function clearData() {
   $dialog.warning({
-    title: "警告",
-    content: "确定要恢复默认设置吗？",
-    positiveText: "确定",
-    negativeText: "取消",
+    title: t("general.warning"),
+    content: t("settings.text-confirm-restore"),
+    positiveText: t("general.btn-confirm"),
+    negativeText: t("general.btn-no"),
     autoFocus: false,
     onPositiveClick: () => {
       settings.value = defaultSettings;
@@ -34,17 +39,26 @@ function startDev() {
 
 <template>
   <n-form>
-    <n-form-item label="连接开发服务器">
+    <n-form-item :label="t('settings.label-connect-to-dev-server')">
       <n-input-group>
         <n-input-group-label>http://</n-input-group-label>
-        <n-input v-model:value="settings.dev.host"></n-input>
+        <n-input v-model:value="settings.dev.host" />
         <n-input-group-label>:</n-input-group-label>
-        <n-input v-model:value="settings.dev.port"></n-input>
-        <n-button @click="startDev()">连接</n-button>
+        <n-input v-model:value="settings.dev.port" />
+        <n-button @click="startDev()" :disabled="dev">{{
+          dev ? t("settings.btn-connected") : t("settings.btn-connect")
+        }}</n-button>
       </n-input-group>
     </n-form-item>
-    <n-form-item label="恢复默认设置">
-      <n-button @click="clearData()">恢复</n-button>
+    <n-form-item :label="t('settings.label-language')">
+      <n-radio :checked="true">
+        {{ t("language") }}
+      </n-radio>
+    </n-form-item>
+    <n-form-item :label="t('settings.label-restore-defaults')">
+      <n-button @click="clearData()">
+        {{ t("settings.btn-restore") }}
+      </n-button>
     </n-form-item>
   </n-form>
 

@@ -8,6 +8,9 @@ import {
 } from "naive-ui";
 import { RouterLink } from "vue-router";
 import { filesize } from "filesize";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 type RowData = {
   _id: string;
@@ -92,7 +95,7 @@ let columns: Ref<DataTableColumns<RowData>> = ref([
     },
   },
   {
-    title: "Name",
+    title: t("file-manager.label-file-name"),
     key: "name",
     sorter: true,
     render: (rowData: RowData): VNodeChild => {
@@ -104,7 +107,7 @@ let columns: Ref<DataTableColumns<RowData>> = ref([
     },
   },
   {
-    title: "Dateityp",
+    title: t("file-manager.label-file-type"),
     key: "type",
     sorter: true,
     render: (rowData: RowData) => {
@@ -112,7 +115,7 @@ let columns: Ref<DataTableColumns<RowData>> = ref([
     },
   },
   {
-    title: "Dateigröße",
+    title: t("file-manager.label-file-size"),
     key: "size",
     sorter: true,
     render: (rowData: RowData) => {

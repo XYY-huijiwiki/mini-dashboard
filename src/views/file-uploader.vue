@@ -9,6 +9,11 @@ import { getPage, editPage, uploadFile } from "@/utils/mwApi/index";
 import fileTypeList from "@/utils/fileTypeList";
 import getVideoMetadata from "@/utils/getVideoMetadata";
 import { base64ToFile, fileToBase64 } from "file64";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
+
+console.log(t("file-uploader.label-file-source"));
 
 // 定义一些变量
 let fileSource = ref("");
@@ -209,22 +214,29 @@ async function uploader() {
             >
           </div>
           <n-text :style="{ 'font-size': '16px' }">
-            点击或者拖动文件到该区域来上传
+            {{ t("file-uploader.label-drop-files-here") }}
           </n-text>
-          <n-p>目前支持上传的文件类型有：{{ fileExtList.join(", ") }}</n-p>
+          <n-p>{{
+            t("file-uploader.label-supported-file-types", [
+              fileExtList.join(", "),
+            ])
+          }}</n-p>
         </n-upload-dragger>
       </n-upload>
       <!-- 上传按钮 -->
       <n-input-group>
-        <n-input placeholder="文件来源" v-model:value="fileSource" />
+        <n-input
+          :placeholder="t(`file-uploader.label-file-source`)"
+          v-model:value="fileSource"
+        />
         <n-select
           :loading="fileLicenseLaoding"
-          placeholder="授权协议"
+          :placeholder="t(`file-uploader.label-file-license`)"
           v-model:value="fileLicense"
           :options="fileLicenseOptions"
         >
           <template #empty>
-            <n-empty description="正在加载">
+            <n-empty :description="t('general.loading')">
               <template #icon>
                 <n-icon>
                   <material-symbol :size="32">hourglass_empty</material-symbol>
@@ -233,7 +245,9 @@ async function uploader() {
             </n-empty>
           </template>
         </n-select>
-        <n-button @click="uploader()" :loading="loading">上传文件</n-button>
+        <n-button @click="uploader()" :loading="loading">
+          {{ t("file-uploader.btn-upload") }}
+        </n-button>
       </n-input-group>
     </n-space>
   </div>

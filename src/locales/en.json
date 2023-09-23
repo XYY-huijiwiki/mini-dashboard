@@ -1,0 +1,54 @@
+{
+  "language": "English",
+  "dev-tag": "Dev",
+  "general": {
+    "loading": "Loading",
+    "info": "Info",
+    "error": "Error",
+    "warning": "Warning",
+    "success": "Success",
+    "btn-ok": "OK",
+    "btn-cancel": "Cancel",
+    "btn-yes": "Yes",
+    "btn-no": "No",
+    "btn-confirm": "Confirm"
+  },
+  "settings": {
+    "title": "Settings",
+    "label-connect-to-dev-server": "Connect to Dev Server",
+    "btn-connect": "Connect",
+    "btn-connected": "Connected",
+    "label-restore-defaults": "Restore Defaults",
+    "btn-restore": "Restore",
+    "text-confirm-restore": "Are you sure you want to restore the default settings?",
+    "label-language": "Language"
+  },
+  "home": {
+    "title": "Home"
+  },
+  "preview": {
+    "title": "Preview",
+    "label-file-type": "Type",
+    "label-file-name": "Name",
+    "label-file-size": "Size",
+    "label-file-size-on-disk": "Size on Disk",
+    "label-video-frame-width": "Frame Width",
+    "label-video-frame-height": "Frame Height",
+    "label-video-total-bitrate": "Total Bitrate",
+    "label-video-length": "Length"
+  },
+  "file-manager": {
+    "title": "File Manager",
+    "label-file-name": "Name",
+    "label-file-type": "File Type",
+    "label-file-size": "File Size"
+  },
+  "file-uploader": {
+    "title": "File Uploader",
+    "label-file-source": "File Source",
+    "label-file-license": "File License",
+    "btn-upload": "Upload",
+    "label-drop-files-here": "Click or drag files here to upload",
+    "label-supported-file-types": "Supported file types: {0}"
+  }
+}

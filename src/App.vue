@@ -1,25 +1,63 @@
 <script lang="ts" setup>
-import { darkTheme, deDE, dateDeDE } from "naive-ui";
+import {
+  darkTheme,
+  zhCN,
+  dateZhCN,
+  deDE,
+  dateDeDE,
+  type NDateLocale,
+  type NLocale,
+} from "naive-ui";
+import { ref, type Ref } from "vue";
+import { langCode } from "@/locales";
+import { useI18n } from "vue-i18n";
+
+let dev = ref(import.meta.env.DEV);
+
+const { t } = useI18n();
+
+// dynamic import language packs from naive-ui
+let langPack: Ref<[NLocale | null, NDateLocale | null]> = ref([null, null]);
+switch (langCode) {
+  case "de":
+    langPack.value = [deDE, dateDeDE];
+    break;
+  case "zh":
+    langPack.value = [zhCN, dateZhCN];
+    break;
+  default:
+    langPack.value = [null, null];
+    break;
+}
 </script>
 
 <template>
-  <n-config-provider :theme="darkTheme" :locale="deDE" :date-Locale="dateDeDE">
+  <n-config-provider
+    :theme="darkTheme"
+    :locale="langPack[0]"
+    :dateLocale="langPack[1]"
+  >
     <n-card>
       <!-- 卡片左上角：返回按钮和标题 -->
       <template #header>
-        <n-space style="align-items: center">
+        <n-space align="center" :wrap="false" :wrap-item="false">
           <n-button quaternary circle @click="$router.back()">
             <template #icon>
               <material-symbol> arrow_back </material-symbol>
             </template>
           </n-button>
-          <n-ellipsis> {{ $route.params.fileName || $route.name }} </n-ellipsis>
+          <n-tag v-if="dev">{{ t("dev-tag") }}</n-tag>
+          <n-ellipsis>
+            {{
+              $route.params.fileName || t(`${$route.name?.toString()}.title`)
+            }}
+          </n-ellipsis>
         </n-space>
       </template>
 
       <!-- 卡片右上角按钮：设置 -->
       <template #header-extra>
-        <n-button quaternary circle @click="$router.push('settings')">
+        <n-button quaternary circle @click="$router.push('/settings')">
           <template #icon>
             <material-symbol> settings </material-symbol>
           </template>

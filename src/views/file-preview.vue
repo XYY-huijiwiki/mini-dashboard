@@ -18,7 +18,7 @@
       <n-grid x-gap="8" y-gap="16" cols="1 400:2 600:3">
         <!-- Dateityp -->
         <n-gi>
-          <n-statistic label="Dateityp">
+          <n-statistic :label="t('preview.label-file-type')">
             <template #default>
               {{ data.metadata.mime }}
             </template>
@@ -26,7 +26,7 @@
         </n-gi>
         <!-- Bildbreite -->
         <n-gi>
-          <n-statistic label="Bildbreite">
+          <n-statistic :label="t('preview.label-video-frame-width')">
             <template #default>
               {{ data.metadata.width }}
             </template>
@@ -35,7 +35,7 @@
         </n-gi>
         <!-- Bildhöhe -->
         <n-gi>
-          <n-statistic label="Bildhöhe">
+          <n-statistic :label="t('preview.label-video-frame-height')">
             <template #default>
               {{ data.metadata.height }}
             </template>
@@ -44,16 +44,19 @@
         </n-gi>
         <!-- Länge -->
         <n-gi>
-          <n-statistic label="Länge">
+          <n-statistic :label="t('preview.label-video-length')">
             <template #default>
-              {{ floor(data.metadata.duration) }}
+              {{
+                dayjs
+                  .duration(data.metadata.duration, "second")
+                  .format("HH:mm:ss")
+              }}
             </template>
-            <template #suffix> Sekunden </template>
           </n-statistic>
         </n-gi>
         <!-- Gesamtbitrate -->
         <n-gi>
-          <n-statistic label="Gesamtbitrate">
+          <n-statistic :label="t('preview.label-video-total-bitrate')">
             <template #default>
               {{
                 floor(
@@ -66,16 +69,16 @@
           </n-statistic>
         </n-gi>
         <n-gi>
-          <n-statistic label="Größe">
+          <n-statistic :label="t('preview.label-file-size')">
             <template #default>
-              {{ filesize(data.metadata.size, { locale: "de-de" }) }}
+              {{ filesize(data.metadata.size, { locale: langCode }) }}
             </template>
           </n-statistic>
         </n-gi>
         <n-gi>
-          <n-statistic label="Größe auf Datenträger">
+          <n-statistic :label="t('preview.label-file-size-on-disk')">
             <template #default>
-              {{ filesize(data.base64Info.size, { locale: "de-de" }) }}
+              {{ filesize(data.base64Info.size, { locale: langCode }) }}
             </template>
           </n-statistic>
         </n-gi>
@@ -95,6 +98,15 @@ import errorView from "@/views/error-view.vue";
 import { floor } from "lodash-es";
 import { filesize } from "filesize";
 import sleep from "await-sleep";
+import dayjs from "dayjs";
+import duration from "dayjs/plugin/duration";
+import { langCode } from "@/locales";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
+
+// configure dayjs
+dayjs.extend(duration);
 
 // use route
 const route = useRoute();
@@ -129,7 +141,7 @@ onMounted(async () => {
     status.value = "error";
   }
   posterSrc.value = mw.huijiApi.getImageUrl(
-    (route.params.fileName as string).replace(/ /g, "_") + ".png",
+    route.params.fileName.toString().replace(/ /g, "_") + ".png",
     "xyy",
   );
 

@@ -1,0 +1,54 @@
+{
+  "language": "中文",
+  "dev-tag": "开发模式",
+  "general": {
+    "loading": "加载中",
+    "info": "信息",
+    "error": "错误",
+    "warning": "警告",
+    "success": "成功",
+    "btn-ok": "确定",
+    "btn-cancel": "取消",
+    "btn-yes": "是",
+    "btn-no": "否",
+    "btn-confirm": "确认"
+  },
+  "settings": {
+    "title": "设置",
+    "label-connect-to-dev-server": "连接开发服务器",
+    "btn-connect": "连接",
+    "btn-connected": "已连接",
+    "label-restore-defaults": "恢复默认设置",
+    "btn-restore": "恢复",
+    "text-confirm-restore": "确定要恢复默认设置吗？",
+    "label-language": "语言"
+  },
+  "home": {
+    "title": "首页"
+  },
+  "preview": {
+    "title": "预览",
+    "label-file-type": "类型",
+    "label-file-name": "名称",
+    "label-file-size": "大小",
+    "label-file-size-on-disk": "占用空间",
+    "label-video-frame-width": "帧宽度",
+    "label-video-frame-height": "帧高度",
+    "label-video-total-bitrate": "总比特率",
+    "label-video-length": "时长"
+  },
+  "file-manager": {
+    "title": "文件管理",
+    "label-file-name": "文件名",
+    "label-file-type": "文件类型",
+    "label-file-size": "文件大小"
+  },
+  "file-uploader": {
+    "title": "文件上传",
+    "label-file-source": "文件来源",
+    "label-file-license": "文件许可",
+    "btn-upload": "上传",
+    "label-drop-files-here": "点击或者拖动文件到该区域来上传",
+    "label-supported-file-types": "目前支持上传的文件类型有：{0}"
+  }
+}

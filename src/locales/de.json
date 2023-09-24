@@ -41,7 +41,12 @@
     "title": "Dateimanager",
     "label-file-name": "Name",
     "label-file-type": "Dateityp",
-    "label-file-size": "Dateigröße"
+    "label-file-size": "Dateigröße",
+    "dropdown-option-preview": "Vorschau",
+    "dropdown-option-link-copy": "Link kopieren",
+    "dropdown-option-rename": "Umbenennen",
+    "dropdown-option-delete": "Löschen",
+    "dropdown-option-details": "Details"
   },
   "file-uploader": {
     "title": "Datei hochladen",

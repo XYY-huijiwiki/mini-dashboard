@@ -41,7 +41,12 @@
     "title": "File Manager",
     "label-file-name": "Name",
     "label-file-type": "File Type",
-    "label-file-size": "File Size"
+    "label-file-size": "File Size",
+    "dropdown-option-preview": "Preview",
+    "dropdown-option-link-copy": "Copy Link",
+    "dropdown-option-rename": "Rename",
+    "dropdown-option-delete": "Delete",
+    "dropdown-option-details": "Details"
   },
   "file-uploader": {
     "title": "File Uploader",

@@ -16,7 +16,6 @@ async function renamePage(from: string, to: string): Promise<boolean> {
         from,
         to,
         movetalk: true,
-        movesubpages: true,
         noredirect: true,
       })
       .done((data: MoveResponse) => {

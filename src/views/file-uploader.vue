@@ -8,12 +8,12 @@ import {
 import { getPage, editPage, uploadFile } from "@/utils/mwApi/index";
 import fileTypeList from "@/utils/fileTypeList";
 import getVideoMetadata from "@/utils/getVideoMetadata";
-import { base64ToFile, fileToBase64 } from "file64";
+import { base64ToFile } from "file64";
 import { useI18n } from "vue-i18n";
+import encodePNG from "png-chunks-encode";
+import { filetypemime } from "magic-bytes.js";
 
 const { t } = useI18n();
-
-console.log(t("file-uploader.label-file-source"));
 
 // 定义一些变量
 let fileSource = ref("");
@@ -23,7 +23,7 @@ let fileExtList = ref(
   Object.values(fileTypeList)
     .map((item) => item.ext)
     .flat()
-    .sort(),
+    .sort()
 );
 
 // 获取羊羊百科授权协议列表
@@ -68,7 +68,6 @@ async function getLicenseList() {
       }
     }
 
-    console.log(result);
     return result;
   }
 
@@ -90,9 +89,16 @@ onMounted(() => {
 
 // 点击上传按钮时：
 async function uploader() {
+  // 如果没有写明文件来源
+  if (fileSource.value === "") {
+    $message.error(`请填写文件来源`);
+    return;
+  }
+
+  // 开始加载状态
   loading.value = true;
 
-  // 第一层循环：遍历文件列表
+  // 遍历文件列表
   for (let index in fileList.value) {
     let file = fileList.value[index];
 
@@ -104,91 +110,113 @@ async function uploader() {
     // 如果因为未知原因file.file不存在
     if (file.file === null || file.file === undefined) {
       $message.error(`file.file不存在，未知错误`);
+      file.status = "error";
       continue;
     }
 
-    // 如果文件大小超过20MB
-    if (file.file.size > 1024 * 1024 * 20) {
-      $message.error(`文件 ${file.file.name} 超过20MB`);
+    // 如果文件大小超过10MB（考虑png容器占用44字节）
+    if (file.file.size > 1024 * 1024 * 10 - 44) {
+      $message.error(`文件 ${file.file.name} 超过10MB`);
+      file.status = "error";
       continue;
     }
 
-    // 将file.file转换为base64编码
-    let fileBase64 = await fileToBase64(file.file);
-
-    // 将base64编码的字符串分割为2MB一份
-    let fileBase64List = [];
-    for (let i = 0; i < fileBase64?.length; i += 1024 * 1024 * 2) {
-      fileBase64List.push(fileBase64?.slice(i, i + 1024 * 1024 * 2));
-    }
-
-    // 初始化进度条，默认进度为0
+    // init progress bar
     file.status = "uploading";
 
-    // 第二层循环：遍历分割后的base64编码字符串
-    for (let index = 0; index < fileBase64List.length; index++) {
-      const element = fileBase64List[index];
-
-      // 上传base64编码的文件
-      (await editPage({
-        title: `Data:${file.name}/${index}`,
-        text: element,
-        summary: "Base64编码文件内容",
-        tags: "Base64文件变更",
-        createonly: true,
-      }))
-        ? (file.percentage = Math.ceil(
-            ((index + 1) / fileBase64List.length) * 100,
-          )) // 处理进度条
-        : (file.status = "error");
+    // check file type
+    let fileBuffer = new Uint8Array(await file.file.arrayBuffer());
+    let fileType = await filetypemime(fileBuffer.slice(0, 128)); // only check first 128 bytes
+    if (fileType.length === 0 || !file.type) {
+      $message.error(`文件 ${file.file.name} 类型未知`);
+      file.status = "error";
+      continue;
+    } else if (!fileType.includes(file.type)) {
+      $message.error(`文件 ${file.file.name} 后缀名与文件类型不匹配`);
+      file.status = "error";
+      continue;
+    } else if (fileExtList.value.includes(file.type)) {
+      $message.error(`文件 ${file.file.name} 类型已被禁止上传`);
+      file.status = "error";
+      continue;
     }
+    file.percentage = 25; // progress bar 25%
 
-    // 如果是视频文件，上传封面及其data页面
-    if (file.file.type.startsWith("video/")) {
-      let Metadata = await getVideoMetadata(file.file);
-      let poster = await base64ToFile(Metadata.poster, `${file.name}.png`);
+    // repack file
+    let pngBuffer = encodePNG([
+      { name: "IHDR", data: new Uint8Array([0]) },
+      { name: "IXYY", data: fileBuffer },
+      { name: "IEND", data: new Uint8Array([0]) },
+    ]);
+    let pngFile = new File([pngBuffer], `${file.name}.png`, {
+      type: "image/png",
+    });
 
-      // 上传封面
-      (await uploadFile(poster)) ? null : (file.status = "error");
-      // 上传data页面
-      let dataObj = {
-        metadata: {
-          duration: Metadata.duration,
-          width: Metadata.width,
-          height: Metadata.height,
-          size: Metadata.size,
-          mime: Metadata.mime,
-        },
+    // get file metadata and poster
+    let { poster, ...metadata } = await getVideoMetadata(file.file);
+    let fileMetadata: FileMetadata = {
+      wiki: {
         fileSource: fileSource.value,
-        fileLicense: fileLicense.value,
-        base64Info: {
-          size: fileBase64?.length,
-          count: fileBase64List.length,
-        },
-        dataType: "base64",
-      };
-      (await editPage({
-        title: `Data:${file.name}.json`,
-        text: JSON.stringify(dataObj),
-        summary: "Base64编码文件data页面",
-        tags: "Base64文件变更",
-        createonly: true,
-      }))
-        ? null
-        : (file.status = "error");
+        fileLicense: fileLicense.value || "合理使用",
+        uploader: mw.config.get("wgUserName"),
+        uploadTime: new Date(),
+      },
+      file: {
+        name: file.name,
+        size: file.file.size,
+        type: file.file.type,
+        lastModified: new Date(file.file.lastModified),
+      },
+      video: {
+        length: metadata.duration,
+        frameWidth: metadata.width,
+        frameHeight: metadata.height,
+      },
+    };
+
+    // init file page
+    if (
+      await editPage({
+        title: `文件:${file.name}`,
+        text: `#重定向 [[文件:${file.name}.poster.png]]\n[[文件:${file.name}.png]]\n[[分类:特殊文件]]`,
+      })
+    ) {
+      file.percentage = 50; // progress bar 50%
+    } else {
+      file.status = "error";
+      continue;
     }
 
-    // 更新文件页面
-    (await editPage({
-      title: `文件:${file.name}`,
-      text: `#重定向 [[文件:${file.name}.png]]\n{{Base64}}`,
-      summary: "Base64编码文件页面",
-      tags: "Base64文件变更",
-      createonly: true,
-    }))
-      ? ((file.url = `https://xyy.huijiwiki.com/wiki/文件:` + file.name),
-        (file.status = "finished"))
-      : (file.status = "error");
+    // init data page
+    if (
+      await editPage({
+        title: `Data:${file.name}.json`,
+        text: JSON.stringify(fileMetadata),
+      })
+    ) {
+      file.percentage = 75; // progress bar 75%
+    } else {
+      file.status = "error";
+      continue;
+    }
+
+    // upload file
+    if (await uploadFile(pngFile)) {
+      file.percentage = 100; // progress bar 100%
+    } else {
+      file.status = "error";
+      continue;
+    }
+
+    // upload poster
+    let posterFile = await base64ToFile(poster, `${file.name}.poster.png`);
+    if (await uploadFile(posterFile)) {
+      file.status = "finished";
+      file.url=`https://xyy.huijiwiki.com/wiki/Project:上传特殊文件#/preview/${file.name}`
+    } else {
+      file.status = "error";
+      continue;
+    }
   }
 
   // 结束加载状态

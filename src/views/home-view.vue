@@ -29,6 +29,7 @@
 <script setup lang="ts">
 import { ref, defineAsyncComponent } from "vue";
 import loadingComponent from "@/views/loading-view.vue";
+import errorComponent from "@/views/error-view.vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
@@ -38,6 +39,7 @@ function createAsyncComponent(name: string) {
   return defineAsyncComponent({
     loader: () => import(`../views/${name}.vue`),
     loadingComponent,
+    errorComponent,
   });
 }
 const fileUploader = createAsyncComponent("file-uploader");

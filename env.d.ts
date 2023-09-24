@@ -45,6 +45,7 @@ interface Api {
 declare const mw: {
   Api: any;
   huijiApi: any;
+  config: any;
 };
 
 // define naive-ui api from huijiWiji
@@ -52,3 +53,46 @@ declare const $message: MessageApiInjection;
 declare const $dialog: DialogApiInjection;
 declare const $loadingBar: LoadingBarApiInjection;
 declare const $notification: NotificationApiInjection;
+
+// FileMetadata
+interface FileMetadata {
+  file: {
+    name: string;
+    type: string;
+    size: number;
+    lastModified: Date;
+  };
+  video?: {
+    length: number;
+    frameWidth: number;
+    frameHeight: number;
+  };
+  audio?: {
+    bitrate: number;
+  };
+  media?: {
+    contributingArtist: string;
+    albumArtist: string;
+    album: string;
+    year: number;
+    no: string;
+    genre: string;
+    lentgh: number;
+  };
+  origin?: {
+    publisher: string;
+    encodedBy: string;
+    authorURL: string;
+    copyright: string;
+  };
+  wiki: {
+    fileSource: string;
+    fileLicense: string;
+    uploader: string;
+    uploadTime: Date;
+  };
+}
+
+interface RetrievedDataItem extends FileMetadata {
+  _id: string;
+}

@@ -23,7 +23,7 @@ async function uploadFile(file: File): Promise<boolean> {
         },
         {
           contentType: "multipart/form-data",
-        },
+        }
       )
       .done((data: UploadResponse) => {
         $message.success("上传成功");

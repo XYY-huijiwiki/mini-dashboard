@@ -19,7 +19,6 @@ async function getVideoMetadata(videoFile: File) {
   const ctx = canvas.getContext("2d")!;
   ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
   const poster = canvas.toDataURL("image/png");
-  console.log(video.duration);
   return {
     poster,
     duration: video.duration,

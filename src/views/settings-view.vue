@@ -45,9 +45,9 @@ function startDev() {
         <n-input v-model:value="settings.dev.host" />
         <n-input-group-label>:</n-input-group-label>
         <n-input v-model:value="settings.dev.port" />
-        <n-button @click="startDev()" :disabled="dev">{{
-          dev ? t("settings.btn-connected") : t("settings.btn-connect")
-        }}</n-button>
+        <n-button @click="startDev()" :disabled="dev">
+          {{ dev ? t("settings.btn-connected") : t("settings.btn-connect") }}
+        </n-button>
       </n-input-group>
     </n-form-item>
     <n-form-item :label="t('settings.label-language')">
@@ -61,17 +61,14 @@ function startDev() {
       </n-button>
     </n-form-item>
   </n-form>
-
   <n-divider />
-
-  <n-text strong>说明</n-text>
   <n-ul>
     <n-li>
       项目源代码可在<n-a href="//github.com/XYY-huijiwiki" target="_blank"
         >GitHub</n-a
       >上查看。
     </n-li>
-    <n-li> 单个文件的大小不能超过10MB。 </n-li>
+    <n-li> 单个文件的大小不能超过10MB（实际上要求比10MB小44个字节）。 </n-li>
     <n-li>
       最好填写文件来源。文件来源不尽相同的时候需要一个一个上传、一个一个填写。
     </n-li>

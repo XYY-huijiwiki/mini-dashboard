@@ -41,7 +41,12 @@
     "title": "文件管理",
     "label-file-name": "文件名",
     "label-file-type": "文件类型",
-    "label-file-size": "文件大小"
+    "label-file-size": "文件大小",
+    "dropdown-option-preview": "预览",
+    "dropdown-option-link-copy": "复制链接",
+    "dropdown-option-rename": "重命名",
+    "dropdown-option-delete": "删除",
+    "dropdown-option-details": "详细信息"
   },
   "file-uploader": {
     "title": "文件上传",

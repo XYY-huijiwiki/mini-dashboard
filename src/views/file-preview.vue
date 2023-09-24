@@ -2,10 +2,7 @@
   <div>
     <loading-view v-if="status === 'loading'" />
     <template v-else-if="status === 'ready'">
-      <div
-        class="embedembed-responsive"
-        v-if="data.metadata.mime === 'video/mp4'"
-      >
+      <div class="embedembed-responsive" v-if="data.file.type === 'video/mp4'">
         <n-spin :show="showSpin">
           <video
             :poster="posterSrc"
@@ -20,50 +17,43 @@
         <n-gi>
           <n-statistic :label="t('preview.label-file-type')">
             <template #default>
-              {{ data.metadata.mime }}
+              {{ data.file.type }}
             </template>
           </n-statistic>
         </n-gi>
         <!-- Bildbreite -->
-        <n-gi>
+        <n-gi v-if="data.video">
           <n-statistic :label="t('preview.label-video-frame-width')">
             <template #default>
-              {{ data.metadata.width }}
+              {{ data.video.frameWidth }}
             </template>
             <template #suffix> px </template>
           </n-statistic>
         </n-gi>
         <!-- Bildhöhe -->
-        <n-gi>
+        <n-gi v-if="data.video">
           <n-statistic :label="t('preview.label-video-frame-height')">
             <template #default>
-              {{ data.metadata.height }}
+              {{ data.video.frameHeight }}
             </template>
             <template #suffix> px </template>
           </n-statistic>
         </n-gi>
         <!-- Länge -->
-        <n-gi>
+        <n-gi v-if="data.video">
           <n-statistic :label="t('preview.label-video-length')">
             <template #default>
               {{
-                dayjs
-                  .duration(data.metadata.duration, "second")
-                  .format("HH:mm:ss")
+                dayjs.duration(data.video.length, "second").format("HH:mm:ss")
               }}
             </template>
           </n-statistic>
         </n-gi>
         <!-- Gesamtbitrate -->
-        <n-gi>
+        <n-gi v-if="data.video">
           <n-statistic :label="t('preview.label-video-total-bitrate')">
             <template #default>
-              {{
-                floor(
-                  ((data.metadata.size / data.metadata.duration) * 8) / 1000,
-                  2,
-                )
-              }}
+              {{ floor(((data.file.size / data.video.length) * 8) / 1000, 2) }}
             </template>
             <template #suffix> kBit/s </template>
           </n-statistic>
@@ -71,14 +61,7 @@
         <n-gi>
           <n-statistic :label="t('preview.label-file-size')">
             <template #default>
-              {{ filesize(data.metadata.size, { locale: langCode }) }}
-            </template>
-          </n-statistic>
-        </n-gi>
-        <n-gi>
-          <n-statistic :label="t('preview.label-file-size-on-disk')">
-            <template #default>
-              {{ filesize(data.base64Info.size, { locale: langCode }) }}
+              {{ filesize(data.file.size, { locale: langCode }) }}
             </template>
           </n-statistic>
         </n-gi>
@@ -102,6 +85,7 @@ import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 import { langCode } from "@/locales";
 import { useI18n } from "vue-i18n";
+import extract from "png-chunks-extract";
 
 const { t } = useI18n();
 
@@ -116,21 +100,7 @@ let videoSrc: Ref<string> = ref("");
 let showControls: Ref<boolean> = ref(false);
 let showSpin: Ref<boolean> = ref(true);
 
-let data: Ref<{
-  metadata: {
-    duration: number;
-    width: number;
-    height: number;
-    size: number;
-    mime: string | null;
-  };
-  fileSource: string;
-  base64Info: {
-    size: number;
-    count: number;
-  };
-  dataType: string;
-}>;
+let data: RetrievedDataItem;
 
 onMounted(async () => {
   let json = await getPage(`Data:${route.params.fileName}.json`);
@@ -139,33 +109,38 @@ onMounted(async () => {
     status.value = "ready";
   } else {
     status.value = "error";
+    return;
   }
   posterSrc.value = mw.huijiApi.getImageUrl(
-    route.params.fileName.toString().replace(/ /g, "_") + ".png",
-    "xyy",
+    route.params.fileName.toString().replace(/ /g, "_") + ".poster.png",
+    "xyy"
   );
 
-  // 定义base64字符串
-  let base64Str = "";
+  let containerURL = mw.huijiApi.getImageUrl(
+    route.params.fileName.toString().replace(/ /g, "_") + ".png",
+    "xyy"
+  );
 
-  // 获取base64字符串
-  for (let index = 0; index < data.value.base64Info.count; index++) {
-    let response = await fetch(
-      `https://xyy.huijiwiki.com/wiki/Data:${route.params.fileName}/${index}?action=raw`,
-    );
-    if (response.ok) {
-      base64Str = base64Str + (await response.text());
-    } else {
-      console.log(
-        "通过循环遍历获取base64字符串，直到找不到下一份字符串为止。所以出现一次404请求是正常的。",
-      );
-      break;
-    }
+  let containerStream = await fetch(containerURL);
+  let containerBuffer = await containerStream.arrayBuffer();
+  let containerArray = new Uint8Array(containerBuffer);
+  let containerChunks = extract(containerArray);
+  let fileUnit8Array = containerChunks.find((chunk) => {
+    return chunk.name === "IXYY";
+  })?.data;
+
+  if (!fileUnit8Array) {
+    status.value = "error";
+    return;
   }
 
-  videoSrc.value = base64Str;
-  // wait for one second, otherwise the video control bar will show its own loading animation
-  await sleep(1000);
+  let fileSrc = URL.createObjectURL(
+    new Blob([fileUnit8Array], { type: "video/mp4" })
+  );
+  
+  videoSrc.value =  fileSrc;
+    // wait for one second, otherwise the video control bar will show its own loading animation
+    await sleep(1000);
   showControls.value = true;
   showSpin.value = false;
 });

@@ -4,10 +4,12 @@ import {
   h,
   onMounted,
   nextTick,
+  computed,
   defineAsyncComponent,
   type Ref,
   type VNodeChild,
   type Component,
+  type ComputedRef,
 } from "vue";
 import {
   NText,
@@ -36,12 +38,31 @@ const DeleteDialog = defineAsyncComponent({
   loadingComponent,
   errorComponent,
 });
+const DetailsDialog = defineAsyncComponent({
+  loader: () => import("@/components/details-dialog.vue"),
+  loadingComponent,
+  errorComponent,
+});
+const downloadDialog = defineAsyncComponent({
+  loader: () => import("@/components/download-dialog.vue"),
+  loadingComponent,
+  errorComponent,
+});
 
 let loading = ref(true);
 let showDropdown = ref(false);
 let dropdownX = ref(0);
 let dropdownY = ref(0);
-let selectedData: RetrievedDataItem;
+let checkedKeys: Ref<string[]> = ref([]);
+let checkedItems: ComputedRef<RetrievedDataItem[]> = computed(() => {
+  if (checkedKeys.value.length === 0) {
+    return [];
+  } else {
+    return data.value.filter((item) =>
+      checkedKeys.value.includes(item.file.name),
+    );
+  }
+});
 let showModel = ref(false);
 let comp: Ref<Component | undefined> = ref();
 
@@ -50,7 +71,10 @@ let rowProps = (rowData: RetrievedDataItem) => {
     onContextmenu: async (e: MouseEvent) => {
       e.preventDefault();
       showDropdown.value = false;
-      selectedData = rowData;
+      // if this row is unchecked, cancel other checked rows and check this row
+      if (!checkedKeys.value.includes(rowData.file.name)) {
+        checkedKeys.value = [rowData.file.name];
+      }
       await nextTick();
       dropdownX.value = e.clientX;
       dropdownY.value = e.clientY;
@@ -59,21 +83,21 @@ let rowProps = (rowData: RetrievedDataItem) => {
   };
 };
 
-const options: DropdownOption[] = [
+const options: ComputedRef<DropdownOption[]> = computed(() => [
   {
     label: t("file-manager.dropdown-option-preview"),
     icon: () => h(materialSymbol, { size: 20 }, "visibility"),
     key: "preview",
+    disabled: checkedKeys.value.length > 1,
   },
   {
     label: t("file-manager.dropdown-option-link-copy"),
     icon: () => h(materialSymbol, { size: 20 }, "link"),
     key: "link-copy",
+    disabled: checkedKeys.value.length > 1,
   },
   {
-    label: t("file-manager.dropdown-option-rename"),
-    icon: () => h(materialSymbol, { size: 20 }, "edit"),
-    key: "rename",
+    type: "divider",
   },
   {
     label: t("file-manager.dropdown-option-delete"),
@@ -81,22 +105,38 @@ const options: DropdownOption[] = [
     key: "delete",
   },
   {
+    label: t("file-manager.dropdown-option-download"),
+    icon: () => h(materialSymbol, { size: 20 }, "download"),
+    key: "download",
+    disabled: checkedKeys.value.length > 1,
+  },
+  {
+    label: t("file-manager.dropdown-option-rename"),
+    icon: () => h(materialSymbol, { size: 20 }, "edit"),
+    key: "rename",
+    disabled: checkedKeys.value.length > 1,
+  },
+  {
+    type: "divider",
+  },
+  {
     label: t("file-manager.dropdown-option-details"),
     icon: () => h(materialSymbol, { size: 20 }, "info"),
     key: "details",
-    disabled: true,
+    disabled: checkedKeys.value.length > 1,
   },
-];
+]);
 
 async function dropdownSelect(key: string | number) {
   switch (key) {
     case "preview":
-      router.push("/preview/" + selectedData.file.name);
+      router.push("/preview/" + checkedKeys.value[0]);
       break;
     case "link-copy":
       navigator.clipboard.writeText(
-        location.href + "preview/" + selectedData.file.name
+        location.href + "preview/" + checkedKeys.value[0],
       );
+      $message.success(t("file-manager.message-link-copied"));
       break;
     case "rename":
       comp.value = RenameDialog;
@@ -107,11 +147,12 @@ async function dropdownSelect(key: string | number) {
       showModel.value = true;
       break;
     case "details":
-      $dialog.info({
-        title: selectedData.file.name,
-        content: JSON.stringify(selectedData),
-        autoFocus: false,
-      });
+      comp.value = DetailsDialog;
+      showModel.value = true;
+      break;
+    case "download":
+      comp.value = downloadDialog;
+      showModel.value = true;
       break;
     default:
       break;
@@ -119,29 +160,30 @@ async function dropdownSelect(key: string | number) {
   showDropdown.value = false;
 }
 
-async function query(sorter?: DataTableSortState): Promise<void> {
+let sorter: Ref<DataTableSortState | undefined> = ref(undefined);
+async function query(): Promise<void> {
   // start loading animation
   loading.value = true;
   // deal with sorter
   let sortBy = { "file.name": 1 };
-  if (sorter) {
+  if (sorter.value) {
     // rename columnKey for query
     let newKey: string = "";
-    sorter.columnKey === "size"
+    sorter.value.columnKey === "size"
       ? (newKey = "file.size")
-      : sorter.columnKey === "type"
+      : sorter.value.columnKey === "type"
       ? (newKey = "file.type")
-      : sorter.columnKey === "name"
+      : sorter.value.columnKey === "name"
       ? (newKey = "file.name")
       : null;
     // new sortBy
     if (newKey && newKey === "file.name") {
       sortBy = {
-        [newKey]: sorter.order === "ascend" ? -1 : 1,
+        [newKey]: sorter.value.order === "ascend" ? -1 : 1,
       };
     } else if (newKey) {
       sortBy = {
-        [newKey]: sorter.order === "ascend" ? -1 : 1,
+        [newKey]: sorter.value.order === "ascend" ? -1 : 1,
         "file.name": 1,
       };
     }
@@ -157,7 +199,7 @@ async function query(sorter?: DataTableSortState): Promise<void> {
     _: new Date().toISOString(),
   });
   let response = await fetch(
-    `https://xyy.huijiwiki.com/api/rest_v1/namespace/data?${params.toString()}`
+    `https://xyy.huijiwiki.com/api/rest_v1/namespace/data?${params.toString()}`,
   );
   let json = await response.json();
   pagination.value.itemCount = json._size;
@@ -172,20 +214,19 @@ let columns: Ref<DataTableColumns<RetrievedDataItem>> = ref([
   {
     type: "selection",
     key: "selection",
-    disabled: (/*rowData: RowData*/) => {
-      return true;
-    },
   },
   {
     title: t("file-manager.label-file-name"),
     key: "name",
     sorter: true,
     render: (rowData: RetrievedDataItem): VNodeChild => {
-      return h(
-        RouterLink,
-        { to: "/preview/" + rowData.file.name },
-        h(NA, rowData.file.name)
-      );
+      return h("div", [
+        h(
+          RouterLink,
+          { to: "/preview/" + rowData.file.name },
+          h(NA, rowData.file.name),
+        ),
+      ]);
     },
   },
   {
@@ -211,7 +252,7 @@ let pagination = ref({
   pageCount: undefined,
   page: 1,
   showSizePicker: true,
-  pageSizes: [10, 20, 50, 100],
+  pageSizes: [10, 20, 50],
   pageSize: 10,
 });
 
@@ -230,7 +271,9 @@ onMounted(async () => {
       remote
       :pagination="pagination"
       @update:sorter="
-        (sorter: DataTableSortState) => ((pagination.page = 1), query(sorter))
+        (a: DataTableSortState) => (
+          (pagination.page = 1), (sorter = a), query()
+        )
       "
       @update:page="(page: number) => ((pagination.page = page), query())"
       @update:page-size="
@@ -239,6 +282,8 @@ onMounted(async () => {
         )
       "
       :row-props="rowProps"
+      :row-key="(rowData: RetrievedDataItem) => rowData.file.name"
+      v-model:checked-row-keys="checkedKeys"
     />
     <n-dropdown
       placement="bottom-start"
@@ -249,6 +294,7 @@ onMounted(async () => {
       :show="showDropdown"
       @clickoutside="showDropdown = false"
       @select="dropdownSelect"
+      row-class-name="data-table-row"
     />
     <n-modal
       v-model:show="showModel"
@@ -258,7 +304,7 @@ onMounted(async () => {
       <div>
         <component
           :is="comp"
-          :data="selectedData"
+          :data="checkedItems"
           @close-dialog="showModel = false"
           @done="query()"
         />

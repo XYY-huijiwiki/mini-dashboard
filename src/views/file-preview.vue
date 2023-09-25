@@ -2,16 +2,19 @@
   <div>
     <loading-view v-if="status === 'loading'" />
     <template v-else-if="status === 'ready'">
-      <div class="embedembed-responsive" v-if="data.file.type === 'video/mp4'">
-        <n-spin :show="showSpin">
+      <n-spin :show="showSpin">
+        <div
+          class="embedembed-responsive"
+          v-if="data.file.type === 'video/mp4'"
+        >
           <video
             :poster="posterSrc"
             :src="videoSrc"
             style="border-radius: 4px; object-fit: cover; width: 100%"
             :controls="showControls"
           ></video>
-        </n-spin>
-      </div>
+        </div>
+      </n-spin>
       <n-grid x-gap="8" y-gap="16" cols="1 400:2 600:3">
         <!-- Dateityp -->
         <n-gi>
@@ -85,7 +88,7 @@ import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 import { langCode } from "@/locales";
 import { useI18n } from "vue-i18n";
-import extract from "png-chunks-extract";
+import { getObjectURL } from "@/utils/getObjectURL";
 
 const { t } = useI18n();
 
@@ -113,37 +116,19 @@ onMounted(async () => {
   }
   posterSrc.value = mw.huijiApi.getImageUrl(
     route.params.fileName.toString().replace(/ /g, "_") + ".poster.png",
-    "xyy"
+    "xyy",
   );
 
-  let containerURL = mw.huijiApi.getImageUrl(
-    route.params.fileName.toString().replace(/ /g, "_") + ".png",
-    "xyy"
-  );
-
-  let containerStream = await fetch(containerURL);
-  let containerBuffer = await containerStream.arrayBuffer();
-  let containerArray = new Uint8Array(containerBuffer);
-  let containerChunks = extract(containerArray);
-  let fileUnit8Array = containerChunks.find((chunk) => {
-    return chunk.name === "IXYY";
-  })?.data;
-
-  if (!fileUnit8Array) {
+  let fileSrc = await getObjectURL(route.params.fileName.toString());
+  if (!fileSrc) {
     status.value = "error";
     return;
   }
 
-  let fileSrc = URL.createObjectURL(
-    new Blob([fileUnit8Array], { type: "video/mp4" })
-  );
-  
-  videoSrc.value =  fileSrc;
-    // wait for one second, otherwise the video control bar will show its own loading animation
-    await sleep(1000);
+  videoSrc.value = fileSrc;
+  // wait for one second, otherwise the video control bar will show its own loading animation
+  await sleep(1000);
   showControls.value = true;
   showSpin.value = false;
 });
 </script>
-
-<style scoped></style>

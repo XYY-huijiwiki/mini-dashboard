@@ -67,7 +67,6 @@ let options: Ref<MenuOption[]> = ref([
     label: "删除",
     key: "delete",
     icon: () => h(materialSymbol, { size: 20 }, "delete"),
-    disabled: true,
   },
   {
     label: "详细信息",

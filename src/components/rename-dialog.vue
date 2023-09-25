@@ -7,7 +7,7 @@
     >
       <!-- header -->
       <template #header>
-        <div>重命名</div>
+        {{ t("file-manager.dropdown-option-download") }}
       </template>
 
       <!-- body (default) -->
@@ -18,10 +18,10 @@
           <n-input
             v-model:value="fileName"
             :disabled="loading"
-            :default-value="removeFileExtension(props.data.file.name)"
+            :default-value="removeFileExtension(props.data[0].file.name)"
           />
           <div style="text-wrap: nowrap">
-            {{ `.${getFileExtension(props.data.file.name)}` }}
+            {{ `.${getFileExtension(props.data[0].file.name)}` }}
           </div>
         </div>
       </template>
@@ -43,11 +43,12 @@
 import { ref, type Ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { renamePage, editPage } from "@/utils/mwApi";
+import { cloneDeep } from "lodash-es";
 
 const { t } = useI18n();
 
 const props = defineProps<{
-  data: RetrievedDataItem;
+  data: RetrievedDataItem[];
 }>();
 
 const loading = ref(false);
@@ -61,9 +62,9 @@ async function rename() {
 
   // set original and new file name
   // and file extension
-  let from = removeFileExtension(props.data.file.name);
+  let from = removeFileExtension(props.data[0].file.name);
   let to = fileName.value;
-  let ext = getFileExtension(props.data.file.name);
+  let ext = getFileExtension(props.data[0].file.name);
 
   // check if file name is valid
   if (to === undefined || from === to) {
@@ -86,24 +87,25 @@ async function rename() {
   await renamePage(`文件:${from}.${ext}.png`, `文件:${to}.${ext}.png`);
 
   // rename file poster (for video)
-  if (props.data.file.type.startsWith("video/")) {
+  if (props.data[0].file.type.startsWith("video/")) {
     await renamePage(
       `文件:${from}.${ext}.poster.png`,
-      `文件:${to}.${ext}.poster.png`
+      `文件:${to}.${ext}.poster.png`,
     );
   }
 
   // renew file data
+  let newData = cloneDeep(props.data[0]);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  let { _id, ...data } = props.data;
-  data.file.name = `${to}.${ext}`;
+  let { _id, ...metadata } = newData;
+  metadata.file.name = `${to}.${ext}`;
   await editPage({
     title: `Data:${to}.${ext}.json`,
-    text: JSON.stringify(data),
+    text: JSON.stringify(metadata),
   });
 
   // renew redirect link (for video)
-  if (props.data.file.type.startsWith("video/")) {
+  if (props.data[0].file.type.startsWith("video/")) {
     await editPage({
       title: `文件:${to}.${ext}`,
       text: `#重定向 [[文件:${to}.${ext}.poster.png]]\n[[文件:${to}.${ext}.png]]\n[[分类:特殊文件]]`,

@@ -7,18 +7,18 @@
     >
       <!-- header -->
       <template #header>
-        <div>删除</div>
+        {{ t("file-manager.dropdown-option-delete") }}
       </template>
 
       <!-- body (default) -->
       <template #default>
         <div style="margin: 32px 0">
           <n-space vertical>
-            <n-p>
-              你确定要删除
-              <n-text type="error">{{ props.data.file.name }}</n-text>
-              吗？请填写删除原因：
-            </n-p>
+            <i18n-t keypath="file-manager.message-delete-confirm">
+              <n-text type="error">
+                {{ props.data.map((item) => item.file.name).join(", ") }}
+              </n-text>
+            </i18n-t>
             <n-input v-model:value="reason" />
           </n-space>
         </div>
@@ -27,10 +27,10 @@
       <!-- footer (action) -->
       <template #action>
         <n-button :disabled="loading" @click="$emit('close-dialog')">
-          {{ t("general.btn-no") }}
+          {{ t("general.btn-cancel") }}
         </n-button>
         <n-button :loading="loading" type="error" @click="confirmDelete()">
-          {{ t("general.btn-yes") }}
+          {{ t("general.btn-confirm") }}
         </n-button>
       </template>
     </n-dialog>
@@ -45,7 +45,7 @@ import { deletePage } from "@/utils/mwApi";
 const { t } = useI18n();
 
 const props = defineProps<{
-  data: RetrievedDataItem;
+  data: RetrievedDataItem[];
 }>();
 
 const loading = ref(false);
@@ -56,30 +56,35 @@ const emit = defineEmits(["close-dialog", "done"]);
 async function confirmDelete() {
   // start loading
   loading.value = true;
-  let name = props.data.file.name;
 
-  // check if the reason of deletion is provided
-  if (!reason.value) {
-    $message.error("请填写删除原因");
-    loading.value = false;
-    return;
-  }
+  for (let index = 0; index < props.data.length; index++) {
+    const element = props.data[index];
 
-  // delete data page
-  await deletePage({ title: `Data:${name}.json`, reason: reason.value });
+    let name = element.file.name;
 
-  // delete file page
-  await deletePage({ title: `文件:${name}`, reason: reason.value });
+    // check if the reason of deletion is provided
+    if (!reason.value) {
+      $message.error("请填写删除原因");
+      loading.value = false;
+      return;
+    }
 
-  // delete file container
-  await deletePage({ title: `文件:${name}.png`, reason: reason.value });
+    // delete data page
+    await deletePage({ title: `Data:${name}.json`, reason: reason.value });
 
-  // delete file poster (for video)
-  if (props.data.file.type.startsWith("video/")) {
-    await deletePage({
-      title: `文件:${name}.poster.png`,
-      reason: reason.value,
-    });
+    // delete file page
+    await deletePage({ title: `文件:${name}`, reason: reason.value });
+
+    // delete file container
+    await deletePage({ title: `文件:${name}.png`, reason: reason.value });
+
+    // delete file poster (for video)
+    if (element.file.type.startsWith("video/")) {
+      await deletePage({
+        title: `文件:${name}.poster.png`,
+        reason: reason.value,
+      });
+    }
   }
 
   // stop loading

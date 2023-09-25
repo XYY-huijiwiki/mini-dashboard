@@ -8,6 +8,8 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     DeleteDialog: typeof import('./src/components/delete-dialog.vue')['default']
+    DetailsDialog: typeof import('./src/components/details-dialog.vue')['default']
+    DownloadDialog: typeof import('./src/components/download-dialog.vue')['default']
     FileInfo: typeof import('./src/components/file-info.vue')['default']
     MaterialSymbol: typeof import('./src/components/material-symbol.vue')['default']
     MenuBtn: typeof import('./src/components/menu-btn.vue')['default']

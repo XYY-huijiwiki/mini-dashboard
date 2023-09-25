@@ -23,7 +23,7 @@ let fileExtList = ref(
   Object.values(fileTypeList)
     .map((item) => item.ext)
     .flat()
-    .sort()
+    .sort(),
 );
 
 // 获取羊羊百科授权协议列表
@@ -212,7 +212,7 @@ async function uploader() {
     let posterFile = await base64ToFile(poster, `${file.name}.poster.png`);
     if (await uploadFile(posterFile)) {
       file.status = "finished";
-      file.url=`https://xyy.huijiwiki.com/wiki/Project:上传特殊文件#/preview/${file.name}`
+      file.url = `https://xyy.huijiwiki.com/wiki/Project:上传特殊文件#/preview/${file.name}`;
     } else {
       file.status = "error";
       continue;

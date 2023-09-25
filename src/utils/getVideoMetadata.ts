@@ -1,5 +1,3 @@
-import mime from "mime/lite";
-
 async function getVideoMetadata(videoFile: File) {
   const video = document.createElement("video");
   video.src = URL.createObjectURL(videoFile);
@@ -22,11 +20,8 @@ async function getVideoMetadata(videoFile: File) {
   return {
     poster,
     duration: video.duration,
-    size: videoFile.size,
     width: video.videoWidth,
     height: video.videoHeight,
-    type: videoFile.type,
-    mime: mime.getType(videoFile.name),
   };
 }
 

@@ -20,7 +20,7 @@ function clearData() {
     title: t("general.warning"),
     content: t("settings.text-confirm-restore"),
     positiveText: t("general.btn-confirm"),
-    negativeText: t("general.btn-no"),
+    negativeText: t("general.btn-cancel"),
     autoFocus: false,
     onPositiveClick: () => {
       settings.value = defaultSettings;

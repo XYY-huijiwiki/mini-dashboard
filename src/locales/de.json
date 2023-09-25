@@ -9,8 +9,6 @@
     "success": "Erfolg",
     "btn-ok": "OK",
     "btn-cancel": "Abbrechen",
-    "btn-yes": "Ja",
-    "btn-no": "Nein",
     "btn-confirm": "Bestätigen"
   },
   "settings": {
@@ -46,7 +44,11 @@
     "dropdown-option-link-copy": "Link kopieren",
     "dropdown-option-rename": "Umbenennen",
     "dropdown-option-delete": "Löschen",
-    "dropdown-option-details": "Details"
+    "dropdown-option-details": "Details",
+    "dropdown-option-download": "Herunterladen",
+    "message-link-copied": "Link kopiert",
+    "message-delete-confirm": "Möchten Sie {0} wirklich löschen? Bitte geben Sie den Löschgrund ein:",
+    "message-download-confirm": "Möchten Sie {0} wirklich herunterladen? (Dateigröße: {1})"
   },
   "file-uploader": {
     "title": "Datei hochladen",

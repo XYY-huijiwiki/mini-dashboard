@@ -9,8 +9,6 @@
     "success": "成功",
     "btn-ok": "确定",
     "btn-cancel": "取消",
-    "btn-yes": "是",
-    "btn-no": "否",
     "btn-confirm": "确认"
   },
   "settings": {
@@ -46,7 +44,11 @@
     "dropdown-option-link-copy": "复制链接",
     "dropdown-option-rename": "重命名",
     "dropdown-option-delete": "删除",
-    "dropdown-option-details": "详细信息"
+    "dropdown-option-details": "详细信息",
+    "dropdown-option-download": "下载",
+    "message-link-copied": "链接已复制",
+    "message-delete-confirm": "确定要删除{0}吗？请填写删除原因：",
+    "message-download-confirm": "确定要下载{0}吗？（文件大小为{1}）"
   },
   "file-uploader": {
     "title": "文件上传",

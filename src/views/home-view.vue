@@ -15,13 +15,6 @@
       >
         <file-manager></file-manager>
       </n-tab-pane>
-      <n-tab-pane
-        name="manager-old"
-        display-directive="show:lazy"
-        tab="文件管理（旧）"
-      >
-        <file-manager-old></file-manager-old>
-      </n-tab-pane>
     </n-tabs>
   </div>
 </template>
@@ -44,7 +37,6 @@ function createAsyncComponent(name: string) {
 }
 const fileUploader = createAsyncComponent("file-uploader");
 const fileManager = createAsyncComponent("file-manager");
-const fileManagerOld = createAsyncComponent("file-manager-old");
 
 const activeTab = ref("uploader");
 </script>

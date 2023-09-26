@@ -16,9 +16,22 @@
           <n-space vertical>
             <i18n-t keypath="file-manager.message-download-confirm">
               <n-text type="primary">
-                {{ props.data[0].file.name }}
+                {{
+                  props.data
+                    .map((item) => {
+                      return item.file.name;
+                    })
+                    .toString()
+                }}
               </n-text>
-              {{ filesize(props.data[0].file.size, { locale: langCode }) }}
+              {{
+                filesize(
+                  props.data
+                    .map((item) => item.file.size)
+                    .reduce((a, b) => a + b),
+                  { locale: langCode },
+                )
+              }}
             </i18n-t>
           </n-space>
         </div>
@@ -57,18 +70,21 @@ const emit = defineEmits(["close-dialog", "done"]);
 async function downloadFile() {
   // start loading
   loading.value = true;
-  let name = props.data[0].file.name;
 
-  // get object URL
-  let url = await getObjectURL(name);
+  // download file(s)
+  let url = await getObjectURL(props.data.map((item) => item.file.name));
   let a = document.createElement("a");
   a.href = url;
-  a.download = name;
+  a.download =
+    props.data.length > 1
+      ? `${props.data.length} files.zip`
+      : props.data[0].file.name;
   a.click();
   URL.revokeObjectURL(url);
 
   // stop loading
   loading.value = false;
+  $message.success(t("file-manager.message-download-success"));
 
   // close dialog
   emit("done");

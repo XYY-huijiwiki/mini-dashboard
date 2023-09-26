@@ -48,7 +48,8 @@
     "dropdown-option-download": "下载",
     "message-link-copied": "链接已复制",
     "message-delete-confirm": "确定要删除{0}吗？请填写删除原因：",
-    "message-download-confirm": "确定要下载{0}吗？（文件大小为{1}）"
+    "message-download-confirm": "确定要下载{0}吗？（文件大小为{1}）",
+    "message-download-success": "下载成功"
   },
   "file-uploader": {
     "title": "文件上传",

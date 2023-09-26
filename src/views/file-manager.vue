@@ -108,7 +108,6 @@ const options: ComputedRef<DropdownOption[]> = computed(() => [
     label: t("file-manager.dropdown-option-download"),
     icon: () => h(materialSymbol, { size: 20 }, "download"),
     key: "download",
-    disabled: checkedKeys.value.length > 1,
   },
   {
     label: t("file-manager.dropdown-option-rename"),

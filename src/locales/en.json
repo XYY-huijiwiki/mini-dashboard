@@ -48,7 +48,8 @@
     "dropdown-option-download": "Download",
     "message-link-copied": "Link copied",
     "message-delete-confirm": "Are you sure you want to delete {0}? Please fill in the reason for deletion:",
-    "message-download-confirm": "Are you sure you want to download {0}? (File size: {1})"
+    "message-download-confirm": "Are you sure you want to download {0}? (File size: {1})",
+    "message-download-success": "Download success"
   },
   "file-uploader": {
     "title": "File Uploader",

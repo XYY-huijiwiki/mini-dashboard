@@ -48,7 +48,8 @@
     "dropdown-option-download": "Herunterladen",
     "message-link-copied": "Link kopiert",
     "message-delete-confirm": "Möchten Sie {0} wirklich löschen? Bitte geben Sie den Löschgrund ein:",
-    "message-download-confirm": "Möchten Sie {0} wirklich herunterladen? (Dateigröße: {1})"
+    "message-download-confirm": "Möchten Sie {0} wirklich herunterladen? (Dateigröße: {1})",
+    "message-download-success": "Download erfolgreich"
   },
   "file-uploader": {
     "title": "Datei hochladen",

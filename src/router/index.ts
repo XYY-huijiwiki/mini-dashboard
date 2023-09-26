@@ -32,6 +32,13 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHashHistory(),
   routes,
+  scrollBehavior() {
+    return {
+      el: "#base64-file-manager",
+      top: 100,
+      behavior: "smooth",
+    };
+  },
 });
 
 export default router;

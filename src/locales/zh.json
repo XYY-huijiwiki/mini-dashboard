@@ -13,9 +13,6 @@
   },
   "settings": {
     "title": "设置",
-    "label-connect-to-dev-server": "连接开发服务器",
-    "btn-connect": "连接",
-    "btn-connected": "已连接",
     "label-restore-defaults": "恢复默认设置",
     "btn-restore": "恢复",
     "text-confirm-restore": "确定要恢复默认设置吗？",

@@ -4,14 +4,7 @@ import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 
-let dev = import.meta.env.DEV;
-
-const defaultSettings = {
-  dev: {
-    port: 5173,
-    host: "localhost",
-  },
-};
+const defaultSettings = {};
 
 const settings = useLocalStorage("settings", defaultSettings);
 
@@ -27,36 +20,17 @@ function clearData() {
     },
   });
 }
-function startDev() {
-  let moduleUrl = `http://${settings.value.dev.host}:${settings.value.dev.port}/src/main.ts`;
-  var newScriptTag = document.createElement("script");
-  newScriptTag.type = "module";
-  newScriptTag.crossOrigin = "anonymous";
-  newScriptTag.src = moduleUrl;
-  document.body.appendChild(newScriptTag);
-}
 </script>
 
 <template>
   <n-form>
-    <n-form-item :label="t('settings.label-connect-to-dev-server')">
-      <n-input-group>
-        <n-input-group-label>http://</n-input-group-label>
-        <n-input v-model:value="settings.dev.host" />
-        <n-input-group-label>:</n-input-group-label>
-        <n-input v-model:value="settings.dev.port" />
-        <n-button @click="startDev()" :disabled="dev">
-          {{ dev ? t("settings.btn-connected") : t("settings.btn-connect") }}
-        </n-button>
-      </n-input-group>
-    </n-form-item>
     <n-form-item :label="t('settings.label-language')">
-      <n-radio :checked="true">
+      <n-radio :checked="true" disabled>
         {{ t("language") }}
       </n-radio>
     </n-form-item>
     <n-form-item :label="t('settings.label-restore-defaults')">
-      <n-button @click="clearData()">
+      <n-button @click="clearData()" disabled>
         {{ t("settings.btn-restore") }}
       </n-button>
     </n-form-item>

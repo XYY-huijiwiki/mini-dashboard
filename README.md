@@ -11,7 +11,7 @@ npm i
 npm run dev
 ```
 
-打开[Project:上传特殊文件](https://xyy.huijiwiki.com/wiki/Project:上传特殊文件)页面，在设置中找到“连接开发服务器”，点击“连接”即可。
+打开[Project:上传特殊文件](https://xyy.huijiwiki.com/wiki/Project:上传特殊文件)页面即可。如果是先打开页面，后执行命令，需要再刷新一次页面。
 
 ## 构建
 

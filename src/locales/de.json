@@ -13,9 +13,6 @@
   },
   "settings": {
     "title": "Einstellungen",
-    "label-connect-to-dev-server": "Mit Dev-Server verbinden",
-    "btn-connect": "Verbinden",
-    "btn-connected": "Verbunden",
     "label-restore-defaults": "Standardwerte wiederherstellen",
     "btn-restore": "Wiederherstellen",
     "text-confirm-restore": "Möchten Sie die Standardeinstellungen wiederherstellen?",

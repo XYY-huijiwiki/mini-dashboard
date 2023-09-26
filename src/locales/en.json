@@ -13,9 +13,6 @@
   },
   "settings": {
     "title": "Settings",
-    "label-connect-to-dev-server": "Connect to Dev Server",
-    "btn-connect": "Connect",
-    "btn-connected": "Connected",
     "label-restore-defaults": "Restore Defaults",
     "btn-restore": "Restore",
     "text-confirm-restore": "Are you sure you want to restore the default settings?",

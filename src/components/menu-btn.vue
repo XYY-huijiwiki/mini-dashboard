@@ -53,6 +53,11 @@ let options: Ref<MenuOption[]> = ref([
     key: "preview",
   },
   {
+    label: "下载",
+    icon: () => h(materialSymbol, { size: 20 }, "download"),
+    key: "download",
+  },
+  {
     label: "复制链接",
     icon: () => h(materialSymbol, { size: 20 }, "link"),
     key: "copyLink",
@@ -107,9 +112,58 @@ async function handleSelect(key: string) {
     case "info":
       showInfoDrawer.value = true;
       break;
+    case "download":
+      downloadFile(props.fulltext);
+      break;
     default:
       $message.error(`未知错误（handleSelect(${key}）`);
   }
+}
+
+async function downloadFile(fileName: string) {
+  console.log(fileName);
+
+  // 定义base64字符串
+  let base64Str = "";
+
+  // 获取base64字符串
+  for (let index = 0; true; index++) {
+    let response = await fetch(
+      `https://xyy.huijiwiki.com/wiki/${fileName}/${index}?action=raw`,
+    );
+    if (response.ok) {
+      let responseText = await response.text();
+      base64Str = base64Str + responseText;
+    } else {
+      console.log(
+        "通过循环遍历获取base64字符串，直到找不到下一份字符串为止。所以出现一次404请求是正常的。",
+      );
+      break;
+    }
+  }
+
+  // 获取文件类型
+  let fileMime = base64Str.split(";base64,")[0].split(":")[1];
+  console.log(fileMime);
+  // base64字符串转为Uint8Array
+  let fileArray = new Uint8Array(
+    atob(base64Str.split(";base64,")[1])
+      .split("")
+      .map((char) => char.charCodeAt(0)),
+  );
+  console.log(fileArray);
+  // Uint8Array转为Blob
+  let fileBlob = new Blob([fileArray], { type: fileMime });
+  console.log(fileBlob);
+  // Blob转为URL
+  let objectURL = URL.createObjectURL(fileBlob);
+  console.log(objectURL);
+
+  // 根据url下载文件
+  let a = document.createElement("a");
+  a.href = objectURL;
+  a.download = fileName.split(":")[1];
+  a.click();
 }
 
 // 删除功能

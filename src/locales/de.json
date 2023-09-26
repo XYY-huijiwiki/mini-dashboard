@@ -33,12 +33,16 @@
     "label-video-frame-width": "Bildbreite",
     "label-video-frame-height": "Bildhöhe",
     "label-video-total-bitrate": "Gesamtbitrate",
-    "label-video-length": "Länge"
+    "label-video-length": "Länge",
+    "label-audio-length": "Länge",
+    "label-audio-bitrate": "Bitrate"
   },
   "file-manager": {
     "title": "Dateimanager",
     "label-file-name": "Name",
     "label-file-type": "Dateityp",
+    "label-file-type-audio": "Audio",
+    "label-file-type-video": "Video",
     "label-file-size": "Dateigröße",
     "dropdown-option-preview": "Vorschau",
     "dropdown-option-link-copy": "Link kopieren",

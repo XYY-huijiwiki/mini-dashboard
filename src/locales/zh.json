@@ -33,12 +33,16 @@
     "label-video-frame-width": "帧宽度",
     "label-video-frame-height": "帧高度",
     "label-video-total-bitrate": "总比特率",
-    "label-video-length": "时长"
+    "label-video-length": "时长",
+    "label-audio-length": "时长",
+    "label-audio-bitrate": "比特率"
   },
   "file-manager": {
     "title": "文件管理",
     "label-file-name": "文件名",
     "label-file-type": "文件类型",
+    "label-file-type-audio": "音频",
+    "label-file-type-video": "视频",
     "label-file-size": "文件大小",
     "dropdown-option-preview": "预览",
     "dropdown-option-link-copy": "复制链接",

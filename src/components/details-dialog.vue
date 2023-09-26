@@ -17,25 +17,28 @@
         <n-divider title-placement="left">page</n-divider>
         <n-p>
           file page:
-          <n-a :href="`/wiki/File:${props.data[0].file.name}`">
-            File:{{ props.data[0].file.name }}
-          </n-a>
-        </n-p>
-        <n-p>
-          container page:
-          <n-a :href="`/wiki/File:${props.data[0].file.name}.png`">
+          <n-a
+            :href="`/wiki/File:${props.data[0].file.name}.png`"
+            target="_blank"
+          >
             File:{{ props.data[0].file.name }}.png
           </n-a>
         </n-p>
-        <n-p>
+        <n-p v-if="props.data[0].file.type.startsWith('video/')">
           poster page:
-          <n-a :href="`/wiki/File:${props.data[0].file.name}.poster.png`">
+          <n-a
+            :href="`/wiki/File:${props.data[0].file.name}.poster.png`"
+            target="_blank"
+          >
             File:{{ props.data[0].file.name }}.poster.png
           </n-a>
         </n-p>
         <n-p>
           data page:
-          <n-a :href="`/wiki/Data:${props.data[0].file.name}.json`">
+          <n-a
+            :href="`/wiki/Data:${props.data[0].file.name}.json`"
+            target="_blank"
+          >
             Data:{{ props.data[0].file.name }}.json
           </n-a>
         </n-p>

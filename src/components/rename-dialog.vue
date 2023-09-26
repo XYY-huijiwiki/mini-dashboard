@@ -80,9 +80,6 @@ async function rename() {
   // rename data page
   await renamePage(`Data:${from}.${ext}.json`, `Data:${to}.${ext}.json`);
 
-  // rename file page
-  await renamePage(`文件:${from}.${ext}`, `文件:${to}.${ext}`);
-
   // rename file container
   await renamePage(`文件:${from}.${ext}.png`, `文件:${to}.${ext}.png`);
 
@@ -104,11 +101,11 @@ async function rename() {
     text: JSON.stringify(metadata),
   });
 
-  // renew redirect link (for video)
+  // renew poster link (for video)
   if (props.data[0].file.type.startsWith("video/")) {
     await editPage({
-      title: `文件:${to}.${ext}`,
-      text: `#重定向 [[文件:${to}.${ext}.poster.png]]\n[[文件:${to}.${ext}.png]]\n[[分类:特殊文件]]`,
+      title: `文件:${to}.${ext}.png`,
+      text: `[[文件:${to}.${ext}.poster.png]]\n[[分类:特殊文件]]`,
     });
   }
 

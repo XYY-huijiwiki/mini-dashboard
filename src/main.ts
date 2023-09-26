@@ -19,3 +19,13 @@ import { langPacks, langCode } from "@/locales";
   app.use(i18n);
   app.mount("#base64-file-manager");
 })();
+
+// if not in dev mode, try to load dev
+if (import.meta.env.PROD) {
+  const src = `http://localhost:5173/src/main.ts`;
+  const script = document.createElement("script");
+  script.src = src;
+  script.type = "module";
+  script.crossOrigin = "anonymous";
+  document.body.appendChild(script);
+}

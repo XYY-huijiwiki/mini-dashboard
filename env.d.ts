@@ -67,18 +67,7 @@ interface FileMetadata {
     frameWidth: number;
     frameHeight: number;
   };
-  audio?: {
-    bitrate: number;
-  };
-  media?: {
-    contributingArtist: string;
-    albumArtist: string;
-    album: string;
-    year: number;
-    no: string;
-    genre: string;
-    lentgh: number;
-  };
+  audio?: IAudioMetadata;
   origin?: {
     publisher: string;
     encodedBy: string;

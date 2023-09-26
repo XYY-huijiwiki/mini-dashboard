@@ -10,7 +10,7 @@ interface UploadResponse {
   };
 }
 
-async function uploadFile(file: File): Promise<boolean> {
+async function uploadFile(file: File, text?: string): Promise<boolean> {
   return new Promise((resolve) => {
     new mw.Api()
       .postWithToken(
@@ -20,6 +20,7 @@ async function uploadFile(file: File): Promise<boolean> {
           file: file,
           filename: file.name,
           ignorewarnings: true,
+          text: text,
         },
         {
           contentType: "multipart/form-data",

@@ -18,6 +18,7 @@ export default defineConfig(({ command }) => {
     resolve: {
       alias: {
         "@": fileURLToPath(new URL("./src", import.meta.url)),
+        'node:buffer': 'buffer',
       },
     },
     build: {

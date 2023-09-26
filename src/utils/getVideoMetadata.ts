@@ -19,9 +19,9 @@ async function getVideoMetadata(videoFile: File) {
   const poster = canvas.toDataURL("image/png");
   return {
     poster,
-    duration: video.duration,
-    width: video.videoWidth,
-    height: video.videoHeight,
+    length: video.duration,
+    frameWidth: video.videoWidth,
+    frameHeight: video.videoHeight,
   };
 }
 

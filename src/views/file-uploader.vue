@@ -12,6 +12,8 @@ import { base64ToFile } from "file64";
 import { useI18n } from "vue-i18n";
 import encodePNG from "png-chunks-encode";
 import { filetypemime } from "magic-bytes.js";
+import { parseBuffer } from "music-metadata-browser";
+import { Buffer } from "buffer";
 
 const { t } = useI18n();
 
@@ -140,7 +142,7 @@ async function uploader() {
       file.status = "error";
       continue;
     }
-    file.percentage = 25; // progress bar 25%
+    file.percentage = 33; // progress bar 33%
 
     // repack file
     let pngBuffer = encodePNG([
@@ -152,8 +154,7 @@ async function uploader() {
       type: "image/png",
     });
 
-    // get file metadata and poster
-    let { poster, ...metadata } = await getVideoMetadata(file.file);
+    // get file metadata (for all file types)
     let fileMetadata: FileMetadata = {
       wiki: {
         fileSource: fileSource.value,
@@ -167,24 +168,20 @@ async function uploader() {
         type: file.file.type,
         lastModified: new Date(file.file.lastModified),
       },
-      video: {
-        length: metadata.duration,
-        frameWidth: metadata.width,
-        frameHeight: metadata.height,
-      },
     };
 
-    // init file page
-    if (
-      await editPage({
-        title: `文件:${file.name}`,
-        text: `#重定向 [[文件:${file.name}.poster.png]]\n[[文件:${file.name}.png]]\n[[分类:特殊文件]]`,
-      })
-    ) {
-      file.percentage = 50; // progress bar 50%
-    } else {
-      file.status = "error";
-      continue;
+    // get file metadata (for audio only)
+    if (file.type.startsWith("audio/")) {
+      let metadata = await parseBuffer(Buffer.from(fileBuffer), file.type);
+      fileMetadata.audio = metadata;
+    }
+
+    // get file metadata and poster (for video only)
+    let videoPoster: string = "";
+    if (file.type.startsWith("video/")) {
+      let { poster, ...metadata } = await getVideoMetadata(file.file);
+      videoPoster = poster;
+      fileMetadata.video = metadata;
     }
 
     // init data page
@@ -194,23 +191,38 @@ async function uploader() {
         text: JSON.stringify(fileMetadata),
       })
     ) {
-      file.percentage = 75; // progress bar 75%
+      file.percentage = 66; // progress bar 66%
     } else {
       file.status = "error";
       continue;
+    }
+
+    // upload poster (for video only)
+    if (file.type.startsWith("video/")) {
+      let posterFile = await base64ToFile(
+        videoPoster,
+        `${file.name}.poster.png`,
+      );
+      if (await uploadFile(posterFile)) {
+        file.percentage = 90; // progress bar 90%
+      } else {
+        file.status = "error";
+        continue;
+      }
     }
 
     // upload file
-    if (await uploadFile(pngFile)) {
+    if (
+      await uploadFile(
+        pngFile,
+        `${
+          file.type.startsWith("video/")
+            ? `[[文件:${file.name}.poster.png]]\n`
+            : ""
+        }[[分类:特殊文件]]`,
+      )
+    ) {
       file.percentage = 100; // progress bar 100%
-    } else {
-      file.status = "error";
-      continue;
-    }
-
-    // upload poster
-    let posterFile = await base64ToFile(poster, `${file.name}.poster.png`);
-    if (await uploadFile(posterFile)) {
       file.status = "finished";
       file.url = `https://xyy.huijiwiki.com/wiki/Project:上传特殊文件#/preview/${file.name}`;
     } else {

@@ -11,9 +11,9 @@ import getVideoMetadata from "@/utils/getVideoMetadata";
 import { base64ToFile } from "file64";
 import { useI18n } from "vue-i18n";
 import encodePNG from "png-chunks-encode";
-import { filetypemime } from "magic-bytes.js";
 import { parseBuffer } from "music-metadata-browser";
 import { Buffer } from "buffer";
+import { fileTypeFromBuffer } from "file-type";
 
 const { t } = useI18n();
 
@@ -25,7 +25,7 @@ let fileExtList = ref(
   Object.values(fileTypeList)
     .map((item) => item.ext)
     .flat()
-    .sort(),
+    .sort()
 );
 
 // 获取羊羊百科授权协议列表
@@ -128,16 +128,20 @@ async function uploader() {
 
     // check file type
     let fileBuffer = new Uint8Array(await file.file.arrayBuffer());
-    let fileType = await filetypemime(fileBuffer.slice(0, 128)); // only check first 128 bytes
-    if (fileType.length === 0 || !file.type) {
+    let fileExt = file.file.name.split(".").pop();
+    let fileType = await fileTypeFromBuffer(
+      Buffer.from(fileBuffer.slice(0, 128))
+    );
+    console.log(fileType);
+    if (!fileType || !fileExt) {
       $message.error(`文件 ${file.file.name} 类型未知`);
       file.status = "error";
       continue;
-    } else if (!fileType.includes(file.type)) {
+    } else if (fileType.ext !== fileExt) {
       $message.error(`文件 ${file.file.name} 后缀名与文件类型不匹配`);
       file.status = "error";
       continue;
-    } else if (fileExtList.value.includes(file.type)) {
+    } else if (!fileExtList.value.includes(fileExt)) {
       $message.error(`文件 ${file.file.name} 类型已被禁止上传`);
       file.status = "error";
       continue;
@@ -165,20 +169,20 @@ async function uploader() {
       file: {
         name: file.name,
         size: file.file.size,
-        type: file.file.type,
+        type: fileType.mime,
         lastModified: new Date(file.file.lastModified),
       },
     };
 
     // get file metadata (for audio only)
-    if (file.type.startsWith("audio/")) {
-      let metadata = await parseBuffer(Buffer.from(fileBuffer), file.type);
+    if (fileType.mime.startsWith("audio/")) {
+      let metadata = await parseBuffer(Buffer.from(fileBuffer), fileType.mime);
       fileMetadata.audio = metadata;
     }
 
     // get file metadata and poster (for video only)
     let videoPoster: string = "";
-    if (file.type.startsWith("video/")) {
+    if (fileType.mime.startsWith("video/")) {
       let { poster, ...metadata } = await getVideoMetadata(file.file);
       videoPoster = poster;
       fileMetadata.video = metadata;
@@ -198,10 +202,10 @@ async function uploader() {
     }
 
     // upload poster (for video only)
-    if (file.type.startsWith("video/")) {
+    if (fileType.mime.startsWith("video/")) {
       let posterFile = await base64ToFile(
         videoPoster,
-        `${file.name}.poster.png`,
+        `${file.name}.poster.png`
       );
       if (await uploadFile(posterFile)) {
         file.percentage = 90; // progress bar 90%
@@ -216,10 +220,10 @@ async function uploader() {
       await uploadFile(
         pngFile,
         `${
-          file.type.startsWith("video/")
+          fileType.mime.startsWith("video/")
             ? `[[文件:${file.name}.poster.png]]\n`
             : ""
-        }[[分类:特殊文件]]`,
+        }[[分类:特殊文件]]`
       )
     ) {
       file.percentage = 100; // progress bar 100%

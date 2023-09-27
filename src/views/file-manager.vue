@@ -26,6 +26,7 @@ import materialSymbol from "@/components/material-symbol.vue";
 import router from "@/router";
 import loadingComponent from "@/views/loading-view.vue";
 import errorComponent from "@/views/error-view.vue";
+import { isArray } from "lodash-es";
 
 const { t } = useI18n();
 
@@ -41,7 +42,7 @@ let checkedItems: ComputedRef<RetrievedDataItem[]> = computed(() => {
     return [];
   } else {
     return data.value.filter((item) =>
-      checkedKeys.value.includes(item.file.name),
+      checkedKeys.value.includes(item.file.name)
     );
   }
 });
@@ -91,17 +92,15 @@ async function query(): Promise<void> {
     }
   }
   // deal with filter
+  console.log(filter.value.type);
   let filterBy = {
     "file.name": { $exists: true },
     "file.type": (() => {
-      if (filter.value.type && typeof filter.value.type === "object") {
+      if (isArray(filter.value.type) && filter.value.type.length > 0) {
         // if filter.value.type is an array, join it with "|"
         return { $regex: `^${filter.value.type.join("|")}/` };
-      } else if (filter.value.type) {
-        // if filter.value.type is a string, use it directly
-        return { $regex: `^${filter.value.type}/` };
       } else {
-        // if filter.value.type is undefined, return { $exists: true }
+        // else return undefined
         return undefined;
       }
     })(),
@@ -115,7 +114,7 @@ async function query(): Promise<void> {
     _: new Date().toISOString(),
   });
   let response = await fetch(
-    `https://xyy.huijiwiki.com/api/rest_v1/namespace/data?${params.toString()}`,
+    `https://xyy.huijiwiki.com/api/rest_v1/namespace/data?${params.toString()}`
   );
   let json = await response.json();
   pagination.value.itemCount = json._size;
@@ -138,7 +137,7 @@ let columns: Ref<DataTableColumns<RetrievedDataItem>> = ref([
         h(
           RouterLink,
           { to: "/preview/" + rowData.file.name },
-          h(NA, rowData.file.name),
+          h(NA, rowData.file.name)
         ),
       ]);
     },
@@ -149,6 +148,7 @@ let columns: Ref<DataTableColumns<RetrievedDataItem>> = ref([
     filter: true,
     filterOptions: [
       { label: t("file-manager.label-file-type-audio"), value: "audio" },
+      { label: t("file-manager.label-file-type-model"), value: "model" },
       { label: t("file-manager.label-file-type-video"), value: "video" },
     ],
     render: (rowData: RetrievedDataItem) => {
@@ -233,7 +233,7 @@ async function dropdownSelect(key: string | number) {
       break;
     case "link-copy":
       navigator.clipboard.writeText(
-        location.href + "preview/" + checkedKeys.value[0],
+        location.href + "preview/" + checkedKeys.value[0]
       );
       $message.success(t("file-manager.message-link-copied"));
       break;

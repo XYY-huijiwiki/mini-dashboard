@@ -3,19 +3,38 @@
     <loading-view v-if="status === 'loading'" />
     <template v-else-if="status === 'ready'">
       <n-spin :show="showSpin">
+        <!-- audio preview -->
         <audio
           v-if="data.audio"
           :src="src"
           controls
           style="display: block; width: 100%; color-scheme: dark"
         ></audio>
-        <div class="embedembed-responsive" v-if="data.video">
-          <video
-            :poster="posterSrc"
+        <!-- video preview -->
+        <video
+          v-if="data.video"
+          :poster="posterSrc"
+          :src="src"
+          style="border-radius: 4px; object-fit: cover; width: 100%"
+          :controls="showControls"
+        ></video>
+        <!-- model preview -->
+        <div class="embed-responsive">
+          <model-viewer
+            v-if="data.file.type.startsWith('model/')"
             :src="src"
-            style="border-radius: 4px; object-fit: cover; width: 100%"
-            :controls="showControls"
-          ></video>
+            camera-controls
+            shadow-intensity="1"
+            touch-action="pan-y"
+            style="
+              position: absolute;
+              top: 0;
+              bottom: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+            "
+          ></model-viewer>
         </div>
       </n-spin>
       <n-divider />
@@ -141,11 +160,16 @@ onMounted(async () => {
     return;
   }
 
+  // load model viewer (for model only)
+  if (data.value.file.type.startsWith("model/")) {
+    await import("@google/model-viewer");
+  }
+
   // load poster (for video only)
   if (data.value.video) {
     posterSrc.value = mw.huijiApi.getImageUrl(
       route.params.fileName.toString().replace(/ /g, "_") + ".poster.png",
-      "xyy",
+      "xyy"
     );
   }
 

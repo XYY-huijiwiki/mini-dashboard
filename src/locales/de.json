@@ -39,6 +39,7 @@
     "label-file-name": "Name",
     "label-file-type": "Dateityp",
     "label-file-type-audio": "Audio",
+    "label-file-type-model": "3D-Modell",
     "label-file-type-video": "Video",
     "label-file-size": "Dateigröße",
     "dropdown-option-preview": "Vorschau",

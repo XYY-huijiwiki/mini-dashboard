@@ -1,5 +1,15 @@
 import { url } from "@/utils/mwApi/index";
 
+/**
+ * Retrieves the content of a MediaWiki page by its title.
+ * @param {string} title - The title of the page to retrieve.
+ * @returns {Promise<{
+ *   id: number;
+ *   content: string;
+ *   title: string;
+ *   namespace: number;
+ * } | null>} - A Promise that resolves to an object containing the page ID, content, title, and namespace, or null if the page was not found.
+ */
 async function getPage(title: string): Promise<{
   id: number;
   content: string;

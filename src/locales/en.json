@@ -39,6 +39,7 @@
     "label-file-name": "Name",
     "label-file-type": "File Type",
     "label-file-type-audio": "Audio",
+    "label-file-type-model": "Model",
     "label-file-type-video": "Video",
     "label-file-size": "File Size",
     "dropdown-option-preview": "Preview",

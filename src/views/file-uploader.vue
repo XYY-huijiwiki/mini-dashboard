@@ -15,6 +15,8 @@ import { parseBuffer } from "music-metadata-browser";
 import { Buffer } from "buffer";
 import { fileTypeFromBuffer } from "file-type";
 
+window.Buffer = Buffer;
+
 const { t } = useI18n();
 
 // 定义一些变量
@@ -25,7 +27,7 @@ let fileExtList = ref(
   Object.values(fileTypeList)
     .map((item) => item.ext)
     .flat()
-    .sort()
+    .sort(),
 );
 
 // 获取羊羊百科授权协议列表
@@ -126,11 +128,19 @@ async function uploader() {
     // init progress bar
     file.status = "uploading";
 
+    // check is duplicated file name
+    if (await getPage(`File:${file.name}.png`)) {
+      $message.error(`文件 ${file.file.name} 名称重复`);
+      file.status = "error";
+      continue;
+    }
+
     // check file type
-    let fileBuffer = new Uint8Array(await file.file.arrayBuffer());
+    let fileBuffer = await file.file.arrayBuffer();
+    let fileUint8Array = new Uint8Array(fileBuffer);
     let fileExt = file.file.name.split(".").pop();
     let fileType = await fileTypeFromBuffer(
-      Buffer.from(fileBuffer.slice(0, 128))
+      Buffer.from(fileUint8Array.slice(0, 128)),
     );
     console.log(fileType);
     if (!fileType || !fileExt) {
@@ -151,7 +161,7 @@ async function uploader() {
     // repack file
     let pngBuffer = encodePNG([
       { name: "IHDR", data: new Uint8Array([0]) },
-      { name: "IXYY", data: fileBuffer },
+      { name: "IXYY", data: fileUint8Array },
       { name: "IEND", data: new Uint8Array([0]) },
     ]);
     let pngFile = new File([pngBuffer], `${file.name}.png`, {
@@ -174,8 +184,8 @@ async function uploader() {
       },
     };
 
-    // get file metadata (for audio only)
-    if (fileType.mime.startsWith("audio/")) {
+    // get file metadata (for audio only, except `audio/midi`)
+    if (fileType.mime.startsWith("audio/") && fileType.mime !== "audio/midi") {
       let metadata = await parseBuffer(Buffer.from(fileBuffer), fileType.mime);
       fileMetadata.audio = metadata;
     }
@@ -205,7 +215,7 @@ async function uploader() {
     if (fileType.mime.startsWith("video/")) {
       let posterFile = await base64ToFile(
         videoPoster,
-        `${file.name}.poster.png`
+        `${file.name}.poster.png`,
       );
       if (await uploadFile(posterFile)) {
         file.percentage = 90; // progress bar 90%
@@ -223,7 +233,7 @@ async function uploader() {
           fileType.mime.startsWith("video/")
             ? `[[文件:${file.name}.poster.png]]\n`
             : ""
-        }[[分类:特殊文件]]`
+        }[[分类:特殊文件]]`,
       )
     ) {
       file.percentage = 100; // progress bar 100%

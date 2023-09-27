@@ -39,6 +39,7 @@
     "label-file-name": "文件名",
     "label-file-type": "文件类型",
     "label-file-type-audio": "音频",
+    "label-file-type-model": "模型",
     "label-file-type-video": "视频",
     "label-file-size": "文件大小",
     "dropdown-option-preview": "预览",

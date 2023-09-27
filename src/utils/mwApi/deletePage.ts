@@ -6,6 +6,14 @@ interface DeleteResponse {
   };
 }
 
+/**
+ * Deletes a page with the given title and reason.
+ * @async
+ * @param {Object} editParams - The parameters for the delete action.
+ * @param {string} editParams.title - The title of the page to delete.
+ * @param {string} editParams.reason - The reason for deleting the page.
+ * @returns {Promise<boolean>} A promise that resolves to true if the page was successfully deleted, false otherwise.
+ */
 async function deletePage(editParams: {
   title: string;
   reason: string;

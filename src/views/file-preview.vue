@@ -3,7 +3,14 @@
     <loading-view v-if="status === 'loading'" />
     <template v-else-if="status === 'ready'">
       <n-spin :show="showSpin">
-        <!-- audio preview -->
+        <!-- audio/midi preview -->
+        <n-space v-if="data.file.type === 'audio/midi'">
+          <n-button @click="MIDIjs.play(src)">Play</n-button>
+          <n-button @click="MIDIjs.stop()">Stop</n-button>
+          <n-button @click="MIDIjs.pause()">Pause</n-button>
+          <n-button @click="MIDIjs.resume()">Resume</n-button>
+        </n-space>
+        <!-- audio preview (except midi) -->
         <audio
           v-if="data.audio"
           :src="src"
@@ -19,14 +26,18 @@
           :controls="showControls"
         ></video>
         <!-- model preview -->
-        <div class="embed-responsive">
+        <div
+          class="embed-responsive"
+          v-if="data.file.type.startsWith('model/')"
+        >
           <model-viewer
-            v-if="data.file.type.startsWith('model/')"
             :src="src"
+            :poster="posterSrc"
             camera-controls
             shadow-intensity="1"
             touch-action="pan-y"
             style="
+              border-radius: 4px;
               position: absolute;
               top: 0;
               bottom: 0;
@@ -134,6 +145,13 @@ import duration from "dayjs/plugin/duration";
 import { langCode } from "@/locales";
 import { useI18n } from "vue-i18n";
 import { getObjectURL } from "@/utils/getObjectURL";
+// 'https://www.midijs.net/lib/midi.js';
+let a = document.createElement("script");
+a.src = "//www.midijs.net/lib/midi.js";
+document.body.appendChild(a);
+
+// @ts-ignore
+let MIDIjs = window.MIDIjs;
 
 const { t } = useI18n();
 
@@ -163,15 +181,27 @@ onMounted(async () => {
   // load model viewer (for model only)
   if (data.value.file.type.startsWith("model/")) {
     await import("@google/model-viewer");
+    // change file name ext from 'glb' to 'png' to get poster
+    let posterFileName = route.params.fileName
+      .toString()
+      .replace(/ /g, "_")
+      .replace(/\.glb$/, ".png");
+    posterSrc.value = mw.huijiApi.getImageUrl(posterFileName, "xyy");
   }
 
   // load poster (for video only)
   if (data.value.video) {
     posterSrc.value = mw.huijiApi.getImageUrl(
       route.params.fileName.toString().replace(/ /g, "_") + ".poster.png",
-      "xyy"
+      "xyy",
     );
   }
+
+  // load midi player (for midi only)
+  // onMounted ends in this if block
+  // if (data.value.file.type === "audio/midi") {
+
+  // }
 
   // load file
   let fileSrc = await getObjectURL([route.params.fileName.toString()]);
@@ -180,6 +210,7 @@ onMounted(async () => {
     return;
   }
   src.value = fileSrc;
+  console.log(src.value);
 
   // wait for one second, otherwise the video control bar will show its own loading animation
   await sleep(1000);

@@ -42,7 +42,7 @@ let checkedItems: ComputedRef<RetrievedDataItem[]> = computed(() => {
     return [];
   } else {
     return data.value.filter((item) =>
-      checkedKeys.value.includes(item.file.name)
+      checkedKeys.value.includes(item.file.name),
     );
   }
 });
@@ -114,7 +114,7 @@ async function query(): Promise<void> {
     _: new Date().toISOString(),
   });
   let response = await fetch(
-    `https://xyy.huijiwiki.com/api/rest_v1/namespace/data?${params.toString()}`
+    `https://xyy.huijiwiki.com/api/rest_v1/namespace/data?${params.toString()}`,
   );
   let json = await response.json();
   pagination.value.itemCount = json._size;
@@ -137,7 +137,7 @@ let columns: Ref<DataTableColumns<RetrievedDataItem>> = ref([
         h(
           RouterLink,
           { to: "/preview/" + rowData.file.name },
-          h(NA, rowData.file.name)
+          h(NA, rowData.file.name),
         ),
       ]);
     },
@@ -233,7 +233,7 @@ async function dropdownSelect(key: string | number) {
       break;
     case "link-copy":
       navigator.clipboard.writeText(
-        location.href + "preview/" + checkedKeys.value[0]
+        location.href + "preview/" + checkedKeys.value[0],
       );
       $message.success(t("file-manager.message-link-copied"));
       break;

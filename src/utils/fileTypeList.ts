@@ -12,8 +12,7 @@ const fileTypeList: FileTypeList = {
   },
   audio: {
     name: "音频",
-    ext: ["mp3"],
-    // ext: ["mp3", "mid", "wav"],
+    ext: ["mp3", "mid", "wav"],
   },
   video: {
     name: "视频",

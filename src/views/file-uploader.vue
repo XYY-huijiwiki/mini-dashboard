@@ -260,6 +260,7 @@ async function uploader() {
         :multiple="true"
         v-model:file-list="fileList"
         :show-retry-button="false"
+        :disabled="loading"
       >
         <n-upload-dragger>
           <div style="margin-bottom: 12px">

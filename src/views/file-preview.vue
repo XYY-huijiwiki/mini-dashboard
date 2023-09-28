@@ -47,6 +47,15 @@
         </div>
       </n-spin>
       <n-divider />
+      <n-space vertical>
+        <n-alert type="info" title="文件来源">{{
+          data.wiki.fileSource
+        }}</n-alert>
+        <n-alert type="info" title="文件许可">{{
+          data.wiki.fileLicense
+        }}</n-alert>
+      </n-space>
+      <n-divider />
       <n-grid x-gap="8" y-gap="16" cols="1 400:2 600:3">
         <!-- file type -->
         <n-gi>
@@ -184,7 +193,7 @@ onMounted(async () => {
   if (data.value.video) {
     posterSrc.value = mw.huijiApi.getImageUrl(
       route.params.fileName.toString().replace(/ /g, "_") + ".poster.png",
-      "xyy"
+      "xyy",
     );
   }
 

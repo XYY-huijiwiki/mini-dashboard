@@ -5,18 +5,20 @@
       <n-spin :show="showSpin">
         <!-- audio/midi preview -->
         <n-space v-if="data.file.type === 'audio/midi'">
-          <n-button @click="MIDIjs.play(src)">Play</n-button>
-          <n-button @click="MIDIjs.stop()">Stop</n-button>
-          <n-button @click="MIDIjs.pause()">Pause</n-button>
-          <n-button @click="MIDIjs.resume()">Resume</n-button>
+          <n-button @click="midi.play(src)">Play</n-button>
+          <n-button @click="midi.stop()">Stop</n-button>
+          <n-button @click="midi.pause()">Pause</n-button>
+          <n-button @click="midi.resume()">Resume</n-button>
         </n-space>
         <!-- audio preview (except midi) -->
-        <audio
-          v-if="data.audio"
-          :src="src"
-          controls
-          style="display: block; width: 100%; color-scheme: dark"
-        ></audio>
+        <template v-if="data.audio">
+          <audio
+            :src="src"
+            controls
+            style="display: block; width: 100%; color-scheme: dark"
+            controlsList="nodownload"
+          ></audio>
+        </template>
         <!-- video preview -->
         <video
           v-if="data.video"
@@ -24,6 +26,7 @@
           :src="src"
           style="border-radius: 4px; object-fit: cover; width: 100%"
           :controls="showControls"
+          controlsList="nodownload"
         ></video>
         <!-- model preview -->
         <div
@@ -145,18 +148,14 @@ import duration from "dayjs/plugin/duration";
 import { langCode } from "@/locales";
 import { useI18n } from "vue-i18n";
 import { getObjectURL } from "@/utils/getObjectURL";
-// 'https://www.midijs.net/lib/midi.js';
-let a = document.createElement("script");
-a.src = "//www.midijs.net/lib/midi.js";
-document.body.appendChild(a);
-
-// @ts-ignore
-let MIDIjs = window.MIDIjs;
 
 const { t } = useI18n();
 
 // configure dayjs
 dayjs.extend(duration);
+
+// MIDIjs
+const midi = MIDIjs;
 
 // use route
 const route = useRoute();
@@ -210,7 +209,6 @@ onMounted(async () => {
     return;
   }
   src.value = fileSrc;
-  console.log(src.value);
 
   // wait for one second, otherwise the video control bar will show its own loading animation
   await sleep(1000);

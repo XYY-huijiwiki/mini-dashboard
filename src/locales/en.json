@@ -42,6 +42,8 @@
     "label-file-type-model": "Model",
     "label-file-type-video": "Video",
     "label-file-size": "File Size",
+    "label-file-upload-time": "Upload Time",
+    "btn-search": "Search",
     "dropdown-option-preview": "Preview",
     "dropdown-option-link-copy": "Copy Link",
     "dropdown-option-rename": "Rename",

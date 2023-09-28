@@ -26,9 +26,26 @@ import materialSymbol from "@/components/material-symbol.vue";
 import router from "@/router";
 import loadingComponent from "@/views/loading-view.vue";
 import errorComponent from "@/views/error-view.vue";
-import { isArray } from "lodash-es";
+import { isArray, debounce } from "lodash-es";
 
 const { t } = useI18n();
+
+/*
+ *
+ * Search Bar
+ *
+ */
+let searchText = ref("");
+const searchBar = ref();
+function cancelSearch() {
+  if (searchText.value) {
+    searchText.value = ``;
+    pagination.value.page = 1;
+    query();
+  }
+  // cancel focus on search bar
+  searchBar.value.blur();
+}
 
 /*
  *
@@ -64,7 +81,9 @@ let rowProps = (rowData: RetrievedDataItem) => {
 };
 let filter: Ref<DataTableFilterState> = ref({ type: undefined });
 let sorter: Ref<DataTableSortState | undefined> = ref();
-async function query(): Promise<void> {
+let query = debounce(async (): Promise<void> => {
+  // reset checkedKeys
+  checkedKeys.value = [];
   // start loading animation
   loading.value = true;
   // deal with sorter
@@ -78,6 +97,8 @@ async function query(): Promise<void> {
       ? (newKey = "file.type")
       : sorter.value.columnKey === "name"
       ? (newKey = "file.name")
+      : sorter.value.columnKey === "uploadTime"
+      ? (newKey = "wiki.uploadTime")
       : null;
     // new sortBy
     if (newKey && newKey === "file.name") {
@@ -92,9 +113,14 @@ async function query(): Promise<void> {
     }
   }
   // deal with filter
-  console.log(filter.value.type);
   let filterBy = {
-    "file.name": { $exists: true },
+    "file.name": (() => {
+      if (searchText.value) {
+        return { $regex: searchText.value };
+      } else {
+        return { $exists: true };
+      }
+    })(),
     "file.type": (() => {
       if (isArray(filter.value.type) && filter.value.type.length > 0) {
         // if filter.value.type is an array, join it with "|"
@@ -121,7 +147,11 @@ async function query(): Promise<void> {
   pagination.value.pageCount = json._total_pages;
   data.value = json["_embedded"];
   loading.value = false;
-}
+  // scroll to #base64-file-manager
+  document
+    .getElementById("base64-file-manager")
+    ?.scrollIntoView({ behavior: "smooth" });
+}, 200);
 let data: Ref<RetrievedDataItem[]> = ref([]);
 let columns: Ref<DataTableColumns<RetrievedDataItem>> = ref([
   {
@@ -161,6 +191,14 @@ let columns: Ref<DataTableColumns<RetrievedDataItem>> = ref([
     sorter: true,
     render: (rowData: RetrievedDataItem) => {
       return h(NText, filesize(rowData.file.size, { locale: "de-de" }));
+    },
+  },
+  {
+    title: t("file-manager.label-file-upload-time"),
+    key: "uploadTime",
+    sorter: true,
+    render: (rowData: RetrievedDataItem) => {
+      return h(NText, new Date(rowData.wiki.uploadTime).toLocaleString());
     },
   },
 ]);
@@ -290,48 +328,71 @@ let comp: Ref<Component | undefined> = ref();
 
 <template>
   <div>
-    <n-data-table
-      :columns="columns"
-      :data="data"
-      :loading="loading"
-      size="small"
-      remote
-      :pagination="pagination"
-      pagination-behavior-on-filter="first"
-      @update:sorter="
-        (a: DataTableSortState) => {
-          pagination.page = 1;
-          sorter = a;
-          checkedKeys = [];
-          query();
-        }
-      "
-      @update:page="
-        (page: number) => {
-          pagination.page = page;
-          checkedKeys = [];
-          query();
-        }
-      "
-      @update:page-size="
-        (pageSize: number) => {
-          pagination.pageSize = pageSize;
-          pagination.page = 1;
-          checkedKeys = [];
-          query();
-        }
-      "
-      @update:filters="
-        (a: DataTableFilterState) => {
-          filter = a;
-          checkedKeys = [];
-          query();
-        }
-      "
-      :row-props="rowProps"
-      :row-key="(rowData: RetrievedDataItem) => rowData.file.name"
-      v-model:checked-row-keys="checkedKeys"
-    />
+    <n-space vertical>
+      <n-input-group>
+        <n-input round v-model:value="searchText" clearable ref="searchBar">
+          <template #prefix>
+            <n-button circle quaternary size="tiny" @click="cancelSearch">
+              <template #icon>
+                <materialSymbol :size="24">
+                  {{ searchText ? " arrow_back " : "search" }}
+                </materialSymbol>
+              </template>
+            </n-button>
+          </template>
+        </n-input>
+        <n-button
+          @click="
+            () => {
+              pagination.page = 1;
+              query();
+            }
+          "
+          round
+          secondary
+        >
+          {{ t("file-manager.btn-search") }}
+        </n-button>
+      </n-input-group>
+      <n-data-table
+        :columns="columns"
+        :data="data"
+        :loading="loading"
+        size="small"
+        remote
+        :pagination="pagination"
+        pagination-behavior-on-filter="first"
+        @update:sorter="
+          (a: DataTableSortState) => {
+            pagination.page = 1;
+            sorter = a;
+            query();
+          }
+        "
+        @update:page="
+          (page: number) => {
+            pagination.page = page;
+            query();
+          }
+        "
+        @update:page-size="
+          (pageSize: number) => {
+            pagination.pageSize = pageSize;
+            pagination.page = 1;
+            query();
+          }
+        "
+        @update:filters="
+          (a: DataTableFilterState) => {
+            filter = a;
+            query();
+          }
+        "
+        :row-props="rowProps"
+        :row-key="(rowData: RetrievedDataItem) => rowData.file.name"
+        v-model:checked-row-keys="checkedKeys"
+      />
+    </n-space>
     <n-dropdown
       placement="bottom-start"
       trigger="manual"

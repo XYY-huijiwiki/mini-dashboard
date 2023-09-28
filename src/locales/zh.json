@@ -42,6 +42,8 @@
     "label-file-type-model": "模型",
     "label-file-type-video": "视频",
     "label-file-size": "文件大小",
+    "label-file-upload-time": "上传时间",
+    "btn-search": "搜索",
     "dropdown-option-preview": "预览",
     "dropdown-option-link-copy": "复制链接",
     "dropdown-option-rename": "重命名",

@@ -85,3 +85,11 @@ interface FileMetadata {
 interface RetrievedDataItem extends FileMetadata {
   _id: string;
 }
+
+// MIDIjs api
+declare const MIDIjs: {
+  play: (url: string) => void;
+  stop: () => void;
+  pause: () => void;
+  resume: () => void;
+};

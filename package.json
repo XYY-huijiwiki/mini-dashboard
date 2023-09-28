@@ -16,6 +16,7 @@
     "await-sleep": "^0.0.1",
     "buffer": "^6.0.3",
     "dayjs": "^1.11.10",
+    "debounce": "^1.2.1",
     "file-type": "^18.5.0",
     "file64": "^1.0.2",
     "filesize": "^10.0.12",

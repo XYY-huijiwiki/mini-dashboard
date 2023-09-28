@@ -12,6 +12,7 @@ declare module 'vue' {
     DownloadDialog: typeof import('./src/components/download-dialog.vue')['default']
     MaterialSymbol: typeof import('./src/components/material-symbol.vue')['default']
     NA: typeof import('naive-ui')['NA']
+    NAlert: typeof import('naive-ui')['NAlert']
     NButton: typeof import('naive-ui')['NButton']
     NCard: typeof import('naive-ui')['NCard']
     NConfigProvider: typeof import('naive-ui')['NConfigProvider']

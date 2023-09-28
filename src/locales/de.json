@@ -42,6 +42,8 @@
     "label-file-type-model": "3D-Modell",
     "label-file-type-video": "Video",
     "label-file-size": "Dateigröße",
+    "label-file-upload-time": "Hochladedatum",
+    "btn-search": "Suchen",
     "dropdown-option-preview": "Vorschau",
     "dropdown-option-link-copy": "Link kopieren",
     "dropdown-option-rename": "Umbenennen",

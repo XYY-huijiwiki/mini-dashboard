@@ -4,11 +4,6 @@ import router from "@/router/index";
 import { createI18n } from "vue-i18n";
 import { langPacks, langCode } from "@/locales";
 
-// 'https://www.midijs.net/lib/midi.js';
-let a = document.createElement("script");
-a.src = "//www.midijs.net/lib/midi.js";
-document.body.appendChild(a);
-
 (async () => {
   const messages = { [langCode]: await langPacks[langCode]() };
   const i18n = createI18n({

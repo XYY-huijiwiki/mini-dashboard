@@ -4,14 +4,9 @@
     <template v-else-if="status === 'ready'">
       <n-spin :show="showSpin">
         <!-- audio/midi preview -->
-        <n-space v-if="data.file.type === 'audio/midi'">
-          <n-button @click="midi.play(src)">Play</n-button>
-          <n-button @click="midi.stop()">Stop</n-button>
-          <n-button @click="midi.pause()">Pause</n-button>
-          <n-button @click="midi.resume()">Resume</n-button>
-        </n-space>
+        <n-result v-if="data.file.type === 'audio/midi'" title="No Preview" />
         <!-- audio preview (except midi) -->
-        <template v-if="data.audio">
+        <template v-else-if="data.audio">
           <audio
             :src="src"
             controls
@@ -154,9 +149,6 @@ const { t } = useI18n();
 // configure dayjs
 dayjs.extend(duration);
 
-// MIDIjs
-const midi = MIDIjs;
-
 // use route
 const route = useRoute();
 let status: Ref<"loading" | "ready" | "error"> = ref("loading");
@@ -192,7 +184,7 @@ onMounted(async () => {
   if (data.value.video) {
     posterSrc.value = mw.huijiApi.getImageUrl(
       route.params.fileName.toString().replace(/ /g, "_") + ".poster.png",
-      "xyy",
+      "xyy"
     );
   }
 

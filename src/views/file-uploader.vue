@@ -233,7 +233,7 @@ async function uploader() {
           fileType.mime.startsWith("video/")
             ? `[[文件:${file.name}.poster.png]]\n`
             : ""
-        }[[分类:特殊文件]]`,
+        }{{特殊文件}}`,
       )
     ) {
       file.percentage = 100; // progress bar 100%
@@ -264,9 +264,9 @@ async function uploader() {
       >
         <n-upload-dragger>
           <div style="margin-bottom: 12px">
-            <material-symbol :size="64" style="opacity: 0.52"
-              >cloud_upload</material-symbol
-            >
+            <material-symbol :size="64" style="opacity: 0.52">
+              cloud_upload
+            </material-symbol>
           </div>
           <n-text :style="{ 'font-size': '16px' }">
             {{ t("file-uploader.label-drop-files-here") }}

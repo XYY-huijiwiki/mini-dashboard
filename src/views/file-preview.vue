@@ -178,30 +178,18 @@ onMounted(async () => {
     return;
   }
 
-  // load model viewer (for model only)
-  if (data.value.file.type.startsWith("model/")) {
-    await import("@google/model-viewer");
-    // change file name ext from 'glb' to 'png' to get poster
-    let posterFileName = route.params.fileName
-      .toString()
-      .replace(/ /g, "_")
-      .replace(/\.glb$/, ".png");
-    posterSrc.value = mw.huijiApi.getImageUrl(posterFileName, "xyy");
-  }
-
-  // load poster (for video only)
-  if (data.value.video) {
+  // load poster (for video and model only)
+  if (data.value.video || data.value.file.type.startsWith("model/")) {
     posterSrc.value = mw.huijiApi.getImageUrl(
       route.params.fileName.toString().replace(/ /g, "_") + ".poster.png",
       "xyy",
     );
   }
 
-  // load midi player (for midi only)
-  // onMounted ends in this if block
-  // if (data.value.file.type === "audio/midi") {
-
-  // }
+  // load model viewer (for model only)
+  if (data.value.file.type.startsWith("model/")) {
+    await import("@google/model-viewer");
+  }
 
   // load file
   let fileSrc = await getObjectURL([route.params.fileName.toString()]);

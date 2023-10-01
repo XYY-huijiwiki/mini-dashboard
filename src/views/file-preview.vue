@@ -195,7 +195,7 @@ onMounted(async () => {
   if (data.value.video || data.value.file.type.startsWith("model/")) {
     posterSrc.value = mw.huijiApi.getImageUrl(
       route.params.fileName.toString().replace(/ /g, "_") + ".poster.png",
-      "xyy"
+      "xyy",
     );
   }
 

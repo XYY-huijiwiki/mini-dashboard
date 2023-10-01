@@ -25,4 +25,4 @@ async function getVideoMetadata(videoFile: File) {
   };
 }
 
-export default getVideoMetadata;
+export { getVideoMetadata };

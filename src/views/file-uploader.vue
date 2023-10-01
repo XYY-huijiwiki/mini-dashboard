@@ -7,11 +7,8 @@ import {
 } from "naive-ui";
 import { getPage, editPage, uploadFile } from "@/utils/mwApi/index";
 import fileTypeList from "@/utils/fileTypeList";
-import getVideoMetadata from "@/utils/getVideoMetadata";
-import { base64ToFile } from "file64";
 import { useI18n } from "vue-i18n";
 import encodePNG from "png-chunks-encode";
-import { parseBuffer } from "music-metadata-browser";
 import { Buffer } from "buffer";
 import { fileTypeFromBuffer } from "file-type";
 
@@ -186,6 +183,7 @@ async function uploader() {
 
     // get file metadata (for audio only, except `audio/midi`)
     if (fileType.mime.startsWith("audio/") && fileType.mime !== "audio/midi") {
+      let { parseBuffer } = await import("music-metadata-browser");
       let metadata = await parseBuffer(Buffer.from(fileBuffer), fileType.mime);
       fileMetadata.audio = metadata;
     }
@@ -193,6 +191,7 @@ async function uploader() {
     // get file metadata and poster (for video only)
     let videoPoster: string = "";
     if (fileType.mime.startsWith("video/")) {
+      let { getVideoMetadata } = await import("@/utils/getVideoMetadata");
       let { poster, ...metadata } = await getVideoMetadata(file.file);
       videoPoster = poster;
       fileMetadata.video = metadata;
@@ -213,6 +212,7 @@ async function uploader() {
 
     // upload poster (for video only)
     if (fileType.mime.startsWith("video/")) {
+      let { base64ToFile } = await import("file64");
       let posterFile = await base64ToFile(
         videoPoster,
         `${file.name}.poster.png`,

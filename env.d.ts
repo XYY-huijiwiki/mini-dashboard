@@ -80,6 +80,9 @@ interface FileMetadata {
     uploader: string;
     uploadTime: Date;
   };
+  model?: {
+    animations: string[];
+  };
 }
 
 interface RetrievedDataItem extends FileMetadata {

@@ -24,28 +24,39 @@
           controlsList="nodownload"
         ></video>
         <!-- model preview -->
-        <div
-          class="embed-responsive"
-          v-if="data.file.type.startsWith('model/')"
-        >
-          <model-viewer
-            autoplay
-            :src="src"
-            :poster="posterSrc"
-            camera-controls
-            shadow-intensity="1"
-            touch-action="pan-y"
-            style="
-              border-radius: 4px;
-              position: absolute;
-              top: 0;
-              bottom: 0;
-              left: 0;
-              width: 100%;
-              height: 100%;
-            "
-          ></model-viewer>
-        </div>
+        <n-space vertical v-if="data.file.type.startsWith('model/')">
+          <div class="embed-responsive">
+            <model-viewer
+              autoplay
+              :animation-name="animation"
+              :src="src"
+              :poster="posterSrc"
+              camera-controls
+              shadow-intensity="1"
+              touch-action="pan-y"
+              style="
+                border-radius: 4px;
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+              "
+            ></model-viewer>
+          </div>
+          <n-space v-if="data.model?.animations">
+            <n-radio-group v-model:value="animation">
+              <n-radio
+                v-for="anim in data.model.animations"
+                :value="anim"
+                :key="anim"
+              >
+                {{ anim }}
+              </n-radio>
+            </n-radio-group>
+          </n-space>
+        </n-space>
       </n-spin>
       <n-divider />
       <n-space vertical>
@@ -168,6 +179,7 @@ let showControls: Ref<boolean> = ref(false);
 let showSpin: Ref<boolean> = ref(true);
 
 let data: Ref<RetrievedDataItem>;
+let animation: Ref<string>;
 
 onMounted(async () => {
   let json = await getPage(`Data:${route.params.fileName}.json`);
@@ -190,6 +202,9 @@ onMounted(async () => {
   // load model viewer (for model only)
   if (data.value.file.type.startsWith("model/")) {
     await import("@google/model-viewer");
+    if (data.value.model?.animations) {
+      animation = ref(data.value.model.animations[0]);
+    }
   }
 
   // load file

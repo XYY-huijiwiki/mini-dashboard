@@ -24,7 +24,12 @@
             File:{{ props.data[0].file.name }}.png
           </n-a>
         </n-p>
-        <n-p v-if="props.data[0].file.type.startsWith('video/')">
+        <n-p
+          v-if="
+            props.data[0].file.type.startsWith('video/') ||
+            props.data[0].file.type.startsWith('model/')
+          "
+        >
           poster page:
           <n-a
             :href="`/wiki/File:${props.data[0].file.name}.poster.png`"

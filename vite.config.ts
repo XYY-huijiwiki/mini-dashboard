@@ -10,7 +10,13 @@ import { NaiveUiResolver } from "unplugin-vue-components/resolvers";
 export default defineConfig(({ command }) => {
   return {
     plugins: [
-      vue(),
+      vue({
+        template: {
+          compilerOptions: {
+            isCustomElement: (tag) => tag === "model-viewer",
+          },
+        },
+      }),
       Components({
         resolvers: [NaiveUiResolver()],
       }),
@@ -18,7 +24,7 @@ export default defineConfig(({ command }) => {
     resolve: {
       alias: {
         "@": fileURLToPath(new URL("./src", import.meta.url)),
-        'node:buffer': 'buffer',
+        "node:buffer": "buffer",
       },
     },
     build: {

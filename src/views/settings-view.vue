@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { useLocalStorage } from "@vueuse/core";
 import { useI18n } from "vue-i18n";
+import { supportedLangs, langCode } from "@/locales";
 
 const { t } = useI18n();
 
@@ -25,9 +26,18 @@ function clearData() {
 <template>
   <n-form>
     <n-form-item :label="t('settings.label-language')">
-      <n-radio :checked="true" disabled>
-        {{ t("language") }}
-      </n-radio>
+      <n-radio-group :value="langCode" name="radiogroup">
+        <n-space>
+          <n-radio
+            v-for="lang in supportedLangs"
+            :key="lang"
+            :value="lang"
+            disabled
+          >
+            {{ new Intl.DisplayNames([lang], { type: "language" }).of(lang) }}
+          </n-radio>
+        </n-space>
+      </n-radio-group>
     </n-form-item>
     <n-form-item :label="t('settings.label-restore-defaults')">
       <n-button @click="clearData()" disabled>

@@ -41,9 +41,14 @@ switch (langCode) {
       <!-- 卡片左上角：返回按钮和标题 -->
       <template #header>
         <n-space align="center" :wrap="false" :wrap-item="false">
-          <n-button quaternary circle @click="$router.back()">
+          <n-button
+            quaternary
+            circle
+            @click="$router.push({ name: 'home' })"
+            v-if="$route.name !== 'home'"
+          >
             <template #icon>
-              <material-symbol> arrow_back </material-symbol>
+              <material-symbol> home </material-symbol>
             </template>
           </n-button>
           <n-tag v-if="dev">{{ t("dev-tag") }}</n-tag>

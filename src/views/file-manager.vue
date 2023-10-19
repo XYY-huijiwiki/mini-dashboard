@@ -8,7 +8,6 @@ import {
   defineAsyncComponent,
   type Ref,
   type VNodeChild,
-  type Component,
   type ComputedRef,
 } from "vue";
 import {
@@ -163,13 +162,17 @@ let columns: Ref<DataTableColumns<RetrievedDataItem>> = ref([
     key: "name",
     sorter: true,
     render: (rowData: RetrievedDataItem): VNodeChild => {
-      return h("div", [
-        h(
-          RouterLink,
-          { to: "/preview/" + rowData.file.name },
-          h(NA, rowData.file.name),
-        ),
-      ]);
+      return h(
+        RouterLink,
+        {
+          to: "/preview/" + rowData.file.name,
+        },
+        () => h(NA, () => rowData.file.name),
+      );
+      // equivalent to HTML
+      //    <router-link to="/preview/{{ rowData.file.name }}">
+      //      <n-a>{{ rowData.file.name }}</n-a>
+      //    </router-link>
     },
   },
   {
@@ -182,7 +185,9 @@ let columns: Ref<DataTableColumns<RetrievedDataItem>> = ref([
       { label: t("file-manager.label-file-type-video"), value: "video" },
     ],
     render: (rowData: RetrievedDataItem) => {
-      return h(NText, rowData.file.type);
+      return h(NText, () => rowData.file.type);
+      // equivalent to HTML
+      //    <n-text>{{ rowData.file.type }}</n-text>
     },
   },
   {
@@ -190,7 +195,9 @@ let columns: Ref<DataTableColumns<RetrievedDataItem>> = ref([
     key: "size",
     sorter: true,
     render: (rowData: RetrievedDataItem) => {
-      return h(NText, filesize(rowData.file.size, { locale: "de-de" }));
+      return h(NText, () => filesize(rowData.file.size, { locale: "de-de" }));
+      // equivalent to HTML
+      //    <n-text>{{ filesize(rowData.file.size, { locale: "de-de" }) }}</n-text>
     },
   },
   {
@@ -198,7 +205,9 @@ let columns: Ref<DataTableColumns<RetrievedDataItem>> = ref([
     key: "uploadTime",
     sorter: true,
     render: (rowData: RetrievedDataItem) => {
-      return h(NText, new Date(rowData.wiki.uploadTime).toLocaleString());
+      return h(NText, () => new Date(rowData.wiki.uploadTime).toLocaleString());
+      // equivalent to HTML
+      //    <n-text>{{ new Date(rowData.wiki.uploadTime).toLocaleString() }}</n-text>
     },
   },
 ]);
@@ -225,13 +234,13 @@ let dropdownY = ref(0);
 const options: ComputedRef<DropdownOption[]> = computed(() => [
   {
     label: t("file-manager.dropdown-option-preview"),
-    icon: () => h(materialSymbol, { size: 20 }, "visibility"),
+    icon: () => h(materialSymbol, { size: 20 }, () => "visibility"),
     key: "preview",
     disabled: checkedKeys.value.length > 1,
   },
   {
     label: t("file-manager.dropdown-option-link-copy"),
-    icon: () => h(materialSymbol, { size: 20 }, "link"),
+    icon: () => h(materialSymbol, { size: 20 }, () => "link"),
     key: "link-copy",
     disabled: checkedKeys.value.length > 1,
   },
@@ -240,17 +249,17 @@ const options: ComputedRef<DropdownOption[]> = computed(() => [
   },
   {
     label: t("file-manager.dropdown-option-delete"),
-    icon: () => h(materialSymbol, { size: 20 }, "delete"),
+    icon: () => h(materialSymbol, { size: 20 }, () => "delete"),
     key: "delete",
   },
   {
     label: t("file-manager.dropdown-option-download"),
-    icon: () => h(materialSymbol, { size: 20 }, "download"),
+    icon: () => h(materialSymbol, { size: 20 }, () => "download"),
     key: "download",
   },
   {
     label: t("file-manager.dropdown-option-rename"),
-    icon: () => h(materialSymbol, { size: 20 }, "edit"),
+    icon: () => h(materialSymbol, { size: 20 }, () => "edit"),
     key: "rename",
     disabled: checkedKeys.value.length > 1,
   },
@@ -259,7 +268,7 @@ const options: ComputedRef<DropdownOption[]> = computed(() => [
   },
   {
     label: t("file-manager.dropdown-option-details"),
-    icon: () => h(materialSymbol, { size: 20 }, "info"),
+    icon: () => h(materialSymbol, { size: 20 }, () => "info"),
     key: "details",
     disabled: checkedKeys.value.length > 1,
   },
@@ -276,19 +285,19 @@ async function dropdownSelect(key: string | number) {
       $message.success(t("file-manager.message-link-copied"));
       break;
     case "rename":
-      comp.value = RenameDialog;
+      currentDialog.value = "RenameDialog";
       showModal.value = true;
       break;
     case "delete":
-      comp.value = DeleteDialog;
+      currentDialog.value = "DeleteDialog";
       showModal.value = true;
       break;
     case "details":
-      comp.value = DetailsDialog;
+      currentDialog.value = "DetailsDialog";
       showModal.value = true;
       break;
     case "download":
-      comp.value = downloadDialog;
+      currentDialog.value = "DownloadDialog";
       showModal.value = true;
       break;
     default:
@@ -317,13 +326,21 @@ const DetailsDialog = defineAsyncComponent({
   loadingComponent,
   errorComponent,
 });
-const downloadDialog = defineAsyncComponent({
+const DownloadDialog = defineAsyncComponent({
   loader: () => import("@/components/download-dialog.vue"),
   loadingComponent,
   errorComponent,
 });
 let showModal = ref(false);
-let comp: Ref<Component | undefined> = ref();
+// let comp: Ref<Component | undefined> = ref();
+let dialogsComponents = {
+  RenameDialog,
+  DeleteDialog,
+  DetailsDialog,
+  DownloadDialog,
+};
+let currentDialog: Ref<keyof typeof dialogsComponents | undefined> =
+  ref(undefined);
 </script>
 
 <template>
@@ -406,12 +423,12 @@ let comp: Ref<Component | undefined> = ref();
     />
     <n-modal
       v-model:show="showModal"
-      @after-leave="comp = undefined"
+      @after-leave="currentDialog = undefined"
       :autoFocus="false"
     >
       <div>
         <component
-          :is="comp"
+          :is="currentDialog ? dialogsComponents[currentDialog] : undefined"
           :data="checkedItems"
           @close-dialog="showModal = false"
           @done="query()"

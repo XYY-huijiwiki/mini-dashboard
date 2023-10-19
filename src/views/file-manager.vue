@@ -26,6 +26,7 @@ import router from "@/router";
 import loadingComponent from "@/views/loading-view.vue";
 import errorComponent from "@/views/error-view.vue";
 import { isArray, debounce } from "lodash-es";
+import { langCode } from "@/locales";
 
 const { t } = useI18n();
 
@@ -195,9 +196,9 @@ let columns: Ref<DataTableColumns<RetrievedDataItem>> = ref([
     key: "size",
     sorter: true,
     render: (rowData: RetrievedDataItem) => {
-      return h(NText, () => filesize(rowData.file.size, { locale: "de-de" }));
+      return h(NText, () => filesize(rowData.file.size, { locale: langCode }));
       // equivalent to HTML
-      //    <n-text>{{ filesize(rowData.file.size, { locale: "de-de" }) }}</n-text>
+      //    <n-text>{{ filesize(rowData.file.size, { locale: langCode }) }}</n-text>
     },
   },
   {

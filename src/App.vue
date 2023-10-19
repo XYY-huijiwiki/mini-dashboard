@@ -61,7 +61,7 @@ switch (langCode) {
       </template>
 
       <!-- 卡片右上角按钮：设置 -->
-      <template #header-extra>
+      <template #header-extra v-if="$route.name !== 'settings'">
         <n-button quaternary circle @click="$router.push('/settings')">
           <template #icon>
             <material-symbol> settings </material-symbol>
@@ -71,7 +71,11 @@ switch (langCode) {
 
       <!-- 卡片主体部分：路由 -->
       <template #default>
-        <router-view></router-view>
+        <router-view v-slot="{ Component }">
+          <keep-alive include="file-manager">
+            <component :is="Component" />
+          </keep-alive>
+        </router-view>
       </template>
     </n-card>
   </n-config-provider>

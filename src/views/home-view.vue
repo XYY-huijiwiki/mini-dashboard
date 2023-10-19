@@ -1,44 +1,27 @@
 <template>
   <div>
-    <n-tabs v-model:value="activeTab" default-value="uploader" animated>
-      <n-tab-pane
-        name="uploader"
-        display-directive="show:lazy"
-        :tab="t('file-uploader.title')"
-      >
-        <file-uploader></file-uploader>
-      </n-tab-pane>
-      <n-tab-pane
-        name="manager"
-        display-directive="show:lazy"
-        :tab="t('file-manager.title')"
-      >
-        <file-manager></file-manager>
-      </n-tab-pane>
-    </n-tabs>
+    <home-thing
+      name="file-uploader"
+      :description="t('file-uploader.description', [fileExtList.join(', ')])"
+      icon="upload"
+    />
+    <n-divider></n-divider>
+    <home-thing
+      name="file-manager"
+      :description="t('file-manager.description')"
+      icon="home_storage"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, defineAsyncComponent } from "vue";
-import loadingComponent from "@/views/loading-view.vue";
-import errorComponent from "@/views/error-view.vue";
 import { useI18n } from "vue-i18n";
-
+import fileTypeList from "@/utils/fileTypeList";
+let fileExtList = Object.values(fileTypeList)
+  .map((item) => item.ext)
+  .flat()
+  .sort();
 const { t } = useI18n();
-
-// define async views
-function createAsyncComponent(name: string) {
-  return defineAsyncComponent({
-    loader: () => import(`../views/${name}.vue`),
-    loadingComponent,
-    errorComponent,
-  });
-}
-const fileUploader = createAsyncComponent("file-uploader");
-const fileManager = createAsyncComponent("file-manager");
-
-const activeTab = ref("uploader");
 </script>
 
 <style scoped></style>

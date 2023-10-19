@@ -4,28 +4,37 @@ import {
   type RouteRecordRaw,
 } from "vue-router";
 
-const filePreview = () => import("@/views/file-preview.vue");
-const homeView = () => import("@/views/home-view.vue");
-const sttingsView = () => import("@/views/settings-view.vue");
+const FilePreview = () => import("@/views/file-preview.vue");
+const HomeView = () => import("@/views/home-view.vue");
+const SettingsView = () => import("@/views/settings-view.vue");
+const FileUploader = () => import("@/views/file-uploader.vue");
+const FileManager = () => import("@/views/file-manager.vue");
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
     name: "home",
-    component: homeView,
-    meta: {
-      keepAlive: true,
-    },
+    component: HomeView,
   },
   {
     path: "/preview/:fileName",
     name: "filePreview",
-    component: filePreview,
+    component: FilePreview,
   },
   {
     path: "/settings",
     name: "settings",
-    component: sttingsView,
+    component: SettingsView,
+  },
+  {
+    path: "/file-uploader",
+    name: "file-uploader",
+    component: FileUploader,
+  },
+  {
+    path: "/file-manager",
+    name: "file-manager",
+    component: FileManager,
   },
 ];
 

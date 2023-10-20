@@ -1,5 +1,4 @@
-import { writeFile } from "xlsx";
-import { utils } from "xlsx";
+import { writeFile, utils } from "xlsx";
 
 interface CartoonData {
   _id: string;

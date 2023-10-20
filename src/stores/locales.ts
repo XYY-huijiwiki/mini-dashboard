@@ -58,12 +58,17 @@ const useLocalesStore = defineStore("locales", () => {
   // language pack for naive ui
   const langPackNaiveUI = asyncComputed(
     async () => {
+      // util function
+      async function getLangPackNaiveUI(langCode: string) {
+        const locale = import(`naive-ui/es/locales/common/${langCode}`);
+        const dateLocale = import(`naive-ui/es/locales/date/${langCode}`);
+        return { locale, dateLocale };
+      }
+      // get lang pack
       if (langCode.value === "de") {
-        const { deDE, dateDeDE } = await import("naive-ui");
-        return { locale: deDE, dateLocale: dateDeDE };
+        return await getLangPackNaiveUI("deDE");
       } else if (langCode.value === "zh") {
-        const { zhCN, dateZhCN } = await import("naive-ui");
-        return { locale: zhCN, dateLocale: dateZhCN };
+        return await getLangPackNaiveUI("zhCN");
       } else {
         return { locale: null, dateLocale: null };
       }

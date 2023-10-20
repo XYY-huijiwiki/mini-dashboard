@@ -29,6 +29,7 @@ export default defineConfig(({ command }) => {
     },
     build: {
       manifest: true,
+      minify: "terser",
     },
     base:
       command === "build"

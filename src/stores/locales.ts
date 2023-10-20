@@ -58,17 +58,19 @@ const useLocalesStore = defineStore("locales", () => {
   // language pack for naive ui
   const langPackNaiveUI = asyncComputed(
     async () => {
-      // util function
-      async function getLangPackNaiveUI(langCode: string) {
-        const locale = import(`naive-ui/es/locales/common/${langCode}`);
-        const dateLocale = import(`naive-ui/es/locales/date/${langCode}`);
-        return { locale, dateLocale };
-      }
       // get lang pack
       if (langCode.value === "de") {
-        return await getLangPackNaiveUI("deDE");
+        const locale = (await import("naive-ui/es/locales/common/deDE"))
+          .default;
+        const dateLocale = (await import("naive-ui/es/locales/date/deDE"))
+          .default;
+        return { locale, dateLocale };
       } else if (langCode.value === "zh") {
-        return await getLangPackNaiveUI("zhCN");
+        const locale = (await import("naive-ui/es/locales/common/zhCN"))
+          .default;
+        const dateLocale = (await import("naive-ui/es/locales/date/zhCN"))
+          .default;
+        return { locale, dateLocale };
       } else {
         return { locale: null, dateLocale: null };
       }

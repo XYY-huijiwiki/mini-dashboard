@@ -18,6 +18,7 @@
     "text-confirm-restore": "Möchten Sie die Standardeinstellungen wiederherstellen?",
     "text-restore-done": "Standardeinstellungen wiederhergestellt",
     "label-language": "Sprache",
+    "text-auto-language": "Automatisch ({0})",
     "label-data-type": "Datentyp",
     "label-export-backup": "Sicherung exportieren",
     "text-export-backup": "Zwei Dateien exportieren, eine zum Bearbeiten und eine zum Sichern.",

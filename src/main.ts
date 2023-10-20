@@ -2,17 +2,21 @@ import { createApp } from "vue";
 import App from "@/App.vue";
 import router from "@/router/index";
 import { createI18n } from "vue-i18n";
-import { langPacks, langCode } from "@/locales";
 import { createPinia } from "pinia";
+import { userLang, langPacks } from "@/stores/locales";
 
 (async () => {
   // i18n
-  const messages = { [langCode]: await langPacks[langCode]() };
+  const language = JSON.parse(
+    localStorage.getItem("miniDashboardSettings") || `{"language":"auto"}`,
+  ).language;
+  const locale = language === "auto" ? userLang : language;
   const i18n = createI18n({
     legacy: false,
-    locale: langCode,
-    fallbackLocale: langCode,
-    messages,
+    locale,
+    messages: {
+      [locale]: await langPacks[locale](),
+    },
   });
 
   // pinia

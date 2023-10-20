@@ -13,13 +13,13 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { useSettingStore } from "@/stores/settings";
+import { useSettingsStore } from "@/stores/settings";
 import { storeToRefs } from "pinia";
 import { useI18n } from "vue-i18n";
 
 let { t } = useI18n();
 
-let { isBot } = storeToRefs(useSettingStore());
+let { isBot } = storeToRefs(useSettingsStore());
 
 let type = computed(() => {
   if (isBot.value === null) return "info";

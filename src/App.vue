@@ -1,41 +1,22 @@
 <script lang="ts" setup>
-import {
-  darkTheme,
-  zhCN,
-  dateZhCN,
-  deDE,
-  dateDeDE,
-  type NDateLocale,
-  type NLocale,
-} from "naive-ui";
-import { ref, type Ref } from "vue";
-import { langCode } from "@/locales";
+import { darkTheme } from "naive-ui";
+import { ref } from "vue";
+import { useLocalesStore } from "@/stores/locales";
+import { storeToRefs } from "pinia";
 import { useI18n } from "vue-i18n";
 
 let dev = ref(import.meta.env.DEV);
 
-const { t } = useI18n();
+let { t } = useI18n();
 
-// dynamic import language packs from naive-ui
-let langPack: Ref<[NLocale | null, NDateLocale | null]> = ref([null, null]);
-switch (langCode) {
-  case "de":
-    langPack.value = [deDE, dateDeDE];
-    break;
-  case "zh":
-    langPack.value = [zhCN, dateZhCN];
-    break;
-  default:
-    langPack.value = [null, null];
-    break;
-}
+let { langPackNaiveUI } = storeToRefs(useLocalesStore());
 </script>
 
 <template>
   <n-config-provider
     :theme="darkTheme"
-    :locale="langPack[0]"
-    :dateLocale="langPack[1]"
+    :locale="langPackNaiveUI.locale"
+    :dateLocale="langPackNaiveUI.dateLocale"
   >
     <n-card>
       <!-- 卡片左上角：返回按钮和标题 -->

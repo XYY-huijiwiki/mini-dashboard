@@ -1,11 +1,15 @@
 <script lang="ts" setup>
 import { useI18n } from "vue-i18n";
-import { supportedLangs, langCode } from "@/locales";
-import { useSettingStore } from "@/stores/settings";
+import { useSettingsStore } from "@/stores/settings";
 import { storeToRefs } from "pinia";
+import { useLocalesStore, supportedLangs, userLang } from "@/stores/locales";
 
-let { settings } = storeToRefs(useSettingStore());
-let { resetSettings } = useSettingStore();
+const { langCode } = storeToRefs(useLocalesStore());
+
+let { settings } = storeToRefs(useSettingsStore());
+
+let { resetSettings } = useSettingsStore();
+
 let dataTypeOptions = [
   { label: "XLSX", value: "xlsx" },
   { label: "JSON", value: "json" },
@@ -32,14 +36,18 @@ function clearData() {
   <n-form>
     <!-- language -->
     <n-form-item :label="t('settings.label-language')">
-      <n-radio-group :value="langCode" name="radiogroup">
+      <n-radio-group v-model:value="settings.language" name="radiogroup">
         <n-space>
-          <n-radio
-            v-for="lang in supportedLangs"
-            :key="lang"
-            :value="lang"
-            disabled
-          >
+          <n-radio key="auto" value="auto">
+            {{
+              t("settings.text-auto-language", [
+                new Intl.DisplayNames([langCode], { type: "language" }).of(
+                  userLang,
+                ),
+              ])
+            }}
+          </n-radio>
+          <n-radio v-for="lang in supportedLangs" :key="lang" :value="lang">
             {{ new Intl.DisplayNames([lang], { type: "language" }).of(lang) }}
           </n-radio>
         </n-space>
@@ -97,7 +105,6 @@ function clearData() {
     <n-li>
       最好填写文件来源。文件来源不尽相同的时候需要一个一个上传、一个一个填写。
     </n-li>
-    <n-li> 此处上传的文件无法通过wikitext直接使用，仅作为归档和备份。 </n-li>
     <n-li>
       如果要上传的文件格式是 png，jpg，jpeg，gif，webp，ogg 中的一种，请<n-a
         :href="encodeURI(`//xyy.huijiwiki.com/wiki/特殊:上传文件`)"

@@ -55,7 +55,10 @@ import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { getObjectURL } from "@/utils/getObjectURL";
 import { filesize } from "filesize";
-import { langCode } from "@/locales";
+import { storeToRefs } from "pinia";
+import { useLocalesStore } from "@/stores/locales";
+
+const { langCode } = storeToRefs(useLocalesStore());
 
 const { t } = useI18n();
 

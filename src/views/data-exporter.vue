@@ -20,13 +20,13 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import cartoonList from "@/json/cartoon-list.json";
-import { useSettingStore } from "@/stores/settings";
+import { useSettingsStore } from "@/stores/settings";
 import { storeToRefs } from "pinia";
 import { downloadJson, downloadXlsx } from "@/utils/dataDownloader";
 import { useI18n } from "vue-i18n";
 
 let { t } = useI18n();
-let { settings } = storeToRefs(useSettingStore());
+let { settings } = storeToRefs(useSettingsStore());
 
 // 定义一些变量
 let btnLoading = ref(false);

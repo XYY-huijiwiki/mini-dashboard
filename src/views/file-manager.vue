@@ -26,7 +26,10 @@ import router from "@/router";
 import loadingComponent from "@/views/loading-view.vue";
 import errorComponent from "@/views/error-view.vue";
 import { isArray, debounce } from "lodash-es";
-import { langCode } from "@/locales";
+import { storeToRefs } from "pinia";
+import { useLocalesStore } from "@/stores/locales";
+
+const { langCode } = storeToRefs(useLocalesStore());
 
 const { t } = useI18n();
 
@@ -196,7 +199,9 @@ let columns: Ref<DataTableColumns<RetrievedDataItem>> = ref([
     key: "size",
     sorter: true,
     render: (rowData: RetrievedDataItem) => {
-      return h(NText, () => filesize(rowData.file.size, { locale: langCode }));
+      return h(NText, () =>
+        filesize(rowData.file.size, { locale: langCode.value }),
+      );
       // equivalent to HTML
       //    <n-text>{{ filesize(rowData.file.size, { locale: langCode }) }}</n-text>
     },

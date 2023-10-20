@@ -3,15 +3,15 @@ import { useLocalStorage } from "@vueuse/core";
 import { type Ref, ref } from "vue";
 import { cloneDeep } from "lodash-es";
 
-export const useSettingStore = defineStore("settings", () => {
+export const useSettingsStore = defineStore("settings", () => {
   // define default settings
   const defaultSettings = {
-    language: "zh-hans",
+    language: "auto",
     dataType: "xlsx",
     exportBackup: false,
   };
   // init settings from localStorage or use default settings
-  const settings = useLocalStorage("miniDaschboardSettings", defaultSettings);
+  const settings = useLocalStorage("miniDashboardSettings", defaultSettings);
   // function of reset settings
   function resetSettings() {
     settings.value = cloneDeep(defaultSettings);

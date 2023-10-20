@@ -54,7 +54,7 @@
 </template>
 
 <script setup lang="ts">
-import { useSettingStore } from "@/stores/settings";
+import { useSettingsStore } from "@/stores/settings";
 import { storeToRefs } from "pinia";
 import { ref, type Ref } from "vue";
 import { type UploadFileInfo } from "naive-ui";
@@ -84,7 +84,7 @@ const { t } = useI18n();
 // define dev env
 let dev = import.meta.env.DEV;
 
-let { settings, isBot } = storeToRefs(useSettingStore());
+let { settings, isBot } = storeToRefs(useSettingsStore());
 let fileList: Ref<UploadFileInfo[]> = ref([]);
 let importing = ref(false);
 let dataInfo = ref({

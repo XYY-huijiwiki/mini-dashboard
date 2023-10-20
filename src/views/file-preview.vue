@@ -161,9 +161,12 @@ import { filesize } from "filesize";
 import sleep from "await-sleep";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
-import { langCode } from "@/locales";
 import { useI18n } from "vue-i18n";
 import { getObjectURL } from "@/utils/getObjectURL";
+import { storeToRefs } from "pinia";
+import { useLocalesStore } from "@/stores/locales";
+
+const { langCode } = storeToRefs(useLocalesStore());
 
 const { t } = useI18n();
 

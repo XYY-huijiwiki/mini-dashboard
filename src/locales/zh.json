@@ -17,6 +17,7 @@
     "text-confirm-restore": "确定要恢复默认设置吗？",
     "text-restore-done": "已恢复默认设置",
     "label-language": "语言",
+    "text-auto-language": "自动（{0}）",
     "label-data-type": "数据类型",
     "label-export-backup": "导出备份",
     "text-export-backup": "导出两份文件，一份用于修改，一份用于备份。",

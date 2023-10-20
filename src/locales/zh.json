@@ -15,10 +15,14 @@
     "label-restore-defaults": "恢复默认设置",
     "btn-restore": "恢复",
     "text-confirm-restore": "确定要恢复默认设置吗？",
+    "text-restore-done": "已恢复默认设置",
     "label-language": "语言",
     "label-data-type": "数据类型",
     "label-export-backup": "导出备份",
-    "text-export-backup": "导出两份文件，一份用于修改，一份用于备份。"
+    "text-export-backup": "导出两份文件，一份用于修改，一份用于备份。",
+    "label-source-code": "源代码",
+    "btn-github": "GitHub",
+    "btn-xyy-wiki": "羊羊百科"
   },
   "home": {
     "title": "迷你控制中心",
@@ -66,7 +70,9 @@
     "label-file-license": "文件许可",
     "btn-upload": "上传",
     "label-drop-files-here": "点击或者拖动文件到该区域来上传",
-    "label-supported-file-types": "目前支持上传的文件类型有：{0}"
+    "label-supported-file-types": "目前支持上传的文件类型有：{0}",
+    "text-leave-warning-title": "警告",
+    "text-leave-warning-content": "当前上传未完成，请勿离开本页面。"
   },
   "data-exporter": {
     "title": "数据导出",
@@ -86,6 +92,8 @@
     "bot-alert-text": "你需要使用机器人账号登陆才能导入数据。",
     "bot-alert-checking": "正在检查账号……",
     "bot-alert-is-bot": "当前账号是机器人账号。",
-    "bot-alert-not-bot": "当前账号不是机器人账号。"
+    "bot-alert-not-bot": "当前账号不是机器人账号。",
+    "text-leave-warning-title": "警告",
+    "text-leave-warning-content": "正在导入数据，请勿离开本页面。"
   }
 }

@@ -5,9 +5,7 @@
         <template #empty>
           <n-empty :description="t('general.loading')">
             <template #icon>
-              <n-icon>
-                <material-symbol :size="32">hourglass_empty</material-symbol>
-              </n-icon>
+              <material-symbol :size="32">hourglass_empty</material-symbol>
             </template>
           </n-empty>
         </template>

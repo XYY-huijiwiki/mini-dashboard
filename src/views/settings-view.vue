@@ -20,7 +20,10 @@ function clearData() {
     positiveText: t("general.btn-confirm"),
     negativeText: t("general.btn-cancel"),
     autoFocus: false,
-    onPositiveClick: resetSettings,
+    onPositiveClick: () => {
+      resetSettings();
+      $message.success(t("settings.text-restore-done"));
+    },
   });
 }
 </script>
@@ -68,14 +71,28 @@ function clearData() {
         {{ t("settings.btn-restore") }}
       </n-button>
     </n-form-item>
+    <!-- source code -->
+    <n-form-item :label="t('settings.label-source-code')">
+      <n-space>
+        <n-button
+          tag="a"
+          href="//github.com/XYY-huijiwiki/mini-dashboard"
+          target="_blank"
+        >
+          {{ t("settings.btn-github") }}
+        </n-button>
+        <n-button
+          tag="a"
+          href="//xyy.huijiwiki.com/wiki/Html:迷你控制中心"
+          target="_blank"
+        >
+          {{ t("settings.btn-xyy-wiki") }}
+        </n-button>
+      </n-space>
+    </n-form-item>
   </n-form>
   <n-divider />
   <n-ul>
-    <n-li>
-      项目源代码可在<n-a href="//github.com/XYY-huijiwiki" target="_blank"
-        >GitHub</n-a
-      >上查看。
-    </n-li>
     <n-li> 单个文件的大小不能超过10MB（实际上要求比10MB小44个字节）。 </n-li>
     <n-li>
       最好填写文件来源。文件来源不尽相同的时候需要一个一个上传、一个一个填写。

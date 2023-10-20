@@ -16,10 +16,14 @@
     "label-restore-defaults": "Restore Defaults",
     "btn-restore": "Restore",
     "text-confirm-restore": "Are you sure you want to restore the default settings?",
+    "text-restore-done": "Default settings restored",
     "label-language": "Language",
     "label-data-type": "Data Type",
     "label-export-backup": "Export Backup",
-    "text-export-backup": "Export two files, one for modification and one for backup."
+    "text-export-backup": "Export two files, one for modification and one for backup.",
+    "label-source-code": "Source Code",
+    "btn-github": "GitHub",
+    "btn-xyy-wiki": "XYY Wiki"
   },
   "home": {
     "title": "Mini Dashboard",
@@ -67,7 +71,9 @@
     "label-file-license": "File License",
     "btn-upload": "Upload",
     "label-drop-files-here": "Click or drag files here to upload",
-    "label-supported-file-types": "Supported file types: {0}"
+    "label-supported-file-types": "Supported file types: {0}",
+    "text-leave-warning-title": "Warning",
+    "text-leave-warning-content": "The upload is now in progress. Please do not leave this page."
   },
   "data-exporter": {
     "title": "Data Exporter",
@@ -87,6 +93,8 @@
     "bot-alert-text": "You need to log in with a bot account to import data.",
     "bot-alert-checking": "Checking account...",
     "bot-alert-is-bot": "Current account is a bot account.",
-    "bot-alert-not-bot": "Current account is not a bot account."
+    "bot-alert-not-bot": "Current account is not a bot account.",
+    "text-leave-warning-title": "Warning",
+    "text-leave-warning-content": "The import is now in progress. Please do not leave this page."
   }
 }

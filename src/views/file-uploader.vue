@@ -11,10 +11,25 @@ import { useI18n } from "vue-i18n";
 import encodePNG from "png-chunks-encode";
 import { Buffer } from "buffer";
 import { fileTypeFromBuffer } from "file-type";
+import { onBeforeRouteLeave } from "vue-router";
 
 window.Buffer = Buffer;
 
 const { t } = useI18n();
+
+// router guard to prevent leaving page when uploading
+onBeforeRouteLeave(() => {
+  if (loading.value) {
+    $dialog.error({
+      title: t("file-uploader.text-leave-warning-title"),
+      content: t("file-uploader.text-leave-warning-content"),
+      positiveText: t("general.btn-confirm"),
+      autoFocus: false,
+      transformOrigin: "center",
+    });
+    return false;
+  }
+});
 
 // 定义一些变量
 let fileSource = ref("");
@@ -24,7 +39,7 @@ let fileExtList = ref(
   Object.values(fileTypeList)
     .map((item) => item.ext)
     .flat()
-    .sort(),
+    .sort()
 );
 
 // 获取羊羊百科授权协议列表
@@ -137,7 +152,7 @@ async function uploader() {
     let fileUint8Array = new Uint8Array(fileBuffer);
     let fileExt = file.file.name.split(".").pop();
     let fileType = await fileTypeFromBuffer(
-      Buffer.from(fileUint8Array.slice(0, 128)),
+      Buffer.from(fileUint8Array.slice(0, 128))
     );
     console.log(fileType);
     if (!fileType || !fileExt) {
@@ -215,7 +230,7 @@ async function uploader() {
       let { base64ToFile } = await import("file64");
       let posterFile = await base64ToFile(
         videoPoster,
-        `${file.name}.poster.png`,
+        `${file.name}.poster.png`
       );
       if (await uploadFile(posterFile)) {
         file.percentage = 90; // progress bar 90%
@@ -233,7 +248,7 @@ async function uploader() {
           fileType.mime.startsWith("video/")
             ? `[[文件:${file.name}.poster.png]]\n`
             : ""
-        }{{特殊文件}}`,
+        }{{特殊文件}}`
       )
     ) {
       file.percentage = 100; // progress bar 100%
@@ -293,9 +308,7 @@ async function uploader() {
           <template #empty>
             <n-empty :description="t('general.loading')">
               <template #icon>
-                <n-icon>
-                  <material-symbol :size="32">hourglass_empty</material-symbol>
-                </n-icon>
+                <material-symbol :size="32">hourglass_empty</material-symbol>
               </template>
             </n-empty>
           </template>

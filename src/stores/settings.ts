@@ -15,7 +15,6 @@ export const useSettingStore = defineStore("settings", () => {
   // function of reset settings
   function resetSettings() {
     settings.value = cloneDeep(defaultSettings);
-    $message.success("设置已重置");
   }
   let isBot: Ref<boolean> = ref(false);
   if (import.meta.env.DEV) {

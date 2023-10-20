@@ -63,6 +63,21 @@ import sleep from "await-sleep";
 import { isArray } from "lodash-es";
 import { type CartoonData } from "@/utils/dataDownloader";
 import { useI18n } from "vue-i18n";
+import { onBeforeRouteLeave } from "vue-router";
+
+// router guard to prevent leaving page when uploading
+onBeforeRouteLeave(() => {
+  if (importing.value) {
+    $dialog.error({
+      title: t("data-importer.text-leave-warning-title"),
+      content: t("data-importer.text-leave-warning-content"),
+      positiveText: t("general.btn-confirm"),
+      autoFocus: false,
+      transformOrigin: "center",
+    });
+    return false;
+  }
+});
 
 const { t } = useI18n();
 

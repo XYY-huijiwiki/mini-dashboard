@@ -55,7 +55,7 @@ const router = createRouter({
   routes,
   scrollBehavior() {
     return {
-      el: "#base64-file-manager",
+      el: "#mini-dashboard",
       top: 100,
       behavior: "smooth",
     };

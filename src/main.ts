@@ -23,7 +23,7 @@ import { createPinia } from "pinia";
   app.use(router);
   app.use(i18n);
   app.use(pinia);
-  app.mount("#base64-file-manager");
+  app.mount("#mini-dashboard");
 })();
 
 // if not in dev mode, try to load dev

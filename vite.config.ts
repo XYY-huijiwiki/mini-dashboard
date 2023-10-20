@@ -32,7 +32,7 @@ export default defineConfig(({ command }) => {
     },
     base:
       command === "build"
-        ? "https://cdn.jsdelivr.net/gh/XYY-huijiwiki/base64-file-manager@dist/"
+        ? "https://cdn.jsdelivr.net/gh/XYY-huijiwiki/mini-dashboard@dist/"
         : "/",
   };
 });

@@ -1,5 +1,5 @@
 {
-  "name": "base64-file-manager",
+  "name": "mini-dashboard",
   "version": "0.1.0",
   "scripts": {
     "dev": "vite",

@@ -238,7 +238,7 @@ async function uploader() {
     ) {
       file.percentage = 100; // progress bar 100%
       file.status = "finished";
-      file.url = `https://xyy.huijiwiki.com/wiki/Project:上传特殊文件#/preview/${file.name}`;
+      file.url = `https://xyy.huijiwiki.com/wiki/Project:迷你控制中心#/preview/${file.name}`;
     } else {
       file.status = "error";
       continue;

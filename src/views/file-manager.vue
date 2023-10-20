@@ -147,9 +147,9 @@ let query = debounce(async (): Promise<void> => {
   pagination.value.pageCount = json._total_pages;
   data.value = json["_embedded"];
   loading.value = false;
-  // scroll to #base64-file-manager
+  // scroll to #mini-dashboard
   document
-    .getElementById("base64-file-manager")
+    .getElementById("mini-dashboard")
     ?.scrollIntoView({ behavior: "smooth" });
 }, 200);
 let data: Ref<RetrievedDataItem[]> = ref([]);

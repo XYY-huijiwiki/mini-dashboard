@@ -27,7 +27,7 @@ async function json2xlsx(json: CartoonData[]) {
 
 async function downloadJson(
   json: CartoonData[],
-  fileName: string
+  fileName: string,
 ): Promise<void> {
   const a = document.createElement("a");
   const blob = new Blob([JSON.stringify(json)], { type: "application/json" });
@@ -39,7 +39,7 @@ async function downloadJson(
 
 async function downloadXlsx(
   json: CartoonData[],
-  fileName: string
+  fileName: string,
 ): Promise<void> {
   const wb = await json2xlsx(json);
   writeFile(wb, `${fileName}.xlsx`);

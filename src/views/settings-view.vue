@@ -1,13 +1,17 @@
 <script lang="ts" setup>
-import { useLocalStorage } from "@vueuse/core";
 import { useI18n } from "vue-i18n";
 import { supportedLangs, langCode } from "@/locales";
+import { useSettingStore } from "@/stores/settings";
+import { storeToRefs } from "pinia";
+
+let { settings } = storeToRefs(useSettingStore());
+let { resetSettings } = useSettingStore();
+let dataTypeOptions = [
+  { label: "XLSX", value: "xlsx" },
+  { label: "JSON", value: "json" },
+];
 
 const { t } = useI18n();
-
-const defaultSettings = {};
-
-const settings = useLocalStorage("settings", defaultSettings);
 
 function clearData() {
   $dialog.warning({
@@ -16,15 +20,14 @@ function clearData() {
     positiveText: t("general.btn-confirm"),
     negativeText: t("general.btn-cancel"),
     autoFocus: false,
-    onPositiveClick: () => {
-      settings.value = defaultSettings;
-    },
+    onPositiveClick: resetSettings,
   });
 }
 </script>
 
 <template>
   <n-form>
+    <!-- language -->
     <n-form-item :label="t('settings.label-language')">
       <n-radio-group :value="langCode" name="radiogroup">
         <n-space>
@@ -39,8 +42,29 @@ function clearData() {
         </n-space>
       </n-radio-group>
     </n-form-item>
+    <!-- data type -->
+    <n-form-item :label="t('settings.label-data-type')">
+      <n-radio-group v-model:value="settings.dataType">
+        <n-space>
+          <n-radio
+            v-for="option in dataTypeOptions"
+            :key="option.value"
+            :value="option.value"
+          >
+            {{ option.label }}
+          </n-radio>
+        </n-space>
+      </n-radio-group>
+    </n-form-item>
+    <!-- export-backup -->
+    <n-form-item :label="t('settings.label-export-backup')">
+      <n-checkbox v-model:checked="settings.exportBackup">
+        {{ t("settings.text-export-backup") }}
+      </n-checkbox>
+    </n-form-item>
+    <!-- restore defaults -->
     <n-form-item :label="t('settings.label-restore-defaults')">
-      <n-button @click="clearData()" disabled>
+      <n-button @click="clearData()">
         {{ t("settings.btn-restore") }}
       </n-button>
     </n-form-item>

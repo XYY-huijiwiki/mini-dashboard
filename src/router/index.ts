@@ -9,6 +9,8 @@ const HomeView = () => import("@/views/home-view.vue");
 const SettingsView = () => import("@/views/settings-view.vue");
 const FileUploader = () => import("@/views/file-uploader.vue");
 const FileManager = () => import("@/views/file-manager.vue");
+const DataImporter = () => import("@/views/data-importer.vue");
+const DataExporter = () => import("@/views/data-exporter.vue");
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -35,6 +37,16 @@ const routes: Array<RouteRecordRaw> = [
     path: "/file-manager",
     name: "file-manager",
     component: FileManager,
+  },
+  {
+    path: "/data-importer",
+    name: "data-importer",
+    component: DataImporter,
+  },
+  {
+    path: "/data-exporter",
+    name: "data-exporter",
+    component: DataExporter,
   },
 ];
 

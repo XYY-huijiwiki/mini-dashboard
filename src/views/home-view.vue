@@ -3,13 +3,25 @@
     <home-thing
       name="file-uploader"
       :description="t('file-uploader.description', [fileExtList.join(', ')])"
-      icon="upload"
+      icon="upload_file"
     />
     <n-divider></n-divider>
     <home-thing
       name="file-manager"
       :description="t('file-manager.description')"
       icon="home_storage"
+    />
+    <n-divider></n-divider>
+    <home-thing
+      name="data-exporter"
+      :description="t('data-exporter.description')"
+      icon="logout"
+    />
+    <n-divider></n-divider>
+    <home-thing
+      name="data-importer"
+      :description="t('data-importer.description')"
+      icon="login"
     />
   </div>
 </template>

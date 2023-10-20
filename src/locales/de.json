@@ -16,10 +16,14 @@
     "label-restore-defaults": "Standardwerte wiederherstellen",
     "btn-restore": "Wiederherstellen",
     "text-confirm-restore": "Möchten Sie die Standardeinstellungen wiederherstellen?",
-    "label-language": "Sprache"
+    "label-language": "Sprache",
+    "label-data-type": "Datentyp",
+    "label-export-backup": "Sicherung exportieren",
+    "text-export-backup": "Zwei Dateien exportieren, eine zum Bearbeiten und eine zum Sichern."
   },
   "home": {
-    "title": "Home"
+    "title": "Mini-Dashboard",
+    "btn-enter": "Betreten"
   },
   "preview": {
     "title": "Vorschau",
@@ -36,6 +40,7 @@
   },
   "file-manager": {
     "title": "Dateimanager",
+    "description": "Hochgeladene Spezialdateien anzeigen, löschen, herunterladen oder umbenennen.",
     "label-file-name": "Name",
     "label-file-type": "Dateityp",
     "label-file-type-audio": "Audio",
@@ -57,10 +62,31 @@
   },
   "file-uploader": {
     "title": "Datei hochladen",
+    "description": "Spezialdateien im {0}-Format hochladen.",
     "label-file-source": "Dateiquelle",
     "label-file-license": "Dateilizenz",
     "btn-upload": "Hochladen",
     "label-drop-files-here": "Klicken oder ziehen Sie Dateien in diesen Bereich, um sie hochzuladen",
     "label-supported-file-types": "Derzeit unterstützte Dateitypen zum Hochladen: {0}"
+  },
+  "data-exporter": {
+    "title": "Datenexporter",
+    "description": "Animationsfolgendaten von XYY Wiki lokal exportieren.",
+    "btn-export": "Exportieren"
+  },
+  "data-importer": {
+    "title": "Datenimporter",
+    "description": "Animationsfolgendaten von lokal nach XYY Wiki importieren.",
+    "label-file-name": "Dateiname",
+    "label-episodes": "Folgen",
+    "label-edit-summary": "Änderungszusammenfassung",
+    "label-select-file": "Datei auswählen",
+    "text-no-file-selected": "Keine Datei ausgewählt",
+    "btn-import": "Importieren",
+    "bot-alert-title": "Bot-Konto",
+    "bot-alert-text": "Sie müssen sich mit einem Bot-Konto anmelden, um Daten zu importieren.",
+    "bot-alert-checking": "Konto wird überprüft...",
+    "bot-alert-is-bot": "Aktuelles Konto ist ein Bot-Konto.",
+    "bot-alert-not-bot": "Aktuelles Konto ist kein Bot-Konto."
   }
 }

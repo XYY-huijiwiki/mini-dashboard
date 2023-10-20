@@ -46,6 +46,7 @@ declare const mw: {
   Api: any;
   huijiApi: any;
   config: any;
+  user: any;
 };
 
 // define naive-ui api from huijiWiji

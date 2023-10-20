@@ -16,10 +16,14 @@
     "label-restore-defaults": "Restore Defaults",
     "btn-restore": "Restore",
     "text-confirm-restore": "Are you sure you want to restore the default settings?",
-    "label-language": "Language"
+    "label-language": "Language",
+    "label-data-type": "Data Type",
+    "label-export-backup": "Export Backup",
+    "text-export-backup": "Export two files, one for modification and one for backup."
   },
   "home": {
-    "title": "Home"
+    "title": "Mini Dashboard",
+    "btn-enter": "Enter"
   },
   "preview": {
     "title": "Preview",
@@ -36,6 +40,7 @@
   },
   "file-manager": {
     "title": "File Manager",
+    "description": "View, delete, download or rename uploaded special files.",
     "label-file-name": "Name",
     "label-file-type": "File Type",
     "label-file-type-audio": "Audio",
@@ -57,10 +62,31 @@
   },
   "file-uploader": {
     "title": "File Uploader",
+    "description": "Upload special files in {0} format.",
     "label-file-source": "File Source",
     "label-file-license": "File License",
     "btn-upload": "Upload",
     "label-drop-files-here": "Click or drag files here to upload",
     "label-supported-file-types": "Supported file types: {0}"
+  },
+  "data-exporter": {
+    "title": "Data Exporter",
+    "description": "Export animation episode data from XYY Wiki to local.",
+    "btn-export": "Export"
+  },
+  "data-importer": {
+    "title": "Data Importer",
+    "description": "Import animation episode data from local to XYY Wiki.",
+    "label-file-name": "File Name",
+    "label-episodes": "Episodes",
+    "label-edit-summary": "Edit Summary",
+    "label-select-file": "Select File",
+    "text-no-file-selected": "No file selected",
+    "btn-import": "Import",
+    "bot-alert-title": "Bot Account",
+    "bot-alert-text": "You need to log in with a bot account to import data.",
+    "bot-alert-checking": "Checking account...",
+    "bot-alert-is-bot": "Current account is a bot account.",
+    "bot-alert-not-bot": "Current account is not a bot account."
   }
 }

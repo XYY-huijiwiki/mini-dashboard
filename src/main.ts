@@ -3,8 +3,10 @@ import App from "@/App.vue";
 import router from "@/router/index";
 import { createI18n } from "vue-i18n";
 import { langPacks, langCode } from "@/locales";
+import { createPinia } from "pinia";
 
 (async () => {
+  // i18n
   const messages = { [langCode]: await langPacks[langCode]() };
   const i18n = createI18n({
     legacy: false,
@@ -13,10 +15,14 @@ import { langPacks, langCode } from "@/locales";
     messages,
   });
 
-  const app = createApp(App);
+  // pinia
+  const pinia = createPinia();
 
+  // vue
+  const app = createApp(App);
   app.use(router);
   app.use(i18n);
+  app.use(pinia);
   app.mount("#base64-file-manager");
 })();
 

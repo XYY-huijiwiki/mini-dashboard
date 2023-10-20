@@ -1,5 +1,4 @@
 {
-  "language": "中文",
   "dev-tag": "开发模式",
   "general": {
     "loading": "加载中",
@@ -16,10 +15,14 @@
     "label-restore-defaults": "恢复默认设置",
     "btn-restore": "恢复",
     "text-confirm-restore": "确定要恢复默认设置吗？",
-    "label-language": "语言"
+    "label-language": "语言",
+    "label-data-type": "数据类型",
+    "label-export-backup": "导出备份",
+    "text-export-backup": "导出两份文件，一份用于修改，一份用于备份。"
   },
   "home": {
-    "title": "首页"
+    "title": "迷你控制中心",
+    "btn-enter": "进入"
   },
   "preview": {
     "title": "预览",
@@ -36,6 +39,7 @@
   },
   "file-manager": {
     "title": "文件管理",
+    "description": "查看、删除、下载或重命名已经上传的特殊文件。",
     "label-file-name": "文件名",
     "label-file-type": "文件类型",
     "label-file-type-audio": "音频",
@@ -57,10 +61,31 @@
   },
   "file-uploader": {
     "title": "文件上传",
+    "description": "上传{0}格式的特殊文件。",
     "label-file-source": "文件来源",
     "label-file-license": "文件许可",
     "btn-upload": "上传",
     "label-drop-files-here": "点击或者拖动文件到该区域来上传",
     "label-supported-file-types": "目前支持上传的文件类型有：{0}"
+  },
+  "data-exporter": {
+    "title": "数据导出",
+    "description": "从羊羊百科导出动画剧集数据到本地。",
+    "btn-export": "导出"
+  },
+  "data-importer": {
+    "title": "数据导入",
+    "description": "从本地导入动画剧集数据到羊羊百科。",
+    "label-file-name": "文件名",
+    "label-episodes": "集数",
+    "label-edit-summary": "编辑摘要",
+    "label-select-file": "选择文件",
+    "text-no-file-selected": "未选择文件",
+    "btn-import": "导入",
+    "bot-alert-title": "机器人账号",
+    "bot-alert-text": "你需要使用机器人账号登陆才能导入数据。",
+    "bot-alert-checking": "正在检查账号……",
+    "bot-alert-is-bot": "当前账号是机器人账号。",
+    "bot-alert-not-bot": "当前账号不是机器人账号。"
   }
 }

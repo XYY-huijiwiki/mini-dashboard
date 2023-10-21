@@ -65,7 +65,7 @@ import { type CartoonData } from "@/utils/dataDownloader";
 import { useI18n } from "vue-i18n";
 import { onBeforeRouteLeave } from "vue-router";
 
-// router guard to prevent leaving page when uploading
+// router guard to prevent leaving page when importing
 onBeforeRouteLeave(() => {
   if (importing.value) {
     $dialog.error({
@@ -181,20 +181,19 @@ async function importData() {
     if (dev) {
       console.log(_id);
       console.log(newDataItem);
-    } else {
-      try {
-        let res = await new mw.Api().postWithToken("csrf", {
-          action: "edit",
-          title: _id,
-          text,
-          summary: "【批量更新剧集信息】" + summary.value,
-        });
-        console.log(res);
-      } catch (error) {
-        $message.error(`导入 ${_id} 失败`);
-        console.log(error);
-        continue;
-      }
+    }
+    try {
+      let res = await new mw.Api().postWithToken("csrf", {
+        action: "edit",
+        title: _id,
+        text,
+        summary: "【批量更新剧集信息】" + summary.value,
+      });
+      console.log(res);
+    } catch (error) {
+      $message.error(`导入 ${_id} 失败`);
+      console.log(error);
+      continue;
     }
     count.value++;
     await sleep(500);

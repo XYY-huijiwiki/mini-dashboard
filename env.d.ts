@@ -49,6 +49,8 @@ declare const mw: {
   user: any;
 };
 
+declare const CHP: Promise<void>;
+
 // define naive-ui api from huijiWiji
 declare const $message: MessageApiInjection;
 declare const $dialog: DialogApiInjection;

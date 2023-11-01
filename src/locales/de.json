@@ -13,8 +13,8 @@
   },
   "settings": {
     "title": "Einstellungen",
-    "label-restore-defaults": "Standardwerte wiederherstellen",
-    "btn-restore": "Wiederherstellen",
+    "label-restore-defaults": "Einstellungen Zurücksetzen",
+    "btn-restore": "Zurücksetzen",
     "text-confirm-restore": "Möchten Sie die Standardeinstellungen wiederherstellen?",
     "text-restore-done": "Standardeinstellungen wiederhergestellt",
     "label-language": "Sprache",

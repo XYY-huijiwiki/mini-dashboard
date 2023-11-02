@@ -11,6 +11,7 @@ const FileUploader = () => import("@/views/file-uploader.vue");
 const FileManager = () => import("@/views/file-manager.vue");
 const DataImporter = () => import("@/views/data-importer.vue");
 const DataExporter = () => import("@/views/data-exporter.vue");
+const MonacoEditor = () => import("@/views/monaco-editor.vue");
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -47,6 +48,11 @@ const routes: Array<RouteRecordRaw> = [
     path: "/data-exporter",
     name: "data-exporter",
     component: DataExporter,
+  },
+  {
+    path: "/monaco-editor",
+    name: "monaco-editor",
+    component: MonacoEditor,
   },
 ];
 

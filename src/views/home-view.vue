@@ -23,6 +23,10 @@
       :description="t('data-importer.description')"
       icon="login"
     />
+    <n-divider>Under Development</n-divider>
+    <router-link to="/monaco-editor">
+      <n-button>Monaco</n-button>
+    </router-link>
   </div>
 </template>
 

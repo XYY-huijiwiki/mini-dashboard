@@ -20,6 +20,7 @@
     "file64": "^1.0.2",
     "filesize": "^10.0.12",
     "jszip": "^3.10.1",
+    "monaco-editor": "^0.44.0",
     "music-metadata-browser": "^2.5.10",
     "pinia": "^2.1.7",
     "png-chunks-encode": "^1.0.0",

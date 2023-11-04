@@ -33,11 +33,13 @@ npm run build
 
 - [x] 支持多语言。
 
-### wikitext 语法高亮
+### wikitext support for monaco-editor
 
-- [x] 斜体
-- [x] 粗体
-- [x] 粗体加斜体
+#### tokenizer
+
+- [ ] 斜体
+- [ ] 粗体
+- [ ] 粗体加斜体
 - [x] 注释
 - [ ] 内部链接
 - [ ] 外部链接
@@ -45,7 +47,7 @@ npm run build
 - [x] nowiki 标签
 - [x] html 标签
 - [ ] 插入缩略图
-- [x] 不同级别的标题
+- [ ] 不同级别的标题
 - [x] 无序列表
 - [x] 有序列表
 - [x] 定义列表
@@ -53,3 +55,11 @@ npm run build
 - [ ] 重定向
 - [ ] 模板
 - [ ] 表格
+- [x] 分割线
+
+#### formatter
+
+- [ ] 无序列表
+- [ ] 有序列表
+- [ ] 定义列表
+- [ ] 文本缩进

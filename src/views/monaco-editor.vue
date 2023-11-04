@@ -1,11 +1,7 @@
 <template>
   <div>
     <n-space vertical>
-      <n-input-group>
-        <n-input v-model:value="title" />
-        <n-button @click="get()">get</n-button>
-      </n-input-group>
-      <div id="editor-container" style="width: 100%; height: 600px"></div>
+      <div id="editor-container" style="width: 100%; height: 480px"></div>
       <n-input-group>
         <n-input v-model:value="summary" placeholder="summary" />
         <n-button @click="previewBtnClick()"> preview </n-button>
@@ -19,30 +15,32 @@
 </template>
 
 <script setup lang="ts">
-import * as monaco from "monaco-editor";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, type Ref } from "vue";
 import { editPage, getPage } from "@/utils/mwApi";
 import { useI18n } from "vue-i18n";
+import { useRoute } from "vue-router";
+import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
+// import * as monaco from "monaco-editor";
+// import editorWorker from "monaco-editor/esm/vs/editor/editor.worker.js?worker";
+
+// self.MonacoEnvironment = {
+//   getWorker: () => new editorWorker(),
+// };
 
 const { t } = useI18n();
+const route = useRoute();
 
-let code = ref(``);
+let orgCode: string;
+let newCode: Ref<string>;
 let summary = ref();
-let title = ref("帮助:基础语法");
-let lastGotTitle = ref("");
-let lastGotText = ref("");
 let html = ref("");
+let title: string =
+  typeof route.params.title === "string" ? route.params.title : "";
 let editor: monaco.editor.IStandaloneCodeEditor;
-async function get() {
-  const res = await getPage(title.value);
-  lastGotTitle.value = title.value;
-  lastGotText.value = res?.content || "";
-  editor.setValue(res?.content || "");
-}
 
 async function previewBtnClick() {
   let formData = new FormData();
-  formData.append("wikitext", code.value);
+  formData.append("wikitext", newCode.value);
   formData.append("body_only", "true");
   let response = await fetch(
     "https://xyy.huijiwiki.com/api/rest_v1/transform/wikitext/to/html",
@@ -69,8 +67,8 @@ function editBtnClick() {
     negativeText: t("general.btn-cancel"),
     onPositiveClick: () => {
       editPage({
-        title: lastGotTitle.value,
-        text: code.value,
+        title,
+        text: newCode.value,
         summary: summary.value,
       });
     },
@@ -78,11 +76,8 @@ function editBtnClick() {
 }
 
 function diffBtnClick() {
-  const originalModel = monaco.editor.createModel(
-    lastGotText.value,
-    "wikitext"
-  );
-  const modifiedModel = monaco.editor.createModel(code.value, "wikitext");
+  const originalModel = monaco.editor.createModel(orgCode, "wikitext");
+  const modifiedModel = monaco.editor.createModel(newCode.value, "wikitext");
   const diffEditor = monaco.editor.createDiffEditor(
     document.getElementById("diff-container") as HTMLDivElement,
     {
@@ -96,19 +91,30 @@ function diffBtnClick() {
   });
 }
 
-onMounted(() => {
+onMounted(async () => {
+  let getPageResult = await getPage(title);
+  if (!getPageResult) {
+    $message.error("get page failed");
+    return;
+  }
+  orgCode = getPageResult.content;
+  newCode = ref(getPageResult.content);
+
   editor = monaco.editor.create(
     document.getElementById("editor-container") as HTMLDivElement,
     {
-      value: code.value,
-      language: "wikitext",
+      value: newCode.value,
+      language:
+        getPageResult.contentModel === "BSON"
+          ? "json"
+          : getPageResult.contentModel,
       theme: "wikitext-light",
       automaticLayout: true,
       wordWrap: "on",
     }
   );
   editor.onDidChangeModelContent(() => {
-    code.value = editor.getValue();
+    newCode.value = editor.getValue();
   });
 });
 
@@ -119,6 +125,11 @@ monaco.languages.setMonarchTokensProvider("wikitext", {
   defaultToken: "invalid",
   tokenPostfix: ".wiki",
   ignoreCase: false,
+  brackets: [
+    { open: "[", close: "]", token: "external-link" },
+    { open: "[[", close: "]]", token: "internal-link" },
+    { open: "{{", close: "}}", token: "template" },
+  ],
   // non matched elements
   //   empty: [
   //     "area",
@@ -140,11 +151,11 @@ monaco.languages.setMonarchTokensProvider("wikitext", {
       // comment
       [/<!--/, "comment", "@comment"],
       // internal link (with |)
-      [/(\[\[)(.*?)(\|)(.*?)(\]\])/, ["link", "link", "link", "", "link"]],
+      // [/(\[\[)(.*?)(\|)(.*?)(\]\])/, ["link", "link", "link", "", "link"]],
       // internal link (without |)
       [/\[\[.*?\]\]/, "link"],
       // external link (with space)
-      [/(\[)(.*?)(\s)(.*?)(\])/, ["link", "link", "link", "", "link"]],
+      // [/(\[)(.*?)(\s)(.*?)(\])/, ["link", "link", "link", "", "link"]],
       // external link (without space)
       [/\[.*?\]/, "link"],
       // template
@@ -157,6 +168,8 @@ monaco.languages.setMonarchTokensProvider("wikitext", {
       [/('')(.*?)('')/, ["keyword", "italic", "keyword"]],
       // header
       [/(^={1,6})(.*?)(={1,6}$)/, ["keyword", "header", "keyword"]],
+      // divider
+      [/----+/, "keyword"],
       // list (starting with #, *, : or ;)
       [/^\s*([*;:#]+)/, "keyword"],
       // nowiki tag
@@ -278,8 +291,10 @@ monaco.languages.setLanguageConfiguration("wikitext", {
   brackets: [
     ["<!--", "-->"],
     ["<", ">"],
-    // ["{{", "}}"],
+    ["{{", "}}"],
   ],
+
+  colorizedBracketPairs: [],
 
   autoClosingPairs: [
     { open: "{", close: "}" },

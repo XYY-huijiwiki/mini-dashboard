@@ -17,11 +17,15 @@ export const useSettingsStore = defineStore("settings", () => {
     settings.value = cloneDeep(defaultSettings);
   }
   const isBot: Ref<boolean | null> = ref(null);
-  CHP.then(() => { // wait huiji wiki api loaded
+  CHP.then(() => {
+    // wait huiji wiki api loaded
     mw.user.getGroups((groupList: string[]) => {
       isBot.value = groupList.includes("bot");
     });
   });
 
-  return { settings, isBot, resetSettings };
+  // global state
+  const globalLoading = ref(false);
+
+  return { settings, isBot, resetSettings, globalLoading };
 });

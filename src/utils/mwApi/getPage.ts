@@ -6,6 +6,8 @@ import { url } from "@/utils/mwApi/index";
  * @returns {Promise<{
  *   id: number;
  *   content: string;
+ *   contentModel: string;
+ *   contentFormat: string;
  *   title: string;
  *   namespace: number;
  * } | null>} - A Promise that resolves to an object containing the page ID, content, title, and namespace, or null if the page was not found.
@@ -13,6 +15,8 @@ import { url } from "@/utils/mwApi/index";
 async function getPage(title: string): Promise<{
   id: number;
   content: string;
+  contentModel: string;
+  contentFormat: string;
   title: string;
   namespace: number;
 } | null> {
@@ -38,6 +42,8 @@ async function getPage(title: string): Promise<{
     return {
       id: parseInt(pageId),
       content: page[pageId].revisions[0]["*"],
+      contentModel: page[pageId].revisions[0].contentmodel,
+      contentFormat: page[pageId].revisions[0].contentformat,
       title: page[pageId].title,
       namespace: page[pageId].ns,
     };

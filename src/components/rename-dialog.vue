@@ -7,7 +7,7 @@
     >
       <!-- header -->
       <template #header>
-        {{ t("file-manager.dropdown-option-download") }}
+        {{ t("file-manager.dropdown-option-rename") }}
       </template>
 
       <!-- body (default) -->

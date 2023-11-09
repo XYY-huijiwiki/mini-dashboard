@@ -26,10 +26,10 @@
     "btn-github": "GitHub",
     "btn-xyy-wiki": "XYY Wiki"
   },
-  "home":{
+  "home": {
     "title": "Mini-Dashboard",
     "text-special-file-title": "Spezialdateien",
-    "text-special-file-description":  "Spezialdateien hochladen, herunterladen, anzeigen, löschen oder umbenennen. Derzeit unterstützte Formate: {0}",
+    "text-special-file-description": "Spezialdateien hochladen, herunterladen, anzeigen, löschen oder umbenennen. Derzeit unterstützte Formate: {0}",
     "text-cartoon-data-title": "Animationsfolgendaten",
     "text-cartoon-data-description": "Animationsfolgendaten exportieren oder importieren."
   },
@@ -97,7 +97,7 @@
     "text-leave-warning-title": "Warnung",
     "text-leave-warning-content": "Der Import läuft jetzt. Bitte verlassen Sie diese Seite nicht."
   },
-  "help-docs":{
+  "help-docs": {
     "title": "Technische Dokumentation"
   }
 }

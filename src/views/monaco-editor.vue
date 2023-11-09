@@ -47,7 +47,7 @@ async function previewBtnClick() {
     {
       method: "POST",
       body: formData,
-    }
+    },
   );
   if (!response.ok) {
     $message.error("preview failed");
@@ -83,7 +83,7 @@ function diffBtnClick() {
     {
       readOnly: true,
       automaticLayout: true,
-    }
+    },
   );
   diffEditor.setModel({
     original: originalModel,
@@ -111,7 +111,7 @@ onMounted(async () => {
       theme: "wikitext-light",
       automaticLayout: true,
       wordWrap: "on",
-    }
+    },
   );
   editor.onDidChangeModelContent(() => {
     newCode.value = editor.getValue();

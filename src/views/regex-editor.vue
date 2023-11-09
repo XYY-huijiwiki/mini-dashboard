@@ -213,7 +213,7 @@ function getNewCode(orgCode: string): string {
       console.log(new RegExp(element.search, "g").test(newCode));
       newCode = newCode.replace(
         new RegExp(element.search, "g"),
-        element.replace
+        element.replace,
       );
     } catch (error) {
       console.log(error);
@@ -250,7 +250,7 @@ async function checkDiff() {
       //   // minimumLineCount: 1,
       //   revealLineCount: 1,
       // },
-    }
+    },
   );
   diffEditor.setModel({
     original: originalModel,
@@ -268,7 +268,7 @@ async function getPreview() {
     {
       method: "POST",
       body: formData,
-    }
+    },
   );
   if (!response.ok) {
     $message.error("preview failed");

@@ -28,7 +28,7 @@
   "home": {
     "title": "迷你控制中心",
     "text-special-file-title": "特殊文件",
-    "text-special-file-description":  "上传、下载、查看、删除或重命名特殊文件。目前支持的格式有：{0}",
+    "text-special-file-description": "上传、下载、查看、删除或重命名特殊文件。目前支持的格式有：{0}",
     "text-cartoon-data-title": "剧集数据",
     "text-cartoon-data-description": "导出或导入动画剧集数据。"
   },
@@ -96,7 +96,7 @@
     "text-leave-warning-title": "警告",
     "text-leave-warning-content": "正在导入数据，请勿离开本页面。"
   },
-  "help-docs":{
+  "help-docs": {
     "title": "技术文档"
   }
 }

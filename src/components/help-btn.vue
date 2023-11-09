@@ -11,9 +11,8 @@
 </template>
 
 <script setup lang="ts">
-import { type RouteLocationRaw } from "vue-router";
 defineProps<{
-  link: RouteLocationRaw;
+  link: string;
 }>();
 </script>
 

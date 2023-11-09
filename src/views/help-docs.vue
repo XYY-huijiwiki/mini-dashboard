@@ -2,7 +2,7 @@
   <div>
     <n-spin :show="loading">
       <error-view v-if="error" />
-      <p v-html="docHTML" v-else class="doc-content"></p>
+      <p v-html="docHTML" v-else></p>
     </n-spin>
   </div>
 </template>
@@ -24,7 +24,7 @@ let docs = import.meta.glob(`@/locales/*/docs/*.md`, {
   import: "default",
   as: "raw",
 });
-console.log(docs);
+if (import.meta.env.DEV) console.log(docs);
 
 onMounted(async () => {
   try {
@@ -44,41 +44,4 @@ onMounted(async () => {
 });
 </script>
 
-<style>
-/* fluent UI title 1 */
-.doc-content h1 {
-  font-weight: 600 !important;
-  font-size: 32px !important;
-  line-height: 40px !important;
-  display: inline-block !important;
-  margin-top: 0.5em !important;
-  margin-bottom: 0.25em !important;
-  padding: 0 !important;
-}
-/* fluent UI title 2 */
-.doc-content h2 {
-  font-weight: 600 !important;
-  font-size: 28px !important;
-  line-height: 36px !important;
-  display: inline-block !important;
-  margin-top: 0.5em !important;
-  margin-bottom: 0.25em !important;
-  padding: 0 !important;
-}
-/* fluent UI title 3 */
-.doc-content h3 {
-  font-weight: 600 !important;
-  font-size: 24px !important;
-  line-height: 32px !important;
-  display: inline-block !important;
-  margin-top: 0.5em !important;
-  margin-bottom: 0.25em !important;
-  padding: 0 !important;
-}
-/* fluent UI body 1 */
-.doc-content p {
-  font-weight: 400 !important;
-  font-size: 14px !important;
-  line-height: 20px !important;
-}
-</style>
+<style scoped></style>

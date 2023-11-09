@@ -2,7 +2,7 @@
   <div>
     <n-thing content-indented>
       <template #header-extra>
-        <help-btn link="special-files"/>
+        <help-btn link="special-files" />
       </template>
       <template #avatar>
         <n-avatar>
@@ -35,7 +35,7 @@
     <n-divider></n-divider>
     <n-thing content-indented>
       <template #header-extra>
-        <help-btn link="cartoon-data"/>
+        <help-btn link="cartoon-data" />
       </template>
       <template #avatar>
         <n-avatar>

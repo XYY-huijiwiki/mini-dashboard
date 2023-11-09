@@ -26,10 +26,10 @@
     "btn-github": "GitHub",
     "btn-xyy-wiki": "XYY Wiki"
   },
-  "home":{
+  "home": {
     "title": "Mini Dashboard",
     "text-special-file-title": "Special Files",
-    "text-special-file-description":  "Upload, download, view, delete or rename special files. Currently supported formats: {0}",
+    "text-special-file-description": "Upload, download, view, delete or rename special files. Currently supported formats: {0}",
     "text-cartoon-data-title": "Cartoon Episode Data",
     "text-cartoon-data-description": "Export or import Cartoon episode data."
   },
@@ -97,7 +97,7 @@
     "text-leave-warning-title": "Warning",
     "text-leave-warning-content": "The import is now in progress. Please do not leave this page."
   },
-  "help-docs":{
-    "title": "Technical documentation" 
+  "help-docs": {
+    "title": "Technical documentation"
   }
 }

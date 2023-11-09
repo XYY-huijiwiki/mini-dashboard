@@ -26,9 +26,12 @@
     "btn-github": "GitHub",
     "btn-xyy-wiki": "XYY Wiki"
   },
-  "home": {
+  "home":{
     "title": "Mini-Dashboard",
-    "btn-enter": "Betreten"
+    "text-special-file-title": "Spezialdateien",
+    "text-special-file-description":  "Spezialdateien hochladen, herunterladen, anzeigen, löschen oder umbenennen. Derzeit unterstützte Formate: {0}",
+    "text-cartoon-data-title": "Animationsfolgendaten",
+    "text-cartoon-data-description": "Animationsfolgendaten exportieren oder importieren."
   },
   "preview": {
     "title": "Vorschau",
@@ -45,7 +48,6 @@
   },
   "file-manager": {
     "title": "Dateimanager",
-    "description": "Hochgeladene Spezialdateien anzeigen, löschen, herunterladen oder umbenennen.",
     "label-file-name": "Name",
     "label-file-type": "Dateityp",
     "label-file-type-audio": "Audio",
@@ -67,7 +69,6 @@
   },
   "file-uploader": {
     "title": "Datei hochladen",
-    "description": "Spezialdateien im {0}-Format hochladen.",
     "label-file-source": "Dateiquelle",
     "label-file-license": "Dateilizenz",
     "btn-upload": "Hochladen",
@@ -78,12 +79,10 @@
   },
   "data-exporter": {
     "title": "Datenexporter",
-    "description": "Animationsfolgendaten von XYY Wiki lokal exportieren.",
     "btn-export": "Exportieren"
   },
   "data-importer": {
     "title": "Datenimporter",
-    "description": "Animationsfolgendaten von lokal nach XYY Wiki importieren.",
     "label-file-name": "Dateiname",
     "label-episodes": "Folgen",
     "label-edit-summary": "Änderungszusammenfassung",
@@ -97,5 +96,8 @@
     "bot-alert-not-bot": "Aktuelles Konto ist kein Bot-Konto.",
     "text-leave-warning-title": "Warnung",
     "text-leave-warning-content": "Der Import läuft jetzt. Bitte verlassen Sie diese Seite nicht."
+  },
+  "help-docs":{
+    "title": "Technische Dokumentation"
   }
 }

@@ -1,28 +1,70 @@
 <template>
   <div>
-    <home-thing
-      name="file-uploader"
-      :description="t('file-uploader.description', [fileExtList.join(', ')])"
-      icon="upload_file"
-    />
+    <n-thing content-indented>
+      <template #header-extra>
+        <help-btn link="special-files"/>
+      </template>
+      <template #avatar>
+        <n-avatar>
+          <MaterialSymbol> home_storage </MaterialSymbol>
+        </n-avatar>
+      </template>
+      <template #header> {{ t("home.text-special-file-title") }} </template>
+      <template #description>
+        {{
+          t("home.text-special-file-description", [
+            "." + fileExtList.join(" ."),
+          ])
+        }}
+      </template>
+      <template #action>
+        <n-space>
+          <router-link :to="{ name: 'file-uploader' }">
+            <n-button size="small">
+              {{ t("file-uploader.title") }}
+            </n-button>
+          </router-link>
+          <router-link :to="{ name: 'file-manager' }">
+            <n-button size="small">
+              {{ t("file-manager.title") }}
+            </n-button>
+          </router-link>
+        </n-space>
+      </template>
+    </n-thing>
     <n-divider></n-divider>
-    <home-thing
-      name="file-manager"
-      :description="t('file-manager.description')"
-      icon="home_storage"
-    />
-    <n-divider></n-divider>
-    <home-thing
-      name="data-exporter"
-      :description="t('data-exporter.description')"
-      icon="logout"
-    />
-    <n-divider></n-divider>
-    <home-thing
-      name="data-importer"
-      :description="t('data-importer.description')"
-      icon="login"
-    />
+    <n-thing content-indented>
+      <template #header-extra>
+        <help-btn link="cartoon-data"/>
+      </template>
+      <template #avatar>
+        <n-avatar>
+          <MaterialSymbol> database </MaterialSymbol>
+        </n-avatar>
+      </template>
+      <template #header> {{ t("home.text-cartoon-data-title") }} </template>
+      <template #description>
+        {{
+          t("home.text-cartoon-data-description", [
+            "." + fileExtList.join(" ."),
+          ])
+        }}
+      </template>
+      <template #action>
+        <n-space>
+          <router-link :to="{ name: 'data-importer' }">
+            <n-button size="small">
+              {{ t("data-importer.title") }}
+            </n-button>
+          </router-link>
+          <router-link :to="{ name: 'data-exporter' }">
+            <n-button size="small">
+              {{ t("data-exporter.title") }}
+            </n-button>
+          </router-link>
+        </n-space>
+      </template>
+    </n-thing>
     <template v-if="dev">
       <n-divider>Under Development</n-divider>
       <n-space>

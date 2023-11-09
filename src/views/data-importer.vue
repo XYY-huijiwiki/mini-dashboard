@@ -59,7 +59,7 @@ import { storeToRefs } from "pinia";
 import { ref, type Ref } from "vue";
 import { type UploadFileInfo } from "naive-ui";
 import { utils, read } from "xlsx";
-import sleep from "await-sleep";
+import sleep from "@anmiles/sleep";
 import { isArray } from "lodash-es";
 import { type CartoonData } from "@/utils/dataDownloader";
 import { useI18n } from "vue-i18n";

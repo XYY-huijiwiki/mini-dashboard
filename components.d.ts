@@ -11,6 +11,7 @@ declare module 'vue' {
     DeleteDialog: typeof import('./src/components/delete-dialog.vue')['default']
     DetailsDialog: typeof import('./src/components/details-dialog.vue')['default']
     DownloadDialog: typeof import('./src/components/download-dialog.vue')['default']
+    HelpBtn: typeof import('./src/components/help-btn.vue')['default']
     HomeThing: typeof import('./src/components/home-thing.vue')['default']
     MaterialSymbol: typeof import('./src/components/material-symbol.vue')['default']
     NA: typeof import('naive-ui')['NA']

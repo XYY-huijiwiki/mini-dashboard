@@ -27,7 +27,10 @@
   },
   "home": {
     "title": "迷你控制中心",
-    "btn-enter": "进入"
+    "text-special-file-title": "特殊文件",
+    "text-special-file-description":  "上传、下载、查看、删除或重命名特殊文件。目前支持的格式有：{0}",
+    "text-cartoon-data-title": "剧集数据",
+    "text-cartoon-data-description": "导出或导入动画剧集数据。"
   },
   "preview": {
     "title": "预览",
@@ -44,7 +47,6 @@
   },
   "file-manager": {
     "title": "文件管理",
-    "description": "查看、删除、下载或重命名已经上传的特殊文件。",
     "label-file-name": "文件名",
     "label-file-type": "文件类型",
     "label-file-type-audio": "音频",
@@ -66,7 +68,6 @@
   },
   "file-uploader": {
     "title": "文件上传",
-    "description": "上传{0}格式的特殊文件。",
     "label-file-source": "文件来源",
     "label-file-license": "文件许可",
     "btn-upload": "上传",
@@ -77,12 +78,10 @@
   },
   "data-exporter": {
     "title": "数据导出",
-    "description": "从羊羊百科导出动画剧集数据到本地。",
     "btn-export": "导出"
   },
   "data-importer": {
     "title": "数据导入",
-    "description": "从本地导入动画剧集数据到羊羊百科。",
     "label-file-name": "文件名",
     "label-episodes": "集数",
     "label-edit-summary": "编辑摘要",
@@ -96,5 +95,8 @@
     "bot-alert-not-bot": "当前账号不是机器人账号。",
     "text-leave-warning-title": "警告",
     "text-leave-warning-content": "正在导入数据，请勿离开本页面。"
+  },
+  "help-docs":{
+    "title": "技术文档"
   }
 }

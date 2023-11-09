@@ -7,9 +7,18 @@ const list = Object.keys(json).map((key) => {
   return value.file;
 });
 
-list.forEach((element) => {
+// list.forEach((element) => {
+//   let baseURL = `https://cdn.jsdelivr.net/gh/XYY-huijiwiki/mini-dashboard@dist/`;
+//   let url = baseURL + element;
+//   console.log(url);
+//   fetch(url);
+// });
+
+for (let i = 0; i < list.length; i++) {
   let baseURL = `https://cdn.jsdelivr.net/gh/XYY-huijiwiki/mini-dashboard@dist/`;
-  let url = baseURL + element;
+  let url = baseURL + list[i];
   console.log(url);
-  fetch(url);
-});
+  await fetch(url).catch((err) => {
+    console.log(err);
+  });
+}

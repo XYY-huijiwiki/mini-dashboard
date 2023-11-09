@@ -158,7 +158,7 @@ import loadingView from "@/views/loading-view.vue";
 import errorView from "@/views/error-view.vue";
 import { floor } from "lodash-es";
 import { filesize } from "filesize";
-import sleep from "await-sleep";
+import sleep from "@anmiles/sleep";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 import { useI18n } from "vue-i18n";

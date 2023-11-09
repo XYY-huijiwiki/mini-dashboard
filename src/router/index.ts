@@ -13,6 +13,7 @@ const DataImporter = () => import("@/views/data-importer.vue");
 const DataExporter = () => import("@/views/data-exporter.vue");
 const MonacoEditor = () => import("@/views/monaco-editor.vue");
 const RegexEditor = () => import("@/views/regex-editor.vue");
+const HelpDocs = () => import("@/views/help-docs.vue");
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -59,6 +60,11 @@ const routes: Array<RouteRecordRaw> = [
     path: "/regex-editor",
     name: "regex-editor",
     component: RegexEditor,
+  },
+  {
+    path: "/help-docs/:title",
+    name: "help-docs",
+    component: HelpDocs,
   },
 ];
 

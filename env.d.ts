@@ -1,11 +1,5 @@
 /// <reference types="vite/client" />
 
-// 定义await-sleep的类型
-declare module "await-sleep" {
-  function sleep(ms: number): Promise<void>;
-  export default sleep;
-}
-
 // 定义请求的返回值
 interface ResponseData {
   _id: string;

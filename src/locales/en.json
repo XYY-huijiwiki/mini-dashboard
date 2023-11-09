@@ -26,9 +26,12 @@
     "btn-github": "GitHub",
     "btn-xyy-wiki": "XYY Wiki"
   },
-  "home": {
+  "home":{
     "title": "Mini Dashboard",
-    "btn-enter": "Enter"
+    "text-special-file-title": "Special Files",
+    "text-special-file-description":  "Upload, download, view, delete or rename special files. Currently supported formats: {0}",
+    "text-cartoon-data-title": "Cartoon Episode Data",
+    "text-cartoon-data-description": "Export or import Cartoon episode data."
   },
   "preview": {
     "title": "Preview",
@@ -45,7 +48,6 @@
   },
   "file-manager": {
     "title": "File Manager",
-    "description": "View, delete, download or rename uploaded special files.",
     "label-file-name": "Name",
     "label-file-type": "File Type",
     "label-file-type-audio": "Audio",
@@ -67,7 +69,6 @@
   },
   "file-uploader": {
     "title": "File Uploader",
-    "description": "Upload special files in {0} format.",
     "label-file-source": "File Source",
     "label-file-license": "File License",
     "btn-upload": "Upload",
@@ -78,12 +79,10 @@
   },
   "data-exporter": {
     "title": "Data Exporter",
-    "description": "Export animation episode data from XYY Wiki to local.",
     "btn-export": "Export"
   },
   "data-importer": {
     "title": "Data Importer",
-    "description": "Import animation episode data from local to XYY Wiki.",
     "label-file-name": "File Name",
     "label-episodes": "Episodes",
     "label-edit-summary": "Edit Summary",
@@ -97,5 +96,8 @@
     "bot-alert-not-bot": "Current account is not a bot account.",
     "text-leave-warning-title": "Warning",
     "text-leave-warning-content": "The import is now in progress. Please do not leave this page."
+  },
+  "help-docs":{
+    "title": "Technical documentation" 
   }
 }

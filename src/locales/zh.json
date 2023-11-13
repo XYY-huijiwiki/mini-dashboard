@@ -43,7 +43,9 @@
     "label-video-total-bitrate": "总比特率",
     "label-video-length": "时长",
     "label-audio-length": "时长",
-    "label-audio-bitrate": "比特率"
+    "label-audio-bitrate": "比特率",
+    "label-file-source": "文件来源",
+    "label-file-license": "文件许可"
   },
   "file-manager": {
     "title": "文件管理",
@@ -98,5 +100,8 @@
   },
   "help-docs": {
     "title": "技术文档"
+  },
+  "undefined": {
+    "title": "加载中……"
   }
 }

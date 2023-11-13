@@ -2,10 +2,10 @@
 import {
   ref,
   h,
+  watch,
   onMounted,
   nextTick,
   computed,
-  defineAsyncComponent,
   type Ref,
   type VNodeChild,
   type ComputedRef,
@@ -23,11 +23,10 @@ import { filesize } from "filesize";
 import { useI18n } from "vue-i18n";
 import materialSymbol from "@/components/material-symbol.vue";
 import router from "@/router";
-import loadingComponent from "@/views/loading-view.vue";
-import errorComponent from "@/views/error-view.vue";
 import { isArray, debounce } from "lodash-es";
 import { storeToRefs } from "pinia";
 import { useLocalesStore } from "@/stores/locales";
+import { useModalStore } from "@/stores/modal";
 
 const { langCode } = storeToRefs(useLocalesStore());
 
@@ -146,6 +145,7 @@ let query = debounce(async (): Promise<void> => {
     `https://xyy.huijiwiki.com/api/rest_v1/namespace/data?${params.toString()}`,
   );
   let json = await response.json();
+  if (import.meta.env.DEV) console.log(json);
   pagination.value.itemCount = json._size;
   pagination.value.pageCount = json._total_pages;
   data.value = json["_embedded"];
@@ -248,7 +248,6 @@ const options: ComputedRef<DropdownOption[]> = computed(() => [
     label: t("file-manager.dropdown-option-link-copy"),
     icon: () => h(materialSymbol, { size: 20 }, () => "link"),
     key: "link-copy",
-    disabled: checkedKeys.value.length > 1,
   },
   {
     type: "divider",
@@ -286,25 +285,27 @@ async function dropdownSelect(key: string | number) {
       break;
     case "link-copy":
       navigator.clipboard.writeText(
-        location.href + "preview/" + checkedKeys.value[0],
+        checkedKeys.value
+          .map((item) => location.origin + "/wiki/File:" + item + ".png")
+          .join("\n"),
       );
       $message.success(t("file-manager.message-link-copied"));
       break;
     case "rename":
-      currentDialog.value = "RenameDialog";
-      showModal.value = true;
+      globalModalContent.value = "rename";
+      globalModalShow.value = true;
       break;
     case "delete":
-      currentDialog.value = "DeleteDialog";
-      showModal.value = true;
+      globalModalContent.value = "delete";
+      globalModalShow.value = true;
       break;
     case "details":
-      currentDialog.value = "DetailsDialog";
-      showModal.value = true;
+      globalModalContent.value = "details";
+      globalModalShow.value = true;
       break;
     case "download":
-      currentDialog.value = "DownloadDialog";
-      showModal.value = true;
+      globalModalContent.value = "download";
+      globalModalShow.value = true;
       break;
     default:
       break;
@@ -317,36 +318,17 @@ async function dropdownSelect(key: string | number) {
  * Modal
  *
  */
-const RenameDialog = defineAsyncComponent({
-  loader: () => import("@/components/rename-dialog.vue"),
-  loadingComponent,
-  errorComponent,
+const { globalModalShow, globalModalContent, globalModalData } = storeToRefs(
+  useModalStore(),
+);
+watch(checkedItems, (newValue) => {
+  globalModalData.value = newValue;
 });
-const DeleteDialog = defineAsyncComponent({
-  loader: () => import("@/components/delete-dialog.vue"),
-  loadingComponent,
-  errorComponent,
+useModalStore().$onAction(({ after }) => {
+  after((result) => {
+    result === "done" ? query() : null;
+  });
 });
-const DetailsDialog = defineAsyncComponent({
-  loader: () => import("@/components/details-dialog.vue"),
-  loadingComponent,
-  errorComponent,
-});
-const DownloadDialog = defineAsyncComponent({
-  loader: () => import("@/components/download-dialog.vue"),
-  loadingComponent,
-  errorComponent,
-});
-let showModal = ref(false);
-// let comp: Ref<Component | undefined> = ref();
-let dialogsComponents = {
-  RenameDialog,
-  DeleteDialog,
-  DetailsDialog,
-  DownloadDialog,
-};
-let currentDialog: Ref<keyof typeof dialogsComponents | undefined> =
-  ref(undefined);
 </script>
 
 <template>
@@ -427,19 +409,5 @@ let currentDialog: Ref<keyof typeof dialogsComponents | undefined> =
       @select="dropdownSelect"
       row-class-name="data-table-row"
     />
-    <n-modal
-      v-model:show="showModal"
-      @after-leave="currentDialog = undefined"
-      :autoFocus="false"
-    >
-      <div>
-        <component
-          :is="currentDialog ? dialogsComponents[currentDialog] : undefined"
-          :data="checkedItems"
-          @close-dialog="showModal = false"
-          @done="query()"
-        />
-      </div>
-    </n-modal>
   </div>
 </template>

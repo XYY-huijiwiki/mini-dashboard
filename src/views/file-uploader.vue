@@ -203,12 +203,10 @@ async function uploader() {
       fileMetadata.audio = metadata;
     }
 
-    // get file metadata and poster (for video only)
-    let videoPoster: string = "";
+    // get file metadata (for video only)
     if (fileType.mime.startsWith("video/")) {
       let { getVideoMetadata } = await import("@/utils/getVideoMetadata");
-      let { poster, ...metadata } = await getVideoMetadata(file.file);
-      videoPoster = poster;
+      let metadata = await getVideoMetadata(file.file);
       fileMetadata.video = metadata;
     }
 
@@ -225,32 +223,8 @@ async function uploader() {
       continue;
     }
 
-    // upload poster (for video only)
-    if (fileType.mime.startsWith("video/")) {
-      let { base64ToFile } = await import("file64");
-      let posterFile = await base64ToFile(
-        videoPoster,
-        `${file.name}.poster.png`,
-      );
-      if (await uploadFile(posterFile)) {
-        file.percentage = 90; // progress bar 90%
-      } else {
-        file.status = "error";
-        continue;
-      }
-    }
-
     // upload file
-    if (
-      await uploadFile(
-        pngFile,
-        `${
-          fileType.mime.startsWith("video/")
-            ? `[[文件:${file.name}.poster.png]]\n`
-            : ""
-        }{{特殊文件}}`,
-      )
-    ) {
+    if (await uploadFile(pngFile, `{{特殊文件}}`)) {
       file.percentage = 100; // progress bar 100%
       file.status = "finished";
       file.url = `https://xyy.huijiwiki.com/wiki/Project:迷你控制中心#/preview/${file.name}`;

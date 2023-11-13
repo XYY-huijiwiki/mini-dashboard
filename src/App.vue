@@ -63,5 +63,8 @@ let { globalLoading } = storeToRefs(useSettingsStore());
         </template>
       </n-card>
     </n-spin>
+
+    <!-- global modal -->
+    <global-modal />
   </n-config-provider>
 </template>

@@ -44,7 +44,9 @@
     "label-video-total-bitrate": "Gesamtbitrate",
     "label-video-length": "Länge",
     "label-audio-length": "Länge",
-    "label-audio-bitrate": "Bitrate"
+    "label-audio-bitrate": "Bitrate",
+    "label-file-source": "Dateiquelle",
+    "label-file-license": "Dateilizenz"
   },
   "file-manager": {
     "title": "Dateimanager",
@@ -99,5 +101,8 @@
   },
   "help-docs": {
     "title": "Technische Dokumentation"
+  },
+  "undefined": {
+    "title": "Laden..."
   }
 }

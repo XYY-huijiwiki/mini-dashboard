@@ -2,7 +2,6 @@ async function getVideoMetadata(videoFile: File) {
   const video = document.createElement("video");
   video.src = URL.createObjectURL(videoFile);
   video.preload = "metadata";
-  video.currentTime = 1;
   await new Promise<void>((resolve, reject) => {
     video.onloadeddata = () => {
       resolve();
@@ -14,11 +13,7 @@ async function getVideoMetadata(videoFile: File) {
   const canvas = document.createElement("canvas");
   canvas.width = video.videoWidth;
   canvas.height = video.videoHeight;
-  const ctx = canvas.getContext("2d")!;
-  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-  const poster = canvas.toDataURL("image/png");
   return {
-    poster,
     length: video.duration,
     frameWidth: video.videoWidth,
     frameHeight: video.videoHeight,

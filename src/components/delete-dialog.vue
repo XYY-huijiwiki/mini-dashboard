@@ -72,19 +72,8 @@ async function confirmDelete() {
     // delete data page
     await deletePage({ title: `Data:${name}.json`, reason: reason.value });
 
-    // delete file page
-    await deletePage({ title: `文件:${name}`, reason: reason.value });
-
     // delete file container
     await deletePage({ title: `文件:${name}.png`, reason: reason.value });
-
-    // delete file poster (for video)
-    if (element.file.type.startsWith("video/")) {
-      await deletePage({
-        title: `文件:${name}.poster.png`,
-        reason: reason.value,
-      });
-    }
   }
 
   // stop loading

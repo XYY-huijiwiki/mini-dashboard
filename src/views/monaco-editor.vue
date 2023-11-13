@@ -20,12 +20,35 @@ import { editPage, getPage } from "@/utils/mwApi";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
-// import * as monaco from "monaco-editor";
-// import editorWorker from "monaco-editor/esm/vs/editor/editor.worker.js?worker";
+import "monaco-editor/esm/vs/language/json/monaco.contribution";
+import "monaco-editor/esm/vs/editor/contrib/format/browser/formatActions";
+import "monaco-editor/esm/vs/editor/contrib/find/browser/findController";
+import editorWorker from "monaco-editor/esm/vs/editor/editor.worker?worker";
+import jsonWorker from "monaco-editor/esm/vs/language/json/json.worker?worker";
+import cssWorker from "monaco-editor/esm/vs/language/css/css.worker?worker";
+import htmlWorker from "monaco-editor/esm/vs/language/html/html.worker?worker";
+import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker";
+import "monaco-editor/esm/vs/base/browser/ui/codicons/codicon/codicon.css";
+import "monaco-editor/esm/vs/base/browser/ui/codicons/codicon/codicon-modifiers.css";
+import "monaco-editor/esm/vs/base/browser/ui/codicons/codicon/codicon.ttf";
 
-// self.MonacoEnvironment = {
-//   getWorker: () => new editorWorker(),
-// };
+self.MonacoEnvironment = {
+  getWorker(_, label) {
+    if (label === "json") {
+      return new jsonWorker();
+    }
+    if (label === "css" || label === "scss" || label === "less") {
+      return new cssWorker();
+    }
+    if (label === "html" || label === "handlebars" || label === "razor") {
+      return new htmlWorker();
+    }
+    if (label === "typescript" || label === "javascript") {
+      return new tsWorker();
+    }
+    return new editorWorker();
+  },
+};
 
 const { t } = useI18n();
 const route = useRoute();
@@ -97,6 +120,7 @@ onMounted(async () => {
     $message.error("get page failed");
     return;
   }
+
   orgCode = getPageResult.content;
   newCode = ref(getPageResult.content);
 
@@ -108,7 +132,8 @@ onMounted(async () => {
         getPageResult.contentModel === "BSON"
           ? "json"
           : getPageResult.contentModel,
-      theme: "wikitext-light",
+      theme:
+        getPageResult.contentModel === "BSON" ? "vs-dark" : "wikitext-light",
       automaticLayout: true,
       wordWrap: "on",
     },
@@ -178,6 +203,14 @@ monaco.languages.setMonarchTokensProvider("wikitext", {
       [/<\/?[a-z][^>]*>/, "tag"],
       // signature
       [/~{3,5}/, "keyword"],
+      // table
+      [/^\s*\{\|.*/, "table", "@table"],
+    ],
+    table: [
+      [/^\|\}$/, "table", "@pop"],
+      [/^\|-$/, "table"],
+      [/^[!|]/, "table"],
+      [/(!{2})|(\|{2})/, "table"],
     ],
     // Note: it is tempting to rather switch to the real HTML mode instead of building our own here
     // but currently there is a limitation in Monarch that prevents us from doing it: The opening
@@ -307,7 +340,14 @@ monaco.languages.setLanguageConfiguration("wikitext", {
     { open: "[", close: "]" },
     { open: "<", close: ">" },
   ],
+  folding: {
+    markers: {
+      start: new RegExp("^\\s*<!--\\s*#?region\\b.*-->"),
+      end: new RegExp("^\\s*<!--\\s*#?endregion\\b.*-->"),
+    },
+  },
 });
+// theme
 monaco.editor.defineTheme("wikitext-light", {
   base: "vs",
   inherit: false,
@@ -322,6 +362,7 @@ monaco.editor.defineTheme("wikitext-light", {
     { token: "header", fontStyle: "bold" },
     { token: "tag", foreground: "#229900" },
     { token: "comment", foreground: "#84a0a0" },
+    { token: "table", foreground: "#ee00ee" },
   ],
   colors: {
     "editor.foreground": "#000000",

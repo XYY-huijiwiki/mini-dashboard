@@ -17,7 +17,6 @@
         <!-- video preview -->
         <video
           v-if="data.video"
-          :poster="posterSrc"
           :src="src"
           style="border-radius: 4px; object-fit: cover; width: 100%"
           :controls="showControls"
@@ -30,7 +29,6 @@
               autoplay
               :animation-name="animation"
               :src="src"
-              :poster="posterSrc"
               camera-controls
               shadow-intensity="1"
               touch-action="pan-y"
@@ -60,89 +58,35 @@
       </n-spin>
       <n-divider />
       <n-space vertical>
-        <n-alert type="info" title="文件来源">{{
-          data.wiki.fileSource
-        }}</n-alert>
-        <n-alert type="info" title="文件许可">{{
-          data.wiki.fileLicense
-        }}</n-alert>
+        <n-alert type="info">
+          <template #header>
+            {{ t("preview.label-file-source") }}
+          </template>
+          <template #default>
+            {{ data.wiki.fileSource }}
+          </template>
+        </n-alert>
+        <n-alert type="info">
+          <template #header>
+            {{ t("preview.label-file-license") }}
+          </template>
+          <template #default>
+            {{ data.wiki.fileLicense }}
+          </template>
+        </n-alert>
       </n-space>
       <n-divider />
+      <!-- file info display -->
       <n-grid x-gap="8" y-gap="16" cols="1 400:2 600:3">
-        <!-- file type -->
-        <n-gi>
-          <n-statistic :label="t('preview.label-file-type')">
-            <template #default>
-              {{ data.file.type }}
-            </template>
-          </n-statistic>
-        </n-gi>
-        <!-- frame width (video only) -->
-        <n-gi v-if="data.video">
-          <n-statistic :label="t('preview.label-video-frame-width')">
-            <template #default>
-              {{ data.video.frameWidth }}
-            </template>
-            <template #suffix> px </template>
-          </n-statistic>
-        </n-gi>
-        <!-- frame height (video only) -->
-        <n-gi v-if="data.video">
-          <n-statistic :label="t('preview.label-video-frame-height')">
-            <template #default>
-              {{ data.video.frameHeight }}
-            </template>
-            <template #suffix> px </template>
-          </n-statistic>
-        </n-gi>
-        <!-- length (video only) -->
-        <n-gi v-if="data.video">
-          <n-statistic :label="t('preview.label-video-length')">
-            <template #default>
-              {{
-                dayjs.duration(data.video.length, "second").format("HH:mm:ss")
-              }}
-            </template>
-          </n-statistic>
-        </n-gi>
-        <!-- length (audio only) -->
-        <n-gi v-if="data.audio">
-          <n-statistic :label="t('preview.label-audio-length')">
-            <template #default>
-              {{
-                dayjs
-                  .duration(data.audio.format.duration, "second")
-                  .format("HH:mm:ss")
-              }}
-            </template>
-          </n-statistic>
-        </n-gi>
-        <!-- total bitrate (video only) -->
-        <n-gi v-if="data.video">
-          <n-statistic :label="t('preview.label-video-total-bitrate')">
-            <template #default>
-              {{ floor(((data.file.size / data.video.length) * 8) / 1000, 2) }}
-            </template>
-            <template #suffix> kBit/s </template>
-          </n-statistic>
-        </n-gi>
-        <!-- bitrate (audio only) -->
-        <n-gi v-if="data.audio">
-          <n-statistic :label="t('preview.label-audio-bitrate')">
-            <template #default>
-              {{ floor(data.audio.format.bitrate / 1000, 2) }}
-            </template>
-            <template #suffix> kBit/s </template>
-          </n-statistic>
-        </n-gi>
-        <!-- file size -->
-        <n-gi>
-          <n-statistic :label="t('preview.label-file-size')">
-            <template #default>
-              {{ filesize(data.file.size, { locale: langCode }) }}
-            </template>
-          </n-statistic>
-        </n-gi>
+        <template v-for="key in Object.keys(fileInfo)">
+          <n-gi v-if="fileInfo[key] !== undefined" :key="key">
+            <n-statistic :label="t('preview.label-' + key)">
+              <template #default>
+                {{ fileInfo[key] }}
+              </template>
+            </n-statistic>
+          </n-gi>
+        </template>
       </n-grid>
     </template>
     <error-view v-else />
@@ -176,13 +120,14 @@ dayjs.extend(duration);
 // use route
 const route = useRoute();
 let status: Ref<"loading" | "ready" | "error"> = ref("loading");
-let posterSrc: Ref<string> = ref("");
 let src: Ref<string> = ref("");
 let showControls: Ref<boolean> = ref(false);
 let showSpin: Ref<boolean> = ref(true);
 
 let data: Ref<RetrievedDataItem>;
 let animation: Ref<string>;
+
+let fileInfo: Ref<Record<string, string | number | undefined>> = ref({});
 
 onMounted(async () => {
   let json = await getPage(`Data:${route.params.fileName}.json`);
@@ -192,14 +137,6 @@ onMounted(async () => {
   } else {
     status.value = "error";
     return;
-  }
-
-  // load poster (for video and model only)
-  if (data.value.video || data.value.file.type.startsWith("model/")) {
-    posterSrc.value = mw.huijiApi.getImageUrl(
-      route.params.fileName.toString().replace(/ /g, "_") + ".poster.png",
-      "xyy",
-    );
   }
 
   // load model viewer (for model only)
@@ -217,6 +154,28 @@ onMounted(async () => {
     return;
   }
   src.value = fileSrc;
+
+  // file info display
+  fileInfo.value = {
+    "file-type": data.value.file.type,
+    "video-frame-width": data.value.video?.frameWidth,
+    "video-frame-height": data.value.video?.frameHeight,
+    "video-length": data.value.video?.length
+      ? dayjs.duration(data.value.video.length, "second").format("HH:mm:ss")
+      : undefined,
+    "audio-length": data.value.audio?.format.duration
+      ? dayjs
+          .duration(data.value.audio.format.duration, "second")
+          .format("HH:mm:ss")
+      : undefined,
+    "video-total-bitrate": data.value.video?.length
+      ? floor(((data.value.file.size / data.value.video.length) * 8) / 1000, 2)
+      : undefined,
+    "audio-bitrate": data.value.audio?.format.bitrate
+      ? floor(data.value.audio.format.bitrate / 1000, 2)
+      : undefined,
+    "file-size": filesize(data.value.file.size, { locale: langCode.value }),
+  };
 
   // wait for one second, otherwise the video control bar will show its own loading animation
   await sleep(1000);

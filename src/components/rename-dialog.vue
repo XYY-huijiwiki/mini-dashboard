@@ -83,14 +83,6 @@ async function rename() {
   // rename file container
   await renamePage(`文件:${from}.${ext}.png`, `文件:${to}.${ext}.png`);
 
-  // rename file poster (for video)
-  if (props.data[0].file.type.startsWith("video/")) {
-    await renamePage(
-      `文件:${from}.${ext}.poster.png`,
-      `文件:${to}.${ext}.poster.png`,
-    );
-  }
-
   // renew file data
   let newData = cloneDeep(props.data[0]);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -100,14 +92,6 @@ async function rename() {
     title: `Data:${to}.${ext}.json`,
     text: JSON.stringify(metadata),
   });
-
-  // renew poster link (for video)
-  if (props.data[0].file.type.startsWith("video/")) {
-    await editPage({
-      title: `文件:${to}.${ext}.png`,
-      text: `[[文件:${to}.${ext}.poster.png]]\n[[分类:特殊文件]]`,
-    });
-  }
 
   // stop loading
   loading.value = false;

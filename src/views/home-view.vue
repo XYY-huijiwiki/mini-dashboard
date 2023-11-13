@@ -65,20 +65,18 @@
         </n-space>
       </template>
     </n-thing>
-    <template v-if="dev">
-      <n-divider>Under Development</n-divider>
-      <n-space>
-        <router-link to="/editor/月圆之夜（羊村守护者）">
-          <n-button>Monaco - Wikitext</n-button>
-        </router-link>
-        <router-link to="/editor/Data:月圆之夜（羊村守护者）.json">
-          <n-button>Monaco - Json</n-button>
-        </router-link>
-        <router-link to="/regex-editor">
-          <n-button>regex editor</n-button>
-        </router-link>
-      </n-space>
-    </template>
+    <n-divider>Under Development</n-divider>
+    <n-space>
+      <router-link to="/editor/月圆之夜（羊村守护者）">
+        <n-button>Monaco - Wikitext</n-button>
+      </router-link>
+      <router-link to="/editor/Data:月圆之夜（羊村守护者）.json">
+        <n-button>Monaco - Json</n-button>
+      </router-link>
+      <router-link to="/regex-editor">
+        <n-button>regex editor</n-button>
+      </router-link>
+    </n-space>
   </div>
 </template>
 
@@ -90,7 +88,6 @@ let fileExtList = Object.values(fileTypeList)
   .flat()
   .sort();
 const { t } = useI18n();
-let dev = import.meta.env.DEV;
 </script>
 
 <style scoped></style>

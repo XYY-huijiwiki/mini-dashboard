@@ -28,9 +28,7 @@ import jsonWorker from "monaco-editor/esm/vs/language/json/json.worker?worker";
 import cssWorker from "monaco-editor/esm/vs/language/css/css.worker?worker";
 import htmlWorker from "monaco-editor/esm/vs/language/html/html.worker?worker";
 import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker";
-import "monaco-editor/esm/vs/base/browser/ui/codicons/codicon/codicon.css";
-import "monaco-editor/esm/vs/base/browser/ui/codicons/codicon/codicon-modifiers.css";
-import "monaco-editor/esm/vs/base/browser/ui/codicons/codicon/codicon.ttf";
+import "monaco-editor/esm/vs/base/browser/ui/codicons/codiconStyles.js";
 
 self.MonacoEnvironment = {
   getWorker(_, label) {

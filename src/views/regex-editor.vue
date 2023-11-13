@@ -104,6 +104,7 @@ import { useI18n } from "vue-i18n";
 import { type UploadFileInfo } from "naive-ui";
 import { getPage, editPage } from "@/utils/mwApi";
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
+import "monaco-editor/esm/vs/base/browser/ui/codicons/codiconStyles.js";
 import { asyncComputed } from "@vueuse/core";
 import { useSettingsStore } from "@/stores/settings";
 import { storeToRefs } from "pinia";

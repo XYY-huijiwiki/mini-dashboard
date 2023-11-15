@@ -76,6 +76,9 @@
       <router-link to="/regex-editor">
         <n-button>regex editor</n-button>
       </router-link>
+      <router-link to="/search-and-destroy">
+        <n-button>search-and-destroy</n-button>
+      </router-link>
     </n-space>
   </div>
 </template>

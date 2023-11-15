@@ -14,6 +14,7 @@ const DataExporter = () => import("@/views/data-exporter.vue");
 const MonacoEditor = () => import("@/views/monaco-editor.vue");
 const RegexEditor = () => import("@/views/regex-editor.vue");
 const HelpDocs = () => import("@/views/help-docs.vue");
+const SearchAndDestroy = () => import("@/views/search-and-destroy.vue");
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -65,6 +66,11 @@ const routes: Array<RouteRecordRaw> = [
     path: "/help-docs/:title",
     name: "help-docs",
     component: HelpDocs,
+  },
+  {
+    path: "/search-and-destroy",
+    name: "search-and-destroy",
+    component: SearchAndDestroy,
   },
 ];
 

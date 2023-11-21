@@ -68,20 +68,40 @@ async function rename() {
 
   // check if file name is valid
   if (to === undefined || from === to) {
-    $message.error("文件名不能与原文件名相同");
+    $message.error(t("file-manager.error-same-file-name"));
     loading.value = false;
     return;
   } else if (to.length === 0) {
-    $message.error("文件名不能为空");
+    $message.error(t("file-manager.error-empty-file-name"));
     loading.value = false;
     return;
   }
 
   // rename data page
-  await renamePage(`Data:${from}.${ext}.json`, `Data:${to}.${ext}.json`);
+  let renameDataPageResponse = await renamePage({
+    from: `Data:${from}.${ext}.json`,
+    to: `Data:${to}.${ext}.json`,
+  });
+  if (renameDataPageResponse.ok) {
+    $message.success(t("file-manager.success-data-page-renamed"));
+  } else {
+    $message.error(t("file-manager.error-data-page-rename-failed"));
+    loading.value = false;
+    return;
+  }
 
   // rename file container
-  await renamePage(`文件:${from}.${ext}.png`, `文件:${to}.${ext}.png`);
+  let renameFilePageResponse = await renamePage({
+    from: `文件:${from}.${ext}.png`,
+    to: `文件:${to}.${ext}.png`,
+  });
+  if (renameFilePageResponse.ok) {
+    $message.success(t("file-manager.success-file-page-renamed"));
+  } else {
+    $message.error(t("file-manager.error-file-page-rename-failed"));
+    loading.value = false;
+    return;
+  }
 
   // renew file data
   let newData = cloneDeep(props.data[0]);

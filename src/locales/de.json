@@ -71,7 +71,13 @@
     "message-link-copied": "Link kopiert",
     "message-delete-confirm": "Möchten Sie {0} wirklich löschen? Bitte geben Sie den Löschgrund ein:",
     "message-download-confirm": "Möchten Sie {0} wirklich herunterladen? (Dateigröße: {1})",
-    "message-download-success": "Download erfolgreich"
+    "message-download-success": "Download erfolgreich",
+    "error-same-file-name": "Dateiname ist mit dem Original identisch",
+    "error-empty-file-name": "Dateiname darf nicht leer sein",
+    "success-data-page-renamed": "Datenseite umbenannt",
+    "error-data-page-rename-failed": "Datenseite konnte nicht umbenannt werden",
+    "success-file-page-renamed": "Dateiseite umbenannt",
+    "error-file-page-rename-failed": "Dateiseite konnte nicht umbenannt werden"
   },
   "file-uploader": {
     "title": "Datei hochladen",

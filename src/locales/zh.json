@@ -70,7 +70,13 @@
     "message-link-copied": "链接已复制",
     "message-delete-confirm": "确定要删除{0}吗？请填写删除原因：",
     "message-download-confirm": "确定要下载{0}吗？（文件大小为{1}）",
-    "message-download-success": "下载成功"
+    "message-download-success": "下载成功",
+    "error-same-file-name": "文件名与原文件相同",
+    "error-empty-file-name": "文件名不能为空",
+    "success-data-page-renamed": "数据页面重命名成功",
+    "error-data-page-rename-failed": "数据页面重命名失败",
+    "success-file-page-renamed": "文件页面重命名成功",
+    "error-file-page-rename-failed": "文件页面重命名失败"
   },
   "file-uploader": {
     "title": "文件上传",

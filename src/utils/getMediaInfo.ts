@@ -29,7 +29,6 @@ async function getMediaInfo(file: File): Promise<MediaType | undefined> {
       reader.readAsArrayBuffer(file.slice(offset, offset + chunkSize));
     });
   const result = await (await mediaInfo.analyzeData(getSize, readChunk)).media;
-  console.log(result);
   return result;
 }
 

@@ -6,7 +6,7 @@
         <!-- audio/midi preview -->
         <n-result v-if="data.file.type === 'audio/midi'" title="No Preview" />
         <!-- audio preview (except midi) -->
-        <template v-else-if="data.audio">
+        <template v-else-if="data.file.type.startsWith('audio/')">
           <audio
             :src="src"
             controls
@@ -16,7 +16,7 @@
         </template>
         <!-- video preview -->
         <video
-          v-if="data.video"
+          v-if="data.file.type.startsWith('video/')"
           :src="src"
           style="border-radius: 4px; object-fit: cover; width: 100%"
           :controls="showControls"

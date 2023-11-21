@@ -12,6 +12,9 @@ import encodePNG from "png-chunks-encode";
 import { fileTypeFromBuffer } from "file-type";
 import { onBeforeRouteLeave } from "vue-router";
 import getMediaInfo from "@/utils/getMediaInfo";
+import { Buffer } from "buffer";
+
+window.Buffer = Buffer;
 
 const { t } = useI18n();
 
@@ -37,7 +40,7 @@ let fileExtList = ref(
   Object.values(fileTypeList)
     .map((item) => item.ext)
     .flat()
-    .sort(),
+    .sort()
 );
 
 // 获取羊羊百科授权协议列表
@@ -150,7 +153,7 @@ async function uploader() {
     let fileUint8Array = new Uint8Array(fileBuffer);
     let fileExt = file.file.name.split(".").pop();
     let fileType = await fileTypeFromBuffer(
-      Buffer.from(fileUint8Array.slice(0, 128)),
+      Buffer.from(fileUint8Array.slice(0, 128))
     );
     console.log(fileType);
     if (!fileType || !fileExt) {
@@ -200,9 +203,6 @@ async function uploader() {
       fileType.mime.startsWith("audio/")
     ) {
       fileMetadata.mediaInfo = await getMediaInfo(file.file);
-      if (import.meta.env.DEV) {
-        return;
-      }
     }
 
     // init data page

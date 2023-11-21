@@ -33,7 +33,7 @@
     "text-special-file-description": "上传、下载、查看、删除或重命名特殊文件。目前支持的格式有：{0}",
     "text-cartoon-data-title": "剧集数据",
     "text-cartoon-data-description": "导出或导入动画剧集数据。",
-    "text-destroy-and-rescue-title": "经典爆破和搜索救援",
+    "text-destroy-and-rescue-title": "经典爆破与搜索救援",
     "text-destroy-and-rescue-description": "批量删除或恢复页面。"
   },
   "preview": {
@@ -131,8 +131,8 @@
   "search-and-rescue": {
     "title": "搜索救援",
     "text-select-pages-by": "选择页面",
-    "label-select-pages-by-txt": "文本文档 (.txt)",
-    "label-select-pages-by-xlsx": "Microsoft Excel 工作表 (.xlsx)",
+    "label-select-pages-by-txt": "文本文档（.txt）",
+    "label-select-pages-by-xlsx": "Microsoft Excel 工作表（.xlsx）",
     "label-select-pages-by-category": "分类",
     "error-no-select-pages-by": "请选择一个方法",
     "btn-search": "搜索",

@@ -43,7 +43,7 @@ interface UndeleteResponse {
 const isDev = import.meta.env.DEV;
 
 async function undeletePage(
-  undeleteParams: UndeleteParams
+  undeleteParams: UndeleteParams,
 ): Promise<{ ok: true; body: UndeleteResponse } | { ok: false; body: string }> {
   return new Promise((resolve) => {
     isDev ? console.groupCollapsed("undeletePage") : null;

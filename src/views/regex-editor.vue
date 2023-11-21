@@ -181,7 +181,7 @@ let orgCode: Ref<string> = asyncComputed(async () => {
     console.log(e);
     $dialog.error({
       title: "get-page-error",
-      content: e,
+      content: String(e),
       positiveText: t("general.btn-confirm"),
       autoFocus: false,
     });
@@ -220,7 +220,7 @@ function getNewCode(orgCode: string): string {
       console.log(error);
       $dialog.error({
         title: "regex-error",
-        content: error,
+        content: String(error),
         positiveText: t("general.btn-confirm"),
         negativeText: t("general.btn-cancel"),
         autoFocus: false,
@@ -293,7 +293,7 @@ async function savePage() {
     console.log(e);
     $dialog.error({
       title: "save-error",
-      content: e,
+      content: String(e),
       positiveText: t("general.btn-confirm"),
       autoFocus: false,
     });

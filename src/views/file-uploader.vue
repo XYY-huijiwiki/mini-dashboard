@@ -9,11 +9,9 @@ import { getPage, editPage, uploadFile } from "@/utils/mwApi/index";
 import fileTypeList from "@/utils/fileTypeList";
 import { useI18n } from "vue-i18n";
 import encodePNG from "png-chunks-encode";
-import { Buffer } from "buffer";
 import { fileTypeFromBuffer } from "file-type";
 import { onBeforeRouteLeave } from "vue-router";
-
-window.Buffer = Buffer;
+import getMediaInfo from "@/utils/getMediaInfo";
 
 const { t } = useI18n();
 
@@ -196,18 +194,15 @@ async function uploader() {
       },
     };
 
-    // get file metadata (for audio only, except `audio/midi`)
-    if (fileType.mime.startsWith("audio/") && fileType.mime !== "audio/midi") {
-      let { parseBuffer } = await import("music-metadata-browser");
-      let metadata = await parseBuffer(Buffer.from(fileBuffer), fileType.mime);
-      fileMetadata.audio = metadata;
-    }
-
-    // get file metadata (for video only)
-    if (fileType.mime.startsWith("video/")) {
-      let { getVideoMetadata } = await import("@/utils/getVideoMetadata");
-      let metadata = await getVideoMetadata(file.file);
-      fileMetadata.video = metadata;
+    // get mediaInfo (for video and audio)
+    if (
+      fileType.mime.startsWith("video/") ||
+      fileType.mime.startsWith("audio/")
+    ) {
+      fileMetadata.mediaInfo = await getMediaInfo(file.file);
+      if (import.meta.env.DEV) {
+        return;
+      }
     }
 
     // init data page
@@ -260,11 +255,13 @@ async function uploader() {
           <n-text :style="{ 'font-size': '16px' }">
             {{ t("file-uploader.label-drop-files-here") }}
           </n-text>
-          <n-p>{{
-            t("file-uploader.label-supported-file-types", [
-              fileExtList.join(", "),
-            ])
-          }}</n-p>
+          <n-p>
+            {{
+              t("file-uploader.label-supported-file-types", [
+                fileExtList.join(", "),
+              ])
+            }}
+          </n-p>
         </n-upload-dragger>
       </n-upload>
       <!-- 上传按钮 -->

@@ -134,7 +134,7 @@ let columns: DataTableColumn[] = [
       return h(
         NA,
         { href: location.origin + "/wiki/" + rowData.title, target: "_blank" },
-        () => rowData.title
+        () => rowData.title,
       );
     },
   },
@@ -155,7 +155,7 @@ let columns: DataTableColumn[] = [
               : "error",
           bordered: false,
         },
-        () => t(`search-and-${DR}.label-status-${rowData.status}`)
+        () => t(`search-and-${DR}.label-status-${rowData.status}`),
       );
     },
   },

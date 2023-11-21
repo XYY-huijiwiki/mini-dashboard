@@ -21,8 +21,8 @@ const { t } = useI18n();
 onBeforeRouteLeave(() => {
   if (loading.value) {
     $dialog.error({
-      title: t("file-uploader.text-leave-warning-title"),
-      content: t("file-uploader.text-leave-warning-content"),
+      title: t("general.text-leave-warning-title"),
+      content: t("general.text-leave-warning-content"),
       positiveText: t("general.btn-confirm"),
       autoFocus: false,
       transformOrigin: "center",

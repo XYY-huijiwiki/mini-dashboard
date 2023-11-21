@@ -63,6 +63,36 @@
             </n-button>
           </router-link>
         </n-space>
+      </template> </n-thing
+    ><n-divider></n-divider>
+    <n-thing content-indented>
+      <template #header-extra>
+        <help-btn link="destroy-and-rescue" />
+      </template>
+      <template #avatar>
+        <n-avatar>
+          <MaterialSymbol> delete </MaterialSymbol>
+        </n-avatar>
+      </template>
+      <template #header>
+        {{ t("home.text-destroy-and-rescue-title") }}
+      </template>
+      <template #description>
+        {{ t("home.text-destroy-and-rescue-description") }}
+      </template>
+      <template #action>
+        <n-space>
+          <router-link :to="{ name: 'search-and-destroy' }">
+            <n-button size="small">
+              {{ t("search-and-destroy.title") }}
+            </n-button>
+          </router-link>
+          <router-link :to="{ name: 'search-and-rescue' }">
+            <n-button size="small">
+              {{ t("search-and-rescue.title") }}
+            </n-button>
+          </router-link>
+        </n-space>
       </template>
     </n-thing>
     <n-divider>Under Development</n-divider>
@@ -75,9 +105,6 @@
       </router-link>
       <router-link to="/regex-editor">
         <n-button>regex editor</n-button>
-      </router-link>
-      <router-link to="/search-and-destroy">
-        <n-button>search-and-destroy</n-button>
       </router-link>
     </n-space>
   </div>

@@ -69,8 +69,8 @@ import { onBeforeRouteLeave } from "vue-router";
 onBeforeRouteLeave(() => {
   if (importing.value) {
     $dialog.error({
-      title: t("data-importer.text-leave-warning-title"),
-      content: t("data-importer.text-leave-warning-content"),
+      title: t("general.text-leave-warning-title"),
+      content: t("general.text-leave-warning-content"),
       positiveText: t("general.btn-confirm"),
       autoFocus: false,
       transformOrigin: "center",

@@ -1,5 +1,4 @@
 {
-  "language": "English",
   "dev-tag": "Dev",
   "general": {
     "loading": "Loading",
@@ -9,7 +8,9 @@
     "success": "Success",
     "btn-ok": "OK",
     "btn-cancel": "Cancel",
-    "btn-confirm": "Confirm"
+    "btn-confirm": "Confirm",
+    "text-leave-warning-title": "Attention",
+    "text-leave-warning-content": "We are still working on it. Please do not leave this page."
   },
   "settings": {
     "title": "Settings",
@@ -31,7 +32,9 @@
     "text-special-file-title": "Special Files",
     "text-special-file-description": "Upload, download, view, delete or rename special files. Currently supported formats: {0}",
     "text-cartoon-data-title": "Cartoon Episode Data",
-    "text-cartoon-data-description": "Export or import Cartoon episode data."
+    "text-cartoon-data-description": "Export or import Cartoon episode data.",
+    "text-destroy-and-rescue-title": "Destroy and Rescue",
+    "text-destroy-and-rescue-description": "Delete or restore pages in batches."
   },
   "preview": {
     "title": "Preview",
@@ -75,9 +78,7 @@
     "label-file-license": "File License",
     "btn-upload": "Upload",
     "label-drop-files-here": "Click or drag files here to upload",
-    "label-supported-file-types": "Supported file types: {0}",
-    "text-leave-warning-title": "Warning",
-    "text-leave-warning-content": "The upload is now in progress. Please do not leave this page."
+    "label-supported-file-types": "Supported file types: {0}"
   },
   "data-exporter": {
     "title": "Data Exporter",
@@ -95,14 +96,48 @@
     "bot-alert-text": "You need to log in with a bot account to import data.",
     "bot-alert-checking": "Checking account...",
     "bot-alert-is-bot": "Current account is a bot account.",
-    "bot-alert-not-bot": "Current account is not a bot account.",
-    "text-leave-warning-title": "Warning",
-    "text-leave-warning-content": "The import is now in progress. Please do not leave this page."
+    "bot-alert-not-bot": "Current account is not a bot account."
   },
   "help-docs": {
-    "title": "Technical documentation"
+    "title": "Technical Documentation"
   },
   "undefined": {
     "title": "Loading..."
+  },
+  "search-and-destroy": {
+    "title": "Search and Destroy",
+    "text-select-pages-by": "Select pages by",
+    "label-select-pages-by-txt": "Text Document (.txt)",
+    "label-select-pages-by-xlsx": "Microsoft Excel Worksheet (.xlsx)",
+    "label-select-pages-by-category": "Category",
+    "error-no-select-pages-by": "Please select a method",
+    "btn-search": "Search",
+    "label-table-title": "Title",
+    "label-table-status": "Status",
+    "label-status-to-do": "Waiting",
+    "label-status-doing": "Destroying",
+    "label-status-done": "Destroyed",
+    "label-status-error": "Error",
+    "text-reason": "Destroy Reason",
+    "btn-destroy": "Destroy",
+    "error-no-destroy-reason": "Please fill in the destroy reason"
+  },
+  "search-and-rescue": {
+    "title": "Search and Rescue",
+    "text-select-pages-by": "Select pages by",
+    "label-select-pages-by-txt": "Text Document (.txt)",
+    "label-select-pages-by-xlsx": "Microsoft Excel Worksheet (.xlsx)",
+    "label-select-pages-by-category": "Category",
+    "error-no-select-pages-by": "Please select a method",
+    "btn-search": "Search",
+    "label-table-title": "Title",
+    "label-table-status": "Status",
+    "label-status-to-do": "Waiting",
+    "label-status-doing": "Rescuing",
+    "label-status-done": "Rescued",
+    "label-status-error": "Error",
+    "text-reason": "Rescue Reason",
+    "btn-rescue": "Rescue",
+    "error-no-rescue-reason": "Please fill in the rescue reason"
   }
 }

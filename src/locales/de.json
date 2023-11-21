@@ -9,7 +9,9 @@
     "success": "Erfolg",
     "btn-ok": "OK",
     "btn-cancel": "Abbrechen",
-    "btn-confirm": "Bestätigen"
+    "btn-confirm": "Bestätigen",
+    "text-leave-warning-title": "Achtung",
+    "text-leave-warning-content": "Wir arbeiten noch daran. Bitte verlassen Sie diese Seite nicht."
   },
   "settings": {
     "title": "Einstellungen",
@@ -31,7 +33,9 @@
     "text-special-file-title": "Spezialdateien",
     "text-special-file-description": "Spezialdateien hochladen, herunterladen, anzeigen, löschen oder umbenennen. Derzeit unterstützte Formate: {0}",
     "text-cartoon-data-title": "Animationsfolgendaten",
-    "text-cartoon-data-description": "Animationsfolgendaten exportieren oder importieren."
+    "text-cartoon-data-description": "Animationsfolgendaten exportieren oder importieren.",
+    "text-destroy-and-rescue-title": "Zerstören und Retten",
+    "text-destroy-and-rescue-description": "Seiten in Stapeln löschen oder wiederherstellen."
   },
   "preview": {
     "title": "Vorschau",
@@ -75,9 +79,7 @@
     "label-file-license": "Dateilizenz",
     "btn-upload": "Hochladen",
     "label-drop-files-here": "Klicken oder ziehen Sie Dateien in diesen Bereich, um sie hochzuladen",
-    "label-supported-file-types": "Derzeit unterstützte Dateitypen zum Hochladen: {0}",
-    "text-leave-warning-title": "Warnung",
-    "text-leave-warning-content": "Der Upload läuft jetzt. Bitte verlassen Sie diese Seite nicht."
+    "label-supported-file-types": "Derzeit unterstützte Dateitypen zum Hochladen: {0}"
   },
   "data-exporter": {
     "title": "Datenexporter",
@@ -95,14 +97,48 @@
     "bot-alert-text": "Sie müssen sich mit einem Bot-Konto anmelden, um Daten zu importieren.",
     "bot-alert-checking": "Konto wird überprüft...",
     "bot-alert-is-bot": "Aktuelles Konto ist ein Bot-Konto.",
-    "bot-alert-not-bot": "Aktuelles Konto ist kein Bot-Konto.",
-    "text-leave-warning-title": "Warnung",
-    "text-leave-warning-content": "Der Import läuft jetzt. Bitte verlassen Sie diese Seite nicht."
+    "bot-alert-not-bot": "Aktuelles Konto ist kein Bot-Konto."
   },
   "help-docs": {
     "title": "Technische Dokumentation"
   },
   "undefined": {
     "title": "Laden..."
+  },
+  "search-and-destroy": {
+    "title": "Suchen und Zerstören",
+    "text-select-pages-by": "Wählen Sie Seiten nach",
+    "label-select-pages-by-txt": "Textdokument (.txt)",
+    "label-select-pages-by-xlsx": "Microsoft Excel-Arbeitsblatt (.xlsx)",
+    "label-select-pages-by-category": "Kategorie",
+    "error-no-select-pages-by": "Bitte wählen Sie eine Methode",
+    "btn-search": "Suchen",
+    "label-table-title": "Titel",
+    "label-table-status": "Status",
+    "label-status-to-do": "Warten",
+    "label-status-doing": "Zerstören",
+    "label-status-done": "Zerstört",
+    "label-status-error": "Fehler",
+    "text-reason": "Zerstörungsgrund",
+    "btn-destroy": "Zerstören",
+    "error-no-destroy-reason": "Bitte geben Sie den Zerstörungsgrund ein"
+  },
+  "search-and-rescue": {
+    "title": "Suchen und Retten",
+    "text-select-pages-by": "Wählen Sie Seiten nach",
+    "label-select-pages-by-txt": "Textdokument (.txt)",
+    "label-select-pages-by-xlsx": "Microsoft Excel-Arbeitsblatt (.xlsx)",
+    "label-select-pages-by-category": "Kategorie",
+    "error-no-select-pages-by": "Bitte wählen Sie eine Methode",
+    "btn-search": "Suchen",
+    "label-table-title": "Titel",
+    "label-table-status": "Status",
+    "label-status-to-do": "Warten",
+    "label-status-doing": "Retten",
+    "label-status-done": "Gerettet",
+    "label-status-error": "Fehler",
+    "text-reason": "Retten Grund",
+    "btn-rescue": "Retten",
+    "error-no-rescue-reason": "Bitte geben Sie den Retten Grund ein"
   }
 }

@@ -8,7 +8,9 @@
     "success": "成功",
     "btn-ok": "确定",
     "btn-cancel": "取消",
-    "btn-confirm": "确认"
+    "btn-confirm": "确认",
+    "text-leave-warning-title": "注意",
+    "text-leave-warning-content": "我们仍在处理。请不要离开本页面。"
   },
   "settings": {
     "title": "设置",
@@ -30,7 +32,9 @@
     "text-special-file-title": "特殊文件",
     "text-special-file-description": "上传、下载、查看、删除或重命名特殊文件。目前支持的格式有：{0}",
     "text-cartoon-data-title": "剧集数据",
-    "text-cartoon-data-description": "导出或导入动画剧集数据。"
+    "text-cartoon-data-description": "导出或导入动画剧集数据。",
+    "text-destroy-and-rescue-title": "经典爆破和搜索救援",
+    "text-destroy-and-rescue-description": "批量删除或恢复页面。"
   },
   "preview": {
     "title": "预览",
@@ -74,9 +78,7 @@
     "label-file-license": "文件许可",
     "btn-upload": "上传",
     "label-drop-files-here": "点击或者拖动文件到该区域来上传",
-    "label-supported-file-types": "目前支持上传的文件类型有：{0}",
-    "text-leave-warning-title": "警告",
-    "text-leave-warning-content": "当前上传未完成，请勿离开本页面。"
+    "label-supported-file-types": "目前支持上传的文件类型有：{0}"
   },
   "data-exporter": {
     "title": "数据导出",
@@ -94,14 +96,48 @@
     "bot-alert-text": "你需要使用机器人账号登陆才能导入数据。",
     "bot-alert-checking": "正在检查账号……",
     "bot-alert-is-bot": "当前账号是机器人账号。",
-    "bot-alert-not-bot": "当前账号不是机器人账号。",
-    "text-leave-warning-title": "警告",
-    "text-leave-warning-content": "正在导入数据，请勿离开本页面。"
+    "bot-alert-not-bot": "当前账号不是机器人账号。"
   },
   "help-docs": {
     "title": "技术文档"
   },
   "undefined": {
     "title": "加载中……"
+  },
+  "search-and-destroy": {
+    "title": "经典爆破",
+    "text-select-pages-by": "选择页面",
+    "label-select-pages-by-txt": "文本文档 (.txt)",
+    "label-select-pages-by-xlsx": "Microsoft Excel 工作表 (.xlsx)",
+    "label-select-pages-by-category": "分类",
+    "error-no-select-pages-by": "请选择一个方法",
+    "btn-search": "搜索",
+    "label-table-title": "标题",
+    "label-table-status": "状态",
+    "label-status-to-do": "等待中",
+    "label-status-doing": "爆破中",
+    "label-status-done": "已爆破",
+    "label-status-error": "错误",
+    "text-reason": "爆破原因",
+    "btn-destroy": "爆破",
+    "error-no-destroy-reason": "请填写爆破原因"
+  },
+  "search-and-rescue": {
+    "title": "搜索救援",
+    "text-select-pages-by": "选择页面",
+    "label-select-pages-by-txt": "文本文档 (.txt)",
+    "label-select-pages-by-xlsx": "Microsoft Excel 工作表 (.xlsx)",
+    "label-select-pages-by-category": "分类",
+    "error-no-select-pages-by": "请选择一个方法",
+    "btn-search": "搜索",
+    "label-table-title": "标题",
+    "label-table-status": "状态",
+    "label-status-to-do": "等待中",
+    "label-status-doing": "救援中",
+    "label-status-done": "已救援",
+    "label-status-error": "错误",
+    "text-reason": "救援原因",
+    "btn-rescue": "救援",
+    "error-no-rescue-reason": "请填写救援原因"
   }
 }

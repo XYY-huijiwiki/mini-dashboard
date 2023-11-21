@@ -14,7 +14,7 @@ const DataExporter = () => import("@/views/data-exporter.vue");
 const MonacoEditor = () => import("@/views/monaco-editor.vue");
 const RegexEditor = () => import("@/views/regex-editor.vue");
 const HelpDocs = () => import("@/views/help-docs.vue");
-const SearchAndDestroy = () => import("@/views/search-and-destroy.vue");
+const DestroyAndRescue = () => import("@/views/destroy-and-rescue.vue");
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -70,7 +70,12 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/search-and-destroy",
     name: "search-and-destroy",
-    component: SearchAndDestroy,
+    component: DestroyAndRescue,
+  },
+  {
+    path: "/search-and-rescue",
+    name: "search-and-rescue",
+    component: DestroyAndRescue,
   },
 ];
 

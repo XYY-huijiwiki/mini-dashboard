@@ -11,7 +11,6 @@ const FileUploader = () => import("@/views/file-uploader.vue");
 const FileManager = () => import("@/views/file-manager.vue");
 const DataImporter = () => import("@/views/data-importer.vue");
 const DataExporter = () => import("@/views/data-exporter.vue");
-const MonacoEditor = () => import("@/views/monaco-editor.vue");
 const RegexEditor = () => import("@/views/regex-editor.vue");
 const HelpDocs = () => import("@/views/help-docs.vue");
 const DestroyAndRescue = () => import("@/views/destroy-and-rescue.vue");
@@ -51,11 +50,6 @@ const routes: Array<RouteRecordRaw> = [
     path: "/data-exporter",
     name: "data-exporter",
     component: DataExporter,
-  },
-  {
-    path: "/editor/:title",
-    name: "editor",
-    component: MonacoEditor,
   },
   {
     path: "/regex-editor",

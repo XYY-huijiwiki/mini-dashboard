@@ -43,12 +43,10 @@
     "label-file-type": "类型",
     "label-file-name": "名称",
     "label-file-size": "大小",
-    "label-file-size-on-disk": "占用空间",
     "label-video-frame-width": "帧宽度",
     "label-video-frame-height": "帧高度",
     "label-video-total-bitrate": "总比特率",
-    "label-video-length": "时长",
-    "label-audio-length": "时长",
+    "label-media-length": "时长",
     "label-audio-bitrate": "比特率",
     "label-file-source": "文件来源",
     "label-file-license": "文件许可"

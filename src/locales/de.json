@@ -44,12 +44,10 @@
     "label-file-type": "Typ",
     "label-file-name": "Name",
     "label-file-size": "Größe",
-    "label-file-size-on-disk": "Größe auf Datenträger",
     "label-video-frame-width": "Bildbreite",
     "label-video-frame-height": "Bildhöhe",
     "label-video-total-bitrate": "Gesamtbitrate",
-    "label-video-length": "Länge",
-    "label-audio-length": "Länge",
+    "label-media-length": "Länge",
     "label-audio-bitrate": "Bitrate",
     "label-file-source": "Dateiquelle",
     "label-file-license": "Dateilizenz"

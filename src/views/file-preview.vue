@@ -94,7 +94,7 @@
         <file-menu :data="[data]" v-model:show="showFileMenu">
           <n-button @click="showFileMenu = true">
             <template #icon>
-              <material-symbol size="20">more_horiz</material-symbol>
+              <material-symbol :size="20">more_horiz</material-symbol>
             </template>
           </n-button>
         </file-menu>
@@ -111,7 +111,6 @@ import { useRoute } from "vue-router";
 import { ref, type Ref } from "vue";
 import loadingView from "@/views/loading-view.vue";
 import errorView from "@/views/error-view.vue";
-import { floor } from "lodash-es";
 import { filesize } from "filesize";
 import sleep from "@anmiles/sleep";
 import dayjs from "dayjs";
@@ -168,24 +167,31 @@ onMounted(async () => {
   src.value = fileSrc;
 
   // file info display
+  let mediaLength = data.value.mediaInfo?.track.filter(
+    (i) => i["@type"] === "General",
+  )[0].Duration;
+  let mediaBitrate = data.value.mediaInfo?.track.filter(
+    (i) => i["@type"] === "General",
+  )[0].OverallBitRate;
   fileInfo.value = {
     "file-type": data.value.file.type,
-    "video-frame-width": data.value.video?.frameWidth,
-    "video-frame-height": data.value.video?.frameHeight,
-    "video-length": data.value.video?.length
-      ? dayjs.duration(data.value.video.length, "second").format("HH:mm:ss")
+    "video-frame-width": data.value.mediaInfo?.track.filter(
+      (i) => i["@type"] === "Video",
+    )[0]?.Width,
+    "video-frame-height": data.value.mediaInfo?.track.filter(
+      (i) => i["@type"] === "Video",
+    )[0]?.Height,
+    "media-length": mediaLength
+      ? dayjs.duration(mediaLength, "second").format("HH:mm:ss")
       : undefined,
-    "audio-length": data.value.audio?.format.duration
-      ? dayjs
-          .duration(data.value.audio.format.duration, "second")
-          .format("HH:mm:ss")
-      : undefined,
-    "video-total-bitrate": data.value.video?.length
-      ? floor(((data.value.file.size / data.value.video.length) * 8) / 1000, 2)
-      : undefined,
-    "audio-bitrate": data.value.audio?.format.bitrate
-      ? floor(data.value.audio.format.bitrate / 1000, 2)
-      : undefined,
+    "video-total-bitrate":
+      data.value.file.type.startsWith("video/") && mediaBitrate
+        ? filesize(mediaBitrate, { locale: langCode.value }) + "/s"
+        : undefined,
+    "audio-bitrate":
+      data.value.file.type.startsWith("audio/") && mediaBitrate
+        ? filesize(mediaBitrate, { locale: langCode.value }) + "/s"
+        : undefined,
     "file-size": filesize(data.value.file.size, { locale: langCode.value }),
   };
 

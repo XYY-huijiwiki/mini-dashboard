@@ -88,6 +88,17 @@
           </n-gi>
         </template>
       </n-grid>
+      <n-divider />
+      <!-- others -->
+      <n-space>
+        <file-menu :data="[data]" v-model:show="showFileMenu">
+          <n-button @click="showFileMenu = true">
+            <template #icon>
+              <material-symbol size="20">more_horiz</material-symbol>
+            </template>
+          </n-button>
+        </file-menu>
+      </n-space>
     </template>
     <error-view v-else />
   </div>
@@ -109,6 +120,7 @@ import { useI18n } from "vue-i18n";
 import { getObjectURL } from "@/utils/getObjectURL";
 import { storeToRefs } from "pinia";
 import { useLocalesStore } from "@/stores/locales";
+import { NButton } from "naive-ui";
 
 const { langCode } = storeToRefs(useLocalesStore());
 
@@ -182,4 +194,7 @@ onMounted(async () => {
   showControls.value = true;
   showSpin.value = false;
 });
+
+// other operations
+let showFileMenu: Ref<boolean> = ref(false);
 </script>

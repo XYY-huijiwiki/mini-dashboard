@@ -25,7 +25,9 @@
     "text-export-backup": "Export two files, one for modification and one for backup.",
     "label-source-code": "Source Code",
     "btn-github": "GitHub",
-    "btn-xyy-wiki": "XYY Wiki"
+    "btn-xyy-wiki": "XYY Wiki",
+    "label-show-update-details": "Show \"Update Details\" Button",
+    "text-show-update-details": "Show \"Update Details\" button on the file management page. This is not necessary unless the structure of the details has been changed."
   },
   "home": {
     "title": "Mini Dashboard",
@@ -67,6 +69,7 @@
     "dropdown-option-delete": "Delete",
     "dropdown-option-details": "Details",
     "dropdown-option-download": "Download",
+    "dropdown-option-update-details": "Update Details",
     "message-link-copied": "Link copied",
     "message-delete-confirm": "Are you sure you want to delete {0}? Please fill in the reason for deletion:",
     "message-download-confirm": "Are you sure you want to download {0}? (File size: {1})",
@@ -76,7 +79,8 @@
     "success-data-page-renamed": "Data page renamed",
     "error-data-page-rename-failed": "Failed to rename data page",
     "success-file-page-renamed": "File page renamed",
-    "error-file-page-rename-failed": "Failed to rename file page"
+    "error-file-page-rename-failed": "Failed to rename file page",
+    "message-update-details-confirm": "Are you sure you want to update details of {0}?"
   },
   "file-uploader": {
     "title": "File Uploader",

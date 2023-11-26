@@ -52,6 +52,8 @@ declare global {
   };
 
   declare const CHP: Promise<void>;
+  declare module "three";
+  declare module "three/addons/loaders/GLTFLoader.js";
 
   // define naive-ui api from huijiWiji
   declare const $message: MessageApi;
@@ -65,7 +67,6 @@ declare global {
       name: string;
       type: string;
       size: number;
-      lastModified: Date;
     };
     // legacy
     video?: {
@@ -91,6 +92,10 @@ declare global {
     };
     model?: {
       animations: string[];
+      asset: {
+        generator: string;
+        version: string;
+      };
     };
   }
 

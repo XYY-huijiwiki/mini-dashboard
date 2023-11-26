@@ -26,9 +26,8 @@ import errorComponent from "@/views/error-view.vue";
 
 const dev = import.meta.env.DEV;
 
-const { globalModalShow, globalModalContent, globalModalData } = storeToRefs(
-  useModalStore(),
-);
+const { globalModalShow, globalModalContent, globalModalData } =
+  storeToRefs(useModalStore());
 const { globalModalFunc } = useModalStore();
 
 // register async component
@@ -38,7 +37,7 @@ let dialogGlobList: Record<string, () => Promise<Component>> = import.meta.glob(
 );
 let dialogCompList = Object.keys(dialogGlobList).reduce(
   (obj: Record<string, Component>, path) => {
-    let dialogName = path.match(/\/(\w+)-dialog\.vue$/)?.[1];
+    let dialogName = path.match(/\/([\w|-]+)-dialog\.vue$/)?.[1];
     if (dialogName) {
       obj[dialogName] = defineAsyncComponent({
         loader: dialogGlobList[path],

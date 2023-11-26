@@ -26,7 +26,9 @@
     "text-export-backup": "Zwei Dateien exportieren, eine zum Bearbeiten und eine zum Sichern.",
     "label-source-code": "Quellcode",
     "btn-github": "GitHub",
-    "btn-xyy-wiki": "XYY Wiki"
+    "btn-xyy-wiki": "XYY Wiki",
+    "label-show-update-details": "Schaltfläche \"Details aktualisieren\" anzeigen",
+    "text-show-update-details": "Auf der Dateimanager-Seite die Schaltfläche \"Details aktualisieren\" anzeigen. Dies ist nur erforderlich, wenn sich die Struktur der Details geändert hat."
   },
   "home": {
     "title": "Mini-Dashboard",
@@ -68,6 +70,7 @@
     "dropdown-option-delete": "Löschen",
     "dropdown-option-details": "Details",
     "dropdown-option-download": "Herunterladen",
+    "dropdown-option-update-details": "Details aktualisieren",
     "message-link-copied": "Link kopiert",
     "message-delete-confirm": "Möchten Sie {0} wirklich löschen? Bitte geben Sie den Löschgrund ein:",
     "message-download-confirm": "Möchten Sie {0} wirklich herunterladen? (Dateigröße: {1})",
@@ -77,7 +80,8 @@
     "success-data-page-renamed": "Datenseite umbenannt",
     "error-data-page-rename-failed": "Datenseite konnte nicht umbenannt werden",
     "success-file-page-renamed": "Dateiseite umbenannt",
-    "error-file-page-rename-failed": "Dateiseite konnte nicht umbenannt werden"
+    "error-file-page-rename-failed": "Dateiseite konnte nicht umbenannt werden",
+    "message-update-details-confirm": "Möchten Sie die Details von {0} wirklich aktualisieren?"
   },
   "file-uploader": {
     "title": "Datei hochladen",

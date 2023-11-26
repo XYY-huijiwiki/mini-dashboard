@@ -149,10 +149,10 @@ let columns: DataTableColumn[] = [
             rowData.status === "to-do"
               ? "info"
               : rowData.status === "doing"
-              ? "warning"
-              : rowData.status === "done"
-              ? "success"
-              : "error",
+                ? "warning"
+                : rowData.status === "done"
+                  ? "success"
+                  : "error",
           bordered: false,
         },
         () => t(`search-and-${DR}.label-status-${rowData.status}`),

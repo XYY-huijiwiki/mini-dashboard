@@ -9,6 +9,7 @@ export const useSettingsStore = defineStore("settings", () => {
     language: "auto",
     dataType: "xlsx",
     exportBackup: false,
+    showUpdateDetails: false,
   };
   // init settings from localStorage or use default settings
   const settings = useLocalStorage("miniDashboardSettings", defaultSettings);

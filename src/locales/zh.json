@@ -25,7 +25,9 @@
     "text-export-backup": "导出两份文件，一份用于修改，一份用于备份。",
     "label-source-code": "源代码",
     "btn-github": "GitHub",
-    "btn-xyy-wiki": "羊羊百科"
+    "btn-xyy-wiki": "羊羊百科",
+    "label-show-update-details": "显示“更新详细信息”按钮",
+    "text-show-update-details": "在文件管理页面显示“更新详细信息”按钮。除非更改了详细信息的结构，否则不需要这么做。"
   },
   "home": {
     "title": "迷你控制中心",
@@ -67,6 +69,7 @@
     "dropdown-option-delete": "删除",
     "dropdown-option-details": "详细信息",
     "dropdown-option-download": "下载",
+    "dropdown-option-update-details": "更新详细信息",
     "message-link-copied": "链接已复制",
     "message-delete-confirm": "确定要删除{0}吗？请填写删除原因：",
     "message-download-confirm": "确定要下载{0}吗？（文件大小为{1}）",
@@ -76,7 +79,8 @@
     "success-data-page-renamed": "数据页面重命名成功",
     "error-data-page-rename-failed": "数据页面重命名失败",
     "success-file-page-renamed": "文件页面重命名成功",
-    "error-file-page-rename-failed": "文件页面重命名失败"
+    "error-file-page-rename-failed": "文件页面重命名失败",
+    "message-update-details-confirm": "确定要更新{0}的详细信息吗？"
   },
   "file-uploader": {
     "title": "文件上传",

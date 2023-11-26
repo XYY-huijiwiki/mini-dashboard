@@ -11,6 +11,7 @@ declare module 'vue' {
     DeleteDialog: typeof import('./src/components/delete-dialog.vue')['default']
     DetailsDialog: typeof import('./src/components/details-dialog.vue')['default']
     DownloadDialog: typeof import('./src/components/download-dialog.vue')['default']
+    FileMenu: typeof import('./src/components/file-menu.vue')['default']
     GlobalModal: typeof import('./src/components/global-modal.vue')['default']
     HelpBtn: typeof import('./src/components/help-btn.vue')['default']
     MaterialSymbol: typeof import('./src/components/material-symbol.vue')['default']
@@ -54,8 +55,10 @@ declare module 'vue' {
     NUpload: typeof import('naive-ui')['NUpload']
     NUploadDragger: typeof import('naive-ui')['NUploadDragger']
     NUploadTrigger: typeof import('naive-ui')['NUploadTrigger']
+    RefreshDialog: typeof import('./src/components/refresh-dialog.vue')['default']
     RenameDialog: typeof import('./src/components/rename-dialog.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    UpdateDetailsDialog: typeof import('./src/components/update-details-dialog.vue')['default']
   }
 }

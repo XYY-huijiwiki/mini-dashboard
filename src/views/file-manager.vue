@@ -2,7 +2,6 @@
 import {
   ref,
   h,
-  watch,
   onMounted,
   nextTick,
   computed,
@@ -15,14 +14,12 @@ import {
   NA,
   type DataTableColumns,
   type DataTableSortState,
-  type DropdownOption,
   type DataTableFilterState,
 } from "naive-ui";
 import { RouterLink } from "vue-router";
 import { filesize } from "filesize";
 import { useI18n } from "vue-i18n";
 import materialSymbol from "@/components/material-symbol.vue";
-import router from "@/router";
 import { isArray, debounce } from "lodash-es";
 import { storeToRefs } from "pinia";
 import { useLocalesStore } from "@/stores/locales";
@@ -96,12 +93,12 @@ let query = debounce(async (): Promise<void> => {
     sorter.value.columnKey === "size"
       ? (newKey = "file.size")
       : sorter.value.columnKey === "type"
-      ? (newKey = "file.type")
-      : sorter.value.columnKey === "name"
-      ? (newKey = "file.name")
-      : sorter.value.columnKey === "uploadTime"
-      ? (newKey = "wiki.uploadTime")
-      : null;
+        ? (newKey = "file.type")
+        : sorter.value.columnKey === "name"
+          ? (newKey = "file.name")
+          : sorter.value.columnKey === "uploadTime"
+            ? (newKey = "wiki.uploadTime")
+            : null;
     // new sortBy
     if (newKey && newKey === "file.name") {
       sortBy = {
@@ -193,6 +190,7 @@ let columns: Ref<DataTableColumns<RetrievedDataItem>> = ref([
       // equivalent to HTML
       //    <n-text>{{ rowData.file.type }}</n-text>
     },
+    className: "hidden-xs",
   },
   {
     title: t("file-manager.label-file-size"),
@@ -237,93 +235,13 @@ onMounted(async () => {
 let showDropdown = ref(false);
 let dropdownX = ref(0);
 let dropdownY = ref(0);
-const options: ComputedRef<DropdownOption[]> = computed(() => [
-  {
-    label: t("file-manager.dropdown-option-preview"),
-    icon: () => h(materialSymbol, { size: 20 }, () => "visibility"),
-    key: "preview",
-    disabled: checkedKeys.value.length > 1,
-  },
-  {
-    label: t("file-manager.dropdown-option-link-copy"),
-    icon: () => h(materialSymbol, { size: 20 }, () => "link"),
-    key: "link-copy",
-  },
-  {
-    type: "divider",
-  },
-  {
-    label: t("file-manager.dropdown-option-delete"),
-    icon: () => h(materialSymbol, { size: 20 }, () => "delete"),
-    key: "delete",
-  },
-  {
-    label: t("file-manager.dropdown-option-download"),
-    icon: () => h(materialSymbol, { size: 20 }, () => "download"),
-    key: "download",
-  },
-  {
-    label: t("file-manager.dropdown-option-rename"),
-    icon: () => h(materialSymbol, { size: 20 }, () => "edit"),
-    key: "rename",
-    disabled: checkedKeys.value.length > 1,
-  },
-  {
-    type: "divider",
-  },
-  {
-    label: t("file-manager.dropdown-option-details"),
-    icon: () => h(materialSymbol, { size: 20 }, () => "info"),
-    key: "details",
-    disabled: checkedKeys.value.length > 1,
-  },
-]);
-async function dropdownSelect(key: string | number) {
-  switch (key) {
-    case "preview":
-      router.push("/preview/" + checkedKeys.value[0]);
-      break;
-    case "link-copy":
-      navigator.clipboard.writeText(
-        checkedKeys.value
-          .map((item) => location.origin + "/wiki/File:" + item + ".png")
-          .join("\n"),
-      );
-      $message.success(t("file-manager.message-link-copied"));
-      break;
-    case "rename":
-      globalModalContent.value = "rename";
-      globalModalShow.value = true;
-      break;
-    case "delete":
-      globalModalContent.value = "delete";
-      globalModalShow.value = true;
-      break;
-    case "details":
-      globalModalContent.value = "details";
-      globalModalShow.value = true;
-      break;
-    case "download":
-      globalModalContent.value = "download";
-      globalModalShow.value = true;
-      break;
-    default:
-      break;
-  }
-  showDropdown.value = false;
-}
 
 /*
  *
  * Modal
  *
  */
-const { globalModalShow, globalModalContent, globalModalData } = storeToRefs(
-  useModalStore(),
-);
-watch(checkedItems, (newValue) => {
-  globalModalData.value = newValue;
-});
+// if 'done' action is triggered, refresh the table
 useModalStore().$onAction(({ after }) => {
   after((result) => {
     result === "done" ? query() : null;
@@ -398,16 +316,13 @@ useModalStore().$onAction(({ after }) => {
         v-model:checked-row-keys="checkedKeys"
       />
     </n-space>
-    <n-dropdown
-      placement="bottom-start"
-      trigger="manual"
-      :x="dropdownX"
-      :y="dropdownY"
-      :options="options"
-      :show="showDropdown"
-      @clickoutside="showDropdown = false"
-      @select="dropdownSelect"
-      row-class-name="data-table-row"
+    <file-menu
+      :data="checkedItems"
+      v-model:show="showDropdown"
+      :position="{
+        x: dropdownX,
+        y: dropdownY,
+      }"
     />
   </div>
 </template>

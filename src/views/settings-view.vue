@@ -35,7 +35,10 @@ function clearData() {
 <template>
   <n-form>
     <!-- language -->
-    <n-form-item :label="t('settings.label-language')">
+    <n-form-item>
+      <template #label>
+        {{ t("settings.label-language") }}
+      </template>
       <n-radio-group v-model:value="settings.language" name="radiogroup">
         <n-space>
           <n-radio key="auto" value="auto">
@@ -54,7 +57,10 @@ function clearData() {
       </n-radio-group>
     </n-form-item>
     <!-- data type -->
-    <n-form-item :label="t('settings.label-data-type')">
+    <n-form-item>
+      <template #label>
+        {{ t("settings.label-data-type") }}
+      </template>
       <n-radio-group v-model:value="settings.dataType">
         <n-space>
           <n-radio
@@ -68,9 +74,21 @@ function clearData() {
       </n-radio-group>
     </n-form-item>
     <!-- export-backup -->
-    <n-form-item :label="t('settings.label-export-backup')">
+    <n-form-item>
+      <template #label>
+        {{ t("settings.label-export-backup") }}
+      </template>
       <n-checkbox v-model:checked="settings.exportBackup">
         {{ t("settings.text-export-backup") }}
+      </n-checkbox>
+    </n-form-item>
+    <!-- show update details button -->
+    <n-form-item>
+      <template #label>
+        {{ t("settings.label-show-update-details") }}
+      </template>
+      <n-checkbox v-model:checked="settings.showUpdateDetails">
+        {{ t("settings.text-show-update-details") }}
       </n-checkbox>
     </n-form-item>
     <!-- restore defaults -->

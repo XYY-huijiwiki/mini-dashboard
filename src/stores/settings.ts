@@ -3,14 +3,14 @@ import { useLocalStorage } from "@vueuse/core";
 import { type Ref, ref } from "vue";
 import { cloneDeep } from "lodash-es";
 
-export const useSettingsStore = defineStore("settings", () => {
-  type Settings = {
-    language: "auto" | string;
-    dataType: "xlsx" | "json";
-    exportBackup: boolean;
-    showUpdateDetails: boolean;
-  };
+interface Settings {
+  language: "auto" | string;
+  dataType: "xlsx" | "json";
+  exportBackup: boolean;
+  showUpdateDetails: boolean;
+}
 
+export const useSettingsStore = defineStore("settings", () => {
   // define default settings
   const defaultSettings: Settings = {
     language: "auto",
@@ -21,11 +21,13 @@ export const useSettingsStore = defineStore("settings", () => {
   // init settings from localStorage or use default settings
   const settings: Ref<Settings> = useLocalStorage(
     "miniDashboardSettings",
-    defaultSettings,
+    defaultSettings
   );
   // if any subitem of settings is undefined, use default settings
   for (const key in defaultSettings) {
+    // @ts-ignore
     if (settings.value[key] === undefined) {
+      // @ts-ignore
       settings.value[key] = defaultSettings[key];
     }
   }

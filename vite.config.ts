@@ -33,7 +33,7 @@ export default defineConfig(({ command }) => {
     },
     base:
       command === "build"
-        ? "https://cdn.jsdelivr.net/gh/XYY-huijiwiki/mini-dashboard@dist/"
+        ? "https://polite-tree-0c356a700.4.azurestaticapps.net/"
         : "/",
   };
 });

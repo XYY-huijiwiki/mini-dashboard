@@ -12,9 +12,9 @@ import encodePNG from "png-chunks-encode";
 import { fileTypeFromBuffer } from "file-type";
 import { onBeforeRouteLeave } from "vue-router";
 import generateFileData from "@/utils/generateFileData";
-// import { Buffer } from "buffer";
+import { Buffer } from "buffer";
 
-// window.Buffer = Buffer;
+window.Buffer = Buffer;
 
 const { t } = useI18n();
 

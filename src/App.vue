@@ -68,3 +68,9 @@ let { globalLoading } = storeToRefs(useSettingsStore());
     <global-modal />
   </n-config-provider>
 </template>
+
+<style>
+header#firstHeading {
+  display: none;
+}
+</style>

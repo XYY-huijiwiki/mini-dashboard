@@ -4,7 +4,6 @@ import router from "@/router/index";
 import { createI18n } from "vue-i18n";
 import { createPinia } from "pinia";
 import { userLang, langPacks } from "@/stores/locales";
-import "@/styles/main.css";
 
 (async () => {
   // i18n

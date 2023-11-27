@@ -66,7 +66,6 @@ let rowProps = (rowData: RetrievedDataItem) => {
   return {
     onContextmenu: async (e: MouseEvent) => {
       e.preventDefault();
-      showDropdown.value = false;
       // if this row is unchecked, cancel other checked rows and check this row
       if (!checkedKeys.value.includes(rowData.file.name)) {
         checkedKeys.value = [rowData.file.name];
@@ -75,6 +74,29 @@ let rowProps = (rowData: RetrievedDataItem) => {
       dropdownX.value = e.clientX;
       dropdownY.value = e.clientY;
       showDropdown.value = true;
+    },
+    onclick: async (e: MouseEvent) => {
+      let triggerClassList = (e.target as HTMLElement).classList;
+      if (e.button !== 0) {
+        // do nothing if click event is not triggered by left button
+        return;
+      } else if (triggerClassList.contains("n-checkbox-box__border")) {
+        // do nothing if target is div.n-checkbox-box__border
+        // this is to prevent bubble from checkbox
+        return;
+      } else if (triggerClassList.contains("n-data-table-td--selection")) {
+        // if target is td.n-data-table-td--selection, toggle checkbox
+        if (checkedKeys.value.includes(rowData.file.name)) {
+          checkedKeys.value = checkedKeys.value.filter(
+            (item) => item !== rowData.file.name,
+          );
+        } else {
+          checkedKeys.value = [...checkedKeys.value, rowData.file.name];
+        }
+      } else {
+        // else, single select this row
+        checkedKeys.value = [rowData.file.name];
+      }
     },
   };
 };
@@ -157,6 +179,11 @@ let columns: Ref<DataTableColumns<RetrievedDataItem>> = ref([
   {
     type: "selection",
     key: "selection",
+    render: (rowData: RetrievedDataItem) => {
+      return h(NText, () => rowData.file.name);
+      // equivalent to HTML
+      //    <n-text>{{ rowData.file.name }}</n-text>
+    },
   },
   {
     title: t("file-manager.label-file-name"),
@@ -167,13 +194,16 @@ let columns: Ref<DataTableColumns<RetrievedDataItem>> = ref([
         RouterLink,
         {
           to: "/preview/" + rowData.file.name,
+          onclick: (e: MouseEvent) => e.stopPropagation(),
         },
         () => h(NA, () => rowData.file.name),
       );
       // equivalent to HTML
-      //    <router-link to="/preview/{{ rowData.file.name }}">
+      //  <n-ellipsis>
+      //    <router-link :to="`/preview/${rowData.file.name}`">
       //      <n-a>{{ rowData.file.name }}</n-a>
       //    </router-link>
+      //  </n-ellipsis>
     },
   },
   {
@@ -215,6 +245,15 @@ let columns: Ref<DataTableColumns<RetrievedDataItem>> = ref([
     },
   },
 ]);
+onMounted(async () => {
+  await query();
+});
+
+/*
+ *
+ * Pagination
+ *
+ */
 let pagination = ref({
   itemCount: undefined,
   pageCount: undefined,
@@ -222,9 +261,7 @@ let pagination = ref({
   showSizePicker: true,
   pageSizes: [10, 20, 50],
   pageSize: 10,
-});
-onMounted(async () => {
-  await query();
+  pageSlot: window.innerWidth < 768 ? 5 : 9,
 });
 
 /*

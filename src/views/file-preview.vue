@@ -14,6 +14,12 @@
             controlsList="nodownload"
           ></audio>
         </template>
+        <!-- flash preview -->
+        <template
+          v-else-if="data.file.type === 'application/x-shockwave-flash'"
+        >
+          <div id="flash-container" class="embed-responsive img-rounded"></div>
+        </template>
         <!-- video preview -->
         <video
           v-if="data.file.type.startsWith('video/')"
@@ -166,20 +172,39 @@ onMounted(async () => {
   }
   src.value = fileSrc;
 
+  // load flash player (for flash only)
+  if (data.value.file.type === "application/x-shockwave-flash") {
+    window.RufflePlayer = window.RufflePlayer || {};
+    await new Promise((resolve) => {
+      let script = document.createElement("script");
+      script.src = "https://unpkg.com/@ruffle-rs/ruffle";
+      script.onload = resolve;
+      document.head.appendChild(script);
+    });
+    let ruffle = await window.RufflePlayer.newest();
+    let player = await ruffle.createPlayer();
+    player.className = "embed-responsive-item"; // implicitly responsive
+    let container = document.getElementById("flash-container");
+    if (container) {
+      container.appendChild(player);
+      player.load(src.value);
+    }
+  }
+
   // file info display
   let mediaLength = data.value.mediaInfo?.track.filter(
-    (i) => i["@type"] === "General",
+    (i) => i["@type"] === "General"
   )[0].Duration;
   let mediaBitrate = data.value.mediaInfo?.track.filter(
-    (i) => i["@type"] === "General",
+    (i) => i["@type"] === "General"
   )[0].OverallBitRate;
   fileInfo.value = {
     "file-type": data.value.file.type,
     "video-frame-width": data.value.mediaInfo?.track.filter(
-      (i) => i["@type"] === "Video",
+      (i) => i["@type"] === "Video"
     )[0]?.Width,
     "video-frame-height": data.value.mediaInfo?.track.filter(
-      (i) => i["@type"] === "Video",
+      (i) => i["@type"] === "Video"
     )[0]?.Height,
     "media-length": mediaLength
       ? dayjs.duration(mediaLength, "second").format("HH:mm:ss")

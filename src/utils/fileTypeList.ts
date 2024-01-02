@@ -16,7 +16,7 @@ const fileTypeList: FileTypeList = {
   },
   video: {
     name: "视频",
-    ext: ["mp4", "webm"],
+    ext: ["mp4", "webm", "swf"],
   },
   model: {
     name: "模型",

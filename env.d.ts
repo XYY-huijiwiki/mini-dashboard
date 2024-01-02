@@ -110,4 +110,8 @@ declare global {
     pause: () => void;
     resume: () => void;
   };
+
+  interface Window {
+    RufflePlayer: any;
+  }
 }

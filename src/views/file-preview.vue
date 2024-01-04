@@ -193,18 +193,18 @@ onMounted(async () => {
 
   // file info display
   let mediaLength = data.value.mediaInfo?.track.filter(
-    (i) => i["@type"] === "General"
+    (i) => i["@type"] === "General",
   )[0].Duration;
   let mediaBitrate = data.value.mediaInfo?.track.filter(
-    (i) => i["@type"] === "General"
+    (i) => i["@type"] === "General",
   )[0].OverallBitRate;
   fileInfo.value = {
     "file-type": data.value.file.type,
     "video-frame-width": data.value.mediaInfo?.track.filter(
-      (i) => i["@type"] === "Video"
+      (i) => i["@type"] === "Video",
     )[0]?.Width,
     "video-frame-height": data.value.mediaInfo?.track.filter(
-      (i) => i["@type"] === "Video"
+      (i) => i["@type"] === "Video",
     )[0]?.Height,
     "media-length": mediaLength
       ? dayjs.duration(mediaLength, "second").format("HH:mm:ss")

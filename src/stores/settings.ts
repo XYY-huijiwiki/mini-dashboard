@@ -21,7 +21,7 @@ export const useSettingsStore = defineStore("settings", () => {
   // init settings from localStorage or use default settings
   const settings: Ref<Settings> = useLocalStorage(
     "miniDashboardSettings",
-    defaultSettings
+    defaultSettings,
   );
   // if any subitem of settings is undefined, use default settings
   for (const key in defaultSettings) {

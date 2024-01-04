@@ -244,13 +244,13 @@ async function checkDiff() {
       readOnly: true,
       automaticLayout: true,
       theme: "vs-dark",
-      onlyShowAccessibleDiffViewer: true,
-      // hideUnchangedRegions: {
-      //   // contextLineCount: 2,
-      //   enabled: true,
-      //   // minimumLineCount: 1,
-      //   revealLineCount: 1,
-      // },
+      wordWrap: "on",
+      unicodeHighlight: {
+        ambiguousCharacters: false, // avoid highlight Chinese punctuation
+      },
+      hideUnchangedRegions: {
+        enabled: true,
+      },
     },
   );
   diffEditor.setModel({

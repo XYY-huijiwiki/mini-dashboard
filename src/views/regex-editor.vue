@@ -78,6 +78,9 @@
         >
           preview
         </n-button>
+      </n-input-group>
+      <n-input-group>
+        <n-input v-model:value="summary" placeholder="summary" />
         <n-button
           :disabled="!pages[currentPageNum] || checkTab === undefined"
           @click="debounce(savePage, 200)()"
@@ -214,7 +217,8 @@ function getNewCode(orgCode: string): string {
       console.log(new RegExp(element.search, "g").test(newCode));
       newCode = newCode.replace(
         new RegExp(element.search, "g"),
-        element.replace,
+        // JSON.parse to process special characters like \n
+        JSON.parse('"' + element.replace + '"'),
       );
     } catch (error) {
       console.log(error);
@@ -241,7 +245,6 @@ async function checkDiff() {
   diffEditor = monaco.editor.createDiffEditor(
     document.getElementById("diff-container") as HTMLDivElement,
     {
-      readOnly: true,
       automaticLayout: true,
       theme: "vs-dark",
       wordWrap: "on",
@@ -260,7 +263,7 @@ async function checkDiff() {
 }
 async function getPreview() {
   checkTab.value = "preview";
-  let newCode = getNewCode(orgCode.value);
+  let newCode = diffEditor.getModifiedEditor().getValue();
   let formData = new FormData();
   formData.append("wikitext", newCode);
   formData.append("body_only", "true");
@@ -279,14 +282,24 @@ async function getPreview() {
   let res = await response.text();
   html.value = res;
 }
+let summary: Ref<string | undefined> = ref();
 async function savePage() {
+  if (!summary.value) {
+    $dialog.error({
+      title: "summary-empty",
+      content: "summary-empty",
+      positiveText: t("general.btn-confirm"),
+      autoFocus: false,
+    });
+    return;
+  }
   globalLoading.value = true;
   try {
-    let newCode = getNewCode(orgCode.value);
+    let newCode = diffEditor.getModifiedEditor().getValue();
     let response = await editPage({
       title: pages.value[currentPageNum.value],
       text: newCode,
-      summary: "regex-editor",
+      summary: summary.value,
     });
     if (dev) console.log(response);
   } catch (e) {

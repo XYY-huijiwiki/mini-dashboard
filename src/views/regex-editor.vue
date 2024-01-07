@@ -218,7 +218,7 @@ function getNewCode(orgCode: string): string {
       newCode = newCode.replace(
         new RegExp(element.search, "g"),
         // JSON.parse to process special characters like \n
-        JSON.parse('"' + element.replace + '"'),
+        JSON.parse('"' + element.replace.replace(/"/g, '\\"') + '"'),
       );
     } catch (error) {
       console.log(error);

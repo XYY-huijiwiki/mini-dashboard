@@ -1,8 +1,6 @@
 <template>
   <div>
     <n-space vertical>
-      <bot-alert />
-
       <n-grid cols="2">
         <n-grid-item>
           <n-statistic :label="t('data-importer.label-file-name')">
@@ -37,15 +35,12 @@
           :default-upload="false"
         >
           <n-upload-trigger #="{ handleClick }" abstract>
-            <n-button :disabled="!isBot || importing" @click="handleClick">
+            <n-button :disabled="importing" @click="handleClick">
               {{ t("data-importer.label-select-file") }}
             </n-button>
           </n-upload-trigger>
         </n-upload>
-        <n-button
-          :disabled="!isBot || !fileList[0] || count !== 0"
-          @click="importData()"
-        >
+        <n-button :disabled="!fileList[0] || count !== 0" @click="importData()">
           {{ t("data-importer.btn-import") }}
         </n-button>
       </n-input-group>
@@ -64,6 +59,7 @@ import { isArray } from "lodash-es";
 import { type CartoonData } from "@/utils/dataDownloader";
 import { useI18n } from "vue-i18n";
 import { onBeforeRouteLeave } from "vue-router";
+import { editPage } from "@/utils/mwApi";
 
 // router guard to prevent leaving page when importing
 onBeforeRouteLeave(() => {
@@ -84,7 +80,7 @@ const { t } = useI18n();
 // define dev env
 let dev = import.meta.env.DEV;
 
-let { settings, isBot } = storeToRefs(useSettingsStore());
+let { settings } = storeToRefs(useSettingsStore());
 let fileList: Ref<UploadFileInfo[]> = ref([]);
 let importing = ref(false);
 let dataInfo = ref({
@@ -183,8 +179,7 @@ async function importData() {
       console.log(newDataItem);
     }
     try {
-      let res = await new mw.Api().postWithToken("csrf", {
-        action: "edit",
+      let res = await editPage({
         title: _id,
         text,
         summary: "【批量更新剧集信息】" + summary.value,

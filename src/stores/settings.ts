@@ -21,7 +21,7 @@ export const useSettingsStore = defineStore("settings", () => {
   // init settings from localStorage or use default settings
   const settings: Ref<Settings> = useLocalStorage(
     "miniDashboardSettings",
-    defaultSettings,
+    defaultSettings
   );
   // if any subitem of settings is undefined, use default settings
   for (const key in defaultSettings) {
@@ -35,16 +35,9 @@ export const useSettingsStore = defineStore("settings", () => {
   function resetSettings() {
     settings.value = cloneDeep(defaultSettings);
   }
-  const isBot: Ref<boolean | null> = ref(null);
-  CHP.then(() => {
-    // wait huiji wiki api loaded
-    mw.user.getGroups((groupList: string[]) => {
-      isBot.value = groupList.includes("bot");
-    });
-  });
 
   // global state
   const globalLoading = ref(false);
 
-  return { settings, isBot, resetSettings, globalLoading };
+  return { settings, resetSettings, globalLoading };
 });

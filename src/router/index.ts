@@ -14,6 +14,7 @@ const DataExporter = () => import("@/views/data-exporter.vue");
 const RegexEditor = () => import("@/views/regex-editor.vue");
 const HelpDocs = () => import("@/views/help-docs.vue");
 const DestroyAndRescue = () => import("@/views/destroy-and-rescue.vue");
+const RenamePages = () => import("@/views/rename-pages.vue");
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -70,6 +71,11 @@ const routes: Array<RouteRecordRaw> = [
     path: "/search-and-rescue",
     name: "search-and-rescue",
     component: DestroyAndRescue,
+  },
+  {
+    path: "/rename-pages",
+    name: "rename-pages",
+    component: RenamePages,
   },
 ];
 

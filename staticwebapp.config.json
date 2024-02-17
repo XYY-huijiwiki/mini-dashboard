@@ -1,5 +1,5 @@
 {
-    "globalHeaders": {
-      "Access-Control-Allow-Origin": "https://xyy.huijiwiki.com"
-    }
+  "globalHeaders": {
+    "Access-Control-Allow-Origin": "https://xyy.huijiwiki.com"
   }
+}

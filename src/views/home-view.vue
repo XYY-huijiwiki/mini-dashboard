@@ -100,6 +100,9 @@
       <router-link to="/regex-editor">
         <n-button>regex editor</n-button>
       </router-link>
+      <router-link to="/rename-pages">
+        <n-button>rename-pages</n-button>
+      </router-link>
     </n-space>
   </div>
 </template>

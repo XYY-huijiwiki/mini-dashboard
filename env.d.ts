@@ -51,6 +51,8 @@ declare global {
     user: any;
   };
 
+  declare const InPageEdit: undefined | any;
+
   declare const CHP: Promise<void>;
   declare module "three";
   declare module "three/addons/loaders/GLTFLoader.js";

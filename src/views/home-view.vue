@@ -103,6 +103,9 @@
       <router-link to="/rename-pages">
         <n-button>rename-pages</n-button>
       </router-link>
+      <router-link to="/check-revisions">
+        <n-button>check-revisions</n-button>
+      </router-link>
     </n-space>
   </div>
 </template>

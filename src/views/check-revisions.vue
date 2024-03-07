@@ -21,7 +21,8 @@
           {{ revision.comment }}
         </template>
         <template #footer>
-          {{ dayjs(revision.timestamp).format('YYYY-MM-DD HH:mm:ss') }} by {{ revision.user }}
+          {{ dayjs(revision.timestamp).format("YYYY-MM-DD HH:mm:ss") }} by
+          {{ revision.user }}
         </template>
       </n-timeline-item>
     </n-timeline>
@@ -81,14 +82,14 @@ async function loadRevisions() {
   let fetchParams = {
     action: "query",
     list: "allrevisions",
-    arvlimit: "50",
+    arvlimit: "500",
     format: "json",
     arvprop: "ids|timestamp|flags|comment|user|tags",
   };
   arvContinue.value &&
     (fetchParams = { ...fetchParams, ...{ arvcontinue: arvContinue.value } });
   let response = await fetch(
-    `/api.php?${new URLSearchParams(fetchParams).toString()}`
+    `/api.php?${new URLSearchParams(fetchParams).toString()}`,
   );
   let data: ArvResponse = await response.json();
   console.log(data);

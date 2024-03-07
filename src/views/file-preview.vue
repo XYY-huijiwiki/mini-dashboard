@@ -24,7 +24,14 @@
         <video
           v-if="data.file.type.startsWith('video/')"
           :src="src"
-          style="border-radius: 4px; object-fit: cover; width: 100%"
+          style="
+            border-radius: 4px;
+            max-width: 100%;
+            max-height: 100vh;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+          "
           :controls="showControls"
           controlsList="nodownload"
         ></video>

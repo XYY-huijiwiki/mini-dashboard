@@ -3,26 +3,26 @@
     <loading-view v-if="status === 'loading'" />
     <template v-else-if="status === 'ready'">
       <n-spin :show="showSpin">
-        <!-- audio/midi preview -->
-        <n-result v-if="data.file.type === 'audio/midi'" title="No Preview" />
         <!-- audio preview (except midi) -->
-        <template v-else-if="data.file.type.startsWith('audio/')">
-          <audio
-            :src="src"
-            controls
-            style="display: block; width: 100%; color-scheme: dark"
-            controlsList="nodownload"
-          ></audio>
-        </template>
+        <audio
+          v-if="
+            data.file.type.startsWith('audio/') &&
+            data.file.type !== 'audio/midi'
+          "
+          :src="src"
+          controls
+          style="display: block; width: 100%; color-scheme: dark"
+          controlsList="nodownload"
+        ></audio>
         <!-- flash preview -->
-        <template
+        <div
           v-else-if="data.file.type === 'application/x-shockwave-flash'"
-        >
-          <div id="flash-container" class="embed-responsive img-rounded"></div>
-        </template>
+          id="flash-container"
+          class="embed-responsive img-rounded"
+        ></div>
         <!-- video preview -->
         <video
-          v-if="data.file.type.startsWith('video/')"
+          v-else-if="data.file.type.startsWith('video/')"
           :src="src"
           style="
             border-radius: 4px;
@@ -36,7 +36,7 @@
           controlsList="nodownload"
         ></video>
         <!-- model preview -->
-        <n-space vertical v-if="data.file.type.startsWith('model/')">
+        <n-space vertical v-else-if="data.file.type.startsWith('model/')">
           <div class="embed-responsive">
             <model-viewer
               autoplay
@@ -225,18 +225,18 @@ onMounted(async () => {
 
   // file info display
   let mediaLength = data.value.mediaInfo?.track.filter(
-    (i) => i["@type"] === "General",
+    (i) => i["@type"] === "General"
   )[0].Duration;
   let mediaBitrate = data.value.mediaInfo?.track.filter(
-    (i) => i["@type"] === "General",
+    (i) => i["@type"] === "General"
   )[0].OverallBitRate;
   fileInfo.value = {
     "file-type": data.value.file.type,
     "video-frame-width": data.value.mediaInfo?.track.filter(
-      (i) => i["@type"] === "Video",
+      (i) => i["@type"] === "Video"
     )[0]?.Width,
     "video-frame-height": data.value.mediaInfo?.track.filter(
-      (i) => i["@type"] === "Video",
+      (i) => i["@type"] === "Video"
     )[0]?.Height,
     "media-length": mediaLength
       ? dayjs.duration(mediaLength, "second").format("HH:mm:ss")

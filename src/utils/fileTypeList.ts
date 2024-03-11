@@ -22,6 +22,10 @@ const fileTypeList: FileTypeList = {
     name: "模型",
     ext: ["glb"],
   },
+  other: {
+    name: "其他",
+    ext: ["ssf"],
+  },
 };
 
 export default fileTypeList;

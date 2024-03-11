@@ -39,7 +39,7 @@
     "text-destroy-and-rescue-title": "Zerstören und Retten",
     "text-destroy-and-rescue-description": "Seiten in Stapeln löschen oder wiederherstellen."
   },
-  "preview": {
+  "file-preview": {
     "title": "Vorschau",
     "label-file-type": "Typ",
     "label-file-name": "Name",
@@ -50,7 +50,8 @@
     "label-media-length": "Länge",
     "label-audio-bitrate": "Bitrate",
     "label-file-source": "Dateiquelle",
-    "label-file-license": "Dateilizenz"
+    "label-file-license": "Dateilizenz",
+    "no-preview": "Für diese Datei scheint es keine Vorschau zu geben, die wir Ihnen zeigen können."
   },
   "file-manager": {
     "title": "Dateimanager",

@@ -1,12 +1,11 @@
 <script lang="ts" setup>
 import { darkTheme } from "naive-ui";
-import { ref } from "vue";
 import { useLocalesStore } from "@/stores/locales";
 import { useSettingsStore } from "@/stores/settings";
 import { storeToRefs } from "pinia";
 import { useI18n } from "vue-i18n";
 
-let dev = ref(import.meta.env.DEV);
+let dev = import.meta.env.DEV;
 
 let { t } = useI18n();
 

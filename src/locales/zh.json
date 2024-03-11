@@ -38,7 +38,7 @@
     "text-destroy-and-rescue-title": "经典爆破与搜索救援",
     "text-destroy-and-rescue-description": "批量删除或恢复页面。"
   },
-  "preview": {
+  "file-preview": {
     "title": "预览",
     "label-file-type": "类型",
     "label-file-name": "名称",
@@ -49,7 +49,8 @@
     "label-media-length": "时长",
     "label-audio-bitrate": "比特率",
     "label-file-source": "文件来源",
-    "label-file-license": "文件许可"
+    "label-file-license": "文件许可",
+    "no-preview": "嗯… 看起来此文件没有可向你显示的预览。"
   },
   "file-manager": {
     "title": "文件管理",

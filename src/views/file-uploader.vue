@@ -9,12 +9,9 @@ import { getPage, editPage, uploadFile } from "@/utils/mwApi/index";
 import fileTypeList from "@/utils/fileTypeList";
 import { useI18n } from "vue-i18n";
 import encodePNG from "png-chunks-encode";
-import { fileTypeFromBuffer } from "file-type";
 import { onBeforeRouteLeave } from "vue-router";
 import generateFileData from "@/utils/generateFileData";
-import { Buffer } from "buffer";
-
-window.Buffer = Buffer;
+import checkFileExt from "@/utils/checkFileExt";
 
 const { t } = useI18n();
 
@@ -149,21 +146,14 @@ async function uploader() {
     }
 
     // check file type
-    let fileBuffer = await file.file.arrayBuffer();
-    let fileUint8Array = new Uint8Array(fileBuffer);
-    let fileExt = file.file.name.split(".").pop();
-    let fileType = await fileTypeFromBuffer(
-      Buffer.from(fileUint8Array.slice(0, 128)),
-    );
-    if (!fileType || !fileExt) {
-      $message.error(`文件 ${file.file.name} 类型未知`);
-      file.status = "error";
-      continue;
-    } else if (fileType.ext !== fileExt) {
+    let fileExt = file.file.name.split(".").pop() || "";
+    let fileExtCheck = await checkFileExt(file.file);
+    if (!fileExtCheck) {
       $message.error(`文件 ${file.file.name} 后缀名与文件类型不匹配`);
       file.status = "error";
       continue;
-    } else if (!fileExtList.value.includes(fileExt)) {
+    }
+    if (!fileExtList.value.includes(fileExt)) {
       $message.error(`文件 ${file.file.name} 类型已被禁止上传`);
       file.status = "error";
       continue;
@@ -171,6 +161,7 @@ async function uploader() {
     file.percentage = 33; // progress bar 33%
 
     // repack file
+    let fileUint8Array = new Uint8Array(await file.file.arrayBuffer());
     let pngBuffer = encodePNG([
       { name: "IHDR", data: new Uint8Array([0]) },
       { name: "IXYY", data: fileUint8Array },

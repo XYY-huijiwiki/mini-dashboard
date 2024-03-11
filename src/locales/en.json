@@ -38,7 +38,7 @@
     "text-destroy-and-rescue-title": "Destroy and Rescue",
     "text-destroy-and-rescue-description": "Delete or restore pages in batches."
   },
-  "preview": {
+  "file-preview": {
     "title": "Preview",
     "label-file-type": "Type",
     "label-file-name": "Name",
@@ -49,7 +49,8 @@
     "label-media-length": "Length",
     "label-audio-bitrate": "Bitrate",
     "label-file-source": "File Source",
-    "label-file-license": "File License"
+    "label-file-license": "File License",
+    "no-preview": "Hmm… looks like this file doesn't have a preview we can show you."
   },
   "file-manager": {
     "title": "File Manager",

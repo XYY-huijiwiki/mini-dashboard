@@ -68,12 +68,33 @@
             </n-radio-group>
           </n-space>
         </n-space>
+        <!-- others preview -->
+        <n-result
+          v-else
+          :title="fileName"
+          :description="t('file-preview.no-preview')"
+        >
+          <template #icon>
+            <material-symbol :size="80">draft</material-symbol>
+          </template>
+          <template #footer>
+            <n-button
+              type="primary"
+              @click="
+                (globalModalContent = `download`),
+                  (globalModalData = [retrievedDataItem]),
+                  (globalModalShow = true)
+              "
+              >{{ t("file-manager.dropdown-option-download") }}</n-button
+            >
+          </template>
+        </n-result>
       </n-spin>
       <n-divider />
       <n-space vertical>
         <n-alert type="info">
           <template #header>
-            {{ t("preview.label-file-source") }}
+            {{ t("file-preview.label-file-source") }}
           </template>
           <template #default>
             {{ data.wiki.fileSource }}
@@ -81,7 +102,7 @@
         </n-alert>
         <n-alert type="info">
           <template #header>
-            {{ t("preview.label-file-license") }}
+            {{ t("file-preview.label-file-license") }}
           </template>
           <template #default>
             {{ data.wiki.fileLicense }}
@@ -93,7 +114,7 @@
       <n-grid x-gap="8" y-gap="16" cols="1 400:2 600:3">
         <template v-for="key in Object.keys(fileInfo)">
           <n-gi v-if="fileInfo[key] !== undefined" :key="key">
-            <n-statistic :label="t('preview.label-' + key)">
+            <n-statistic :label="t('file-preview.label-' + key)">
               <template #default>
                 {{ fileInfo[key] }}
               </template>
@@ -133,16 +154,19 @@ import { getObjectURL } from "@/utils/getObjectURL";
 import { storeToRefs } from "pinia";
 import { useLocalesStore } from "@/stores/locales";
 import { NButton } from "naive-ui";
+import { useModalStore } from "@/stores/modal";
 
 const { langCode } = storeToRefs(useLocalesStore());
 
 const { t } = useI18n();
+let retrievedDataItem: Ref<RetrievedDataItem>;
 
 // configure dayjs
 dayjs.extend(duration);
 
 // use route
 const route = useRoute();
+const fileName = route.params.fileName;
 let status: Ref<"loading" | "ready" | "error"> = ref("loading");
 let src: Ref<string> = ref("");
 let showControls: Ref<boolean> = ref(false);
@@ -154,9 +178,10 @@ let animation: Ref<string>;
 let fileInfo: Ref<Record<string, string | number | undefined>> = ref({});
 
 onMounted(async () => {
-  let json = await getPage(`Data:${route.params.fileName}.json`);
+  let json = await getPage(`Data:${fileName}.json`);
   if (json) {
     data = ref(JSON.parse(json.content));
+    retrievedDataItem = ref(data.value);
     status.value = "ready";
   } else {
     status.value = "error";
@@ -172,7 +197,7 @@ onMounted(async () => {
   }
 
   // load file
-  let fileSrc = await getObjectURL([route.params.fileName.toString()]);
+  let fileSrc = await getObjectURL([fileName.toString()]);
   if (!fileSrc) {
     status.value = "error";
     return;
@@ -235,4 +260,8 @@ onMounted(async () => {
 
 // other operations
 let showFileMenu: Ref<boolean> = ref(false);
+
+// import global modal store
+const { globalModalShow, globalModalContent, globalModalData } =
+  storeToRefs(useModalStore());
 </script>

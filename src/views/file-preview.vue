@@ -56,17 +56,6 @@
               "
             ></model-viewer>
           </div>
-          <n-space v-if="data.model?.animations">
-            <n-radio-group v-model:value="animation">
-              <n-radio
-                v-for="anim in data.model.animations"
-                :value="anim"
-                :key="anim"
-              >
-                {{ anim }}
-              </n-radio>
-            </n-radio-group>
-          </n-space>
         </n-space>
         <!-- others preview -->
         <n-result
@@ -156,6 +145,9 @@ import { useLocalesStore } from "@/stores/locales";
 import { NButton } from "naive-ui";
 import { useModalStore } from "@/stores/modal";
 
+// config dev env
+let dev = import.meta.env.DEV;
+
 const { langCode } = storeToRefs(useLocalesStore());
 
 const { t } = useI18n();
@@ -182,6 +174,7 @@ onMounted(async () => {
   if (json) {
     data = ref(JSON.parse(json.content));
     retrievedDataItem = ref(data.value);
+    dev && console.log(retrievedDataItem.value);
     status.value = "ready";
   } else {
     status.value = "error";
@@ -225,18 +218,18 @@ onMounted(async () => {
 
   // file info display
   let mediaLength = data.value.mediaInfo?.track.filter(
-    (i) => i["@type"] === "General"
+    (i) => i["@type"] === "General",
   )[0].Duration;
   let mediaBitrate = data.value.mediaInfo?.track.filter(
-    (i) => i["@type"] === "General"
+    (i) => i["@type"] === "General",
   )[0].OverallBitRate;
   fileInfo.value = {
     "file-type": data.value.file.type,
     "video-frame-width": data.value.mediaInfo?.track.filter(
-      (i) => i["@type"] === "Video"
+      (i) => i["@type"] === "Video",
     )[0]?.Width,
     "video-frame-height": data.value.mediaInfo?.track.filter(
-      (i) => i["@type"] === "Video"
+      (i) => i["@type"] === "Video",
     )[0]?.Height,
     "media-length": mediaLength
       ? dayjs.duration(mediaLength, "second").format("HH:mm:ss")

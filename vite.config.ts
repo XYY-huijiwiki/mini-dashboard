@@ -1,6 +1,7 @@
 import { fileURLToPath, URL } from "node:url";
 
 import { defineConfig } from "vite";
+import basicSsl from "@vitejs/plugin-basic-ssl";
 import vue from "@vitejs/plugin-vue";
 
 import Components from "unplugin-vue-components/vite";
@@ -20,6 +21,7 @@ export default defineConfig(({ command }) => {
       Components({
         resolvers: [NaiveUiResolver()],
       }),
+      basicSsl(),
     ],
     resolve: {
       alias: {
@@ -30,6 +32,9 @@ export default defineConfig(({ command }) => {
     build: {
       manifest: true,
       minify: "terser",
+    },
+    server: {
+      host: true,
     },
     base:
       command === "build"

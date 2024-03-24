@@ -106,9 +106,6 @@
       <router-link to="/check-revisions">
         <n-button>check-revisions</n-button>
       </router-link>
-      <router-link to="/3d-test">
-        <n-button>3d-test</n-button>
-      </router-link>
     </n-space>
   </div>
 </template>

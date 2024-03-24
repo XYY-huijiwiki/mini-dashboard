@@ -15,7 +15,7 @@
     "node": ">=20"
   },
   "dependencies": {
-    "@anmiles/sleep": "^4.0.1",
+    "@anmiles/sleep": "^2.0.0",
     "@google/model-viewer": "^3.3.0",
     "@vueuse/core": "^10.3.0",
     "buffer": "^6.0.3",
@@ -30,7 +30,8 @@
     "pinia": "^2.1.7",
     "png-chunks-encode": "^1.0.0",
     "png-chunks-extract": "^1.0.0",
-    "vue": "^3.4.21",
+    "three": "^0.157.0",
+    "vue": "^3.2.45",
     "vue-i18n": "^9.4.1",
     "vue-router": "^4.2.4",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.0/xlsx-0.20.0.tgz"

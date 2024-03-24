@@ -16,7 +16,6 @@ const HelpDocs = () => import("@/views/help-docs.vue");
 const DestroyAndRescue = () => import("@/views/destroy-and-rescue.vue");
 const RenamePages = () => import("@/views/rename-pages.vue");
 const CheckRevisions = () => import("@/views/check-revisions.vue");
-const threeTest = () => import("@/views/3d-test.vue");
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -83,11 +82,6 @@ const routes: Array<RouteRecordRaw> = [
     path: "/check-revisions",
     name: "check-revisions",
     component: CheckRevisions,
-  },
-  {
-    path: "/3d-test",
-    name: "3d-test",
-    component: threeTest,
   },
 ];
 

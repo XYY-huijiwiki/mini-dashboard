@@ -36,7 +36,7 @@
           controlsList="nodownload"
         ></video>
         <!-- model preview -->
-        <n-space vertical v-else-if="data.file.type.startsWith('model/')">
+        <!-- <n-space vertical v-else-if="data.file.type.startsWith('model/')">
           <div class="embed-responsive">
             <model-viewer
               autoplay
@@ -63,6 +63,35 @@
                 :value="anim"
                 :key="anim"
               >
+                {{ anim }}
+              </n-radio>
+            </n-radio-group>
+          </n-space>
+        </n-space> -->
+        <n-space vertical v-else-if="data.file.type.startsWith('model/')">
+          <div class="embed-responsive">
+            <model-viewer
+              ref="modelViewer"
+              autoplay
+              :animation-name="animation"
+              src="https://raw.githubusercontent.com/XYY-huijiwiki/3d-assets/main/v1.glb"
+              camera-controls
+              shadow-intensity="1"
+              touch-action="pan-y"
+              style="
+                border-radius: 4px;
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+              "
+            ></model-viewer>
+          </div>
+          <n-space v-if="animations">
+            <n-radio-group v-model:value="animation">
+              <n-radio v-for="anim in animations" :value="anim" :key="anim">
                 {{ anim }}
               </n-radio>
             </n-radio-group>
@@ -140,7 +169,7 @@
 
 <script setup lang="ts">
 import { getPage } from "@/utils/mwApi/index";
-import { onMounted } from "vue";
+import { onMounted, watchEffect } from "vue";
 import { useRoute } from "vue-router";
 import { ref, type Ref } from "vue";
 import loadingView from "@/views/loading-view.vue";
@@ -155,6 +184,16 @@ import { storeToRefs } from "pinia";
 import { useLocalesStore } from "@/stores/locales";
 import { NButton } from "naive-ui";
 import { useModalStore } from "@/stores/modal";
+import { type ModelViewerElement } from "@google/model-viewer";
+
+let modelViewer: Ref<ModelViewerElement | null> = ref(null);
+let animations: Ref<string[]> = ref([]);
+const unwatchModelViewer = watchEffect(() => {
+  if (modelViewer.value && modelViewer.value.loaded) {
+    animations.value = modelViewer.value.availableAnimations
+    unwatchModelViewer();
+  }
+});
 
 const { langCode } = storeToRefs(useLocalesStore());
 

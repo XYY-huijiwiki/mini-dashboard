@@ -9,6 +9,5 @@
     "https://xyy-huijiwiki.github.io/mini-dashboard/" +
     data["index.html"]["file"];
   // 导入模块
-  // eslint-disable-next-line no-undef
-  mw.loader.load(moduleUrl);
+  import(moduleUrl);
 })();

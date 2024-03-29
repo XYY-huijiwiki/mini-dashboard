@@ -38,7 +38,7 @@ export default defineConfig(({ command }) => {
     },
     base:
       command === "build"
-        ? "https://polite-tree-0c356a700.4.azurestaticapps.net/"
+        ? "https://xyy-huijiwiki.github.io/mini-dashboard/"
         : "/",
   };
 });

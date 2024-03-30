@@ -115,5 +115,6 @@ declare global {
 
   interface Window {
     RufflePlayer: any;
+    dev: string | false;
   }
 }

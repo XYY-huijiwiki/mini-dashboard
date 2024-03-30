@@ -8,7 +8,15 @@
 
 在羊羊本科的对应页面为[Project:迷你控制中心](https://xyy.huijiwiki.com/wiki/Project:迷你控制中心)。
 
-## 测试
+## 开发测试
+
+要求：
+- Node.js 版本：20.0.0+
+- 浏览器插件：[篡改猴](https://www.tampermonkey.net)
+- 篡改猴脚本：[Dev-Toggle-for-GitHub-Code](https://github.com/XYY-huijiwiki/Dev-Toggle-for-GitHub-Code)
+
+> [!NOTE]
+> 结束测试后记得关闭篡改猴脚本，否则默认js将无法加载。
 
 输入以下命令，启动测试。
 

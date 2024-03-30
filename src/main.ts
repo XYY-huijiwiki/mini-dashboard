@@ -29,13 +29,3 @@ import { userLang, langPacks } from "@/stores/locales";
   app.use(pinia);
   app.mount("#mini-dashboard");
 })();
-
-// if not in dev mode, try to load dev
-if (import.meta.env.PROD) {
-  const src = `https://localhost:5173/src/main.ts`;
-  const script = document.createElement("script");
-  script.src = src;
-  script.type = "module";
-  script.crossOrigin = "anonymous";
-  document.body.appendChild(script);
-}

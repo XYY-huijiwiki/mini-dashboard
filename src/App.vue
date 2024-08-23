@@ -1,21 +1,23 @@
 <script lang="ts" setup>
-import { darkTheme } from "naive-ui";
+import { darkTheme, useOsTheme } from "naive-ui";
 import { useLocalesStore } from "@/stores/locales";
 import { useSettingsStore } from "@/stores/settings";
 import { storeToRefs } from "pinia";
 import { useI18n } from "vue-i18n";
+import { computed } from "vue";
 
 let dev = import.meta.env.DEV;
 
 let { t } = useI18n();
 
+let theme = computed(() => (useOsTheme().value === "dark" ? darkTheme : null));
 let { langPackNaiveUI } = storeToRefs(useLocalesStore());
 let { globalLoading } = storeToRefs(useSettingsStore());
 </script>
 
 <template>
   <n-config-provider
-    :theme="darkTheme"
+    :theme="theme"
     :locale="langPackNaiveUI.locale"
     :dateLocale="langPackNaiveUI.dateLocale"
   >

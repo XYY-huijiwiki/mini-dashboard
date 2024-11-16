@@ -8,6 +8,8 @@ interface Settings {
   dataType: "xlsx" | "json";
   exportBackup: boolean;
   showUpdateDetails: boolean;
+  devMode: boolean;
+  githubToken: string;
 }
 
 export const useSettingsStore = defineStore("settings", () => {
@@ -17,18 +19,18 @@ export const useSettingsStore = defineStore("settings", () => {
     dataType: "xlsx",
     exportBackup: false,
     showUpdateDetails: false,
+    devMode: false,
+    githubToken: "",
   };
   // init settings from localStorage or use default settings
   const settings: Ref<Settings> = useLocalStorage(
     "miniDashboardSettings",
-    defaultSettings,
+    defaultSettings
   );
   // if any subitem of settings is undefined, use default settings
   for (const key in defaultSettings) {
-    // @ts-ignore
-    if (settings.value[key] === undefined) {
-      // @ts-ignore
-      settings.value[key] = defaultSettings[key];
+    if ((settings.value as any)[key] === undefined) {
+      (settings.value as any)[key] = defaultSettings[key as keyof Settings];
     }
   }
   // function of reset settings

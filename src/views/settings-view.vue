@@ -45,7 +45,7 @@ function clearData() {
             {{
               t("settings.text-auto-language", [
                 new Intl.DisplayNames([langCode], { type: "language" }).of(
-                  userLang,
+                  userLang
                 ),
               ])
             }}
@@ -60,6 +60,7 @@ function clearData() {
     <n-form-item>
       <template #label>
         {{ t("settings.label-data-type") }}
+        <info-label :content="t('settings.data-type-info')" />
       </template>
       <n-radio-group v-model:value="settings.dataType">
         <n-space>
@@ -77,6 +78,7 @@ function clearData() {
     <n-form-item>
       <template #label>
         {{ t("settings.label-export-backup") }}
+        <info-label :content="t('settings.export-backup-info')" />
       </template>
       <n-checkbox v-model:checked="settings.exportBackup">
         {{ t("settings.text-export-backup") }}
@@ -89,6 +91,24 @@ function clearData() {
       </template>
       <n-checkbox v-model:checked="settings.showUpdateDetails">
         {{ t("settings.text-show-update-details") }}
+      </n-checkbox>
+    </n-form-item>
+    <!-- github token -->
+    <n-form-item>
+      <template #label>
+        {{ t("settings.label-github-token") }}
+        <info-label :content="t('settings.github-token-info')" />
+      </template>
+      <n-input v-model:value="settings.githubToken" clearable type="text" />
+    </n-form-item>
+    <!-- dev mode -->
+    <n-form-item>
+      <template #label>
+        {{ t("settings.label-dev-mode") }}
+        <info-label :content="t('settings.dev-mode-info')" />
+      </template>
+      <n-checkbox v-model:checked="settings.devMode">
+        {{ t("settings.text-dev-mode") }}
       </n-checkbox>
     </n-form-item>
     <!-- restore defaults -->

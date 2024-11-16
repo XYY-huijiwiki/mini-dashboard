@@ -6,26 +6,31 @@ import { createPinia } from "pinia";
 import { userLang, langPacks } from "@/stores/locales";
 
 (async () => {
+  // get settings object
+  const settings = JSON.parse(
+    localStorage.getItem("miniDashboardSettings") || "{}"
+  );
+
   // dev mode (true for dev and false for prod)
-  const userDevModeOption: Boolean = JSON.parse(
-    localStorage.getItem("miniDashboardSettings") || `{"devMode":false}`
-  ).devMode;
+  const userDevModeOption: Boolean = settings.devMode || false;
   const currentCodeDevMode: Boolean = import.meta.env.DEV;
   if (userDevModeOption !== currentCodeDevMode) {
-    // if user dev mode is on but current code dev mode is off, show warning
     if (userDevModeOption) {
+      // if user dev mode is on but current code dev mode is off, show warning and a button to turn off dev mode
+      // @ts-ignore
+      import("http://localhost:5173/src/main.ts");
+      const settings = JSON.parse(
+        localStorage.getItem("miniDashboardSettings") || "{}"
+      );
       const turnOffDevMode = function () {
-        localStorage.setItem(
-          "miniDashboardSettings",
-          JSON.stringify(
-            JSON.parse(localStorage.getItem("miniDashboardSettings") || "{}")
-          )
-        );
+        settings.devMode = false;
+        localStorage.setItem("miniDashboardSettings", JSON.stringify(settings));
         location.reload();
       };
-      const devModeWarningHTML = `Waiting dev server... <a onclick="(${turnOffDevMode.toString()})()">Click Here</a> to turn off dev mode.`;
+      const devModeWarningHTML = `Waiting dev server... <a href='#' onclick='(${turnOffDevMode.toString()})()'>Click Here</a> to turn off dev mode.`;
       document.querySelector("#mini-dashboard")!.innerHTML = devModeWarningHTML;
     } else {
+      // if user dev mode is off but current code dev mode is on, show warning in console
       console.warn(
         "[Mini Dashboard]User dev mode is off. Turn on dev mode on settings to load dev server."
       );

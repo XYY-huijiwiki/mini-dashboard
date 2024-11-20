@@ -8,8 +8,8 @@ interface Settings {
   dataType: "xlsx" | "json";
   exportBackup: boolean;
   showUpdateDetails: boolean;
-  devMode?: boolean;
-  githubToken?: string;
+  devMode: boolean;
+  githubToken: string;
 }
 
 export const useSettingsStore = defineStore("settings", () => {

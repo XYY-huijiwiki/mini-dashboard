@@ -4,84 +4,73 @@ import {
   type RouteRecordRaw,
 } from "vue-router";
 
-const FilePreview = () => import("@/views/file-preview.vue");
-const HomeView = () => import("@/views/home-view.vue");
-const SettingsView = () => import("@/views/settings-view.vue");
-const FileUploader = () => import("@/views/file-uploader.vue");
-const FileManager = () => import("@/views/file-manager.vue");
-const DataImporter = () => import("@/views/data-importer.vue");
-const DataExporter = () => import("@/views/data-exporter.vue");
-const RegexEditor = () => import("@/views/regex-editor.vue");
-const HelpDocs = () => import("@/views/help-docs.vue");
-const DestroyAndRescue = () => import("@/views/destroy-and-rescue.vue");
-const RenamePages = () => import("@/views/rename-pages.vue");
-const CheckRevisions = () => import("@/views/check-revisions.vue");
+const views = import.meta.glob("@/views/*.vue");
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
     name: "home",
-    component: HomeView,
+    component: views["/src/views/home-view.vue"],
   },
   {
     path: "/preview/:fileName",
     name: "filePreview",
-    component: FilePreview,
+    component: views["/src/views/file-preview.vue"],
   },
   {
     path: "/settings",
     name: "settings",
-    component: SettingsView,
+    component: views["/src/views/settings-view.vue"],
   },
   {
     path: "/file-uploader",
     name: "file-uploader",
-    component: FileUploader,
+    component: views["/src/views/file-uploader.vue"],
   },
   {
     path: "/file-manager",
     name: "file-manager",
-    component: FileManager,
+    component: views["/src/views/file-manager.vue"],
   },
   {
     path: "/data-importer",
     name: "data-importer",
-    component: DataImporter,
+    component: views["/src/views/data-importer.vue"],
   },
   {
     path: "/data-exporter",
     name: "data-exporter",
-    component: DataExporter,
+    component: views["/src/views/data-exporter.vue"],
   },
   {
     path: "/regex-editor",
     name: "regex-editor",
-    component: RegexEditor,
+    component: views["/src/views/regex-editor.vue"],
   },
   {
     path: "/help-docs/:title",
     name: "help-docs",
-    component: HelpDocs,
+    component: views["/src/views/help-docs.vue"],
   },
   {
     path: "/search-and-destroy",
     name: "search-and-destroy",
-    component: DestroyAndRescue,
+    component: views["/src/views/destroy-and-rescue.vue"],
   },
   {
     path: "/search-and-rescue",
     name: "search-and-rescue",
-    component: DestroyAndRescue,
+    component: views["/src/views/destroy-and-rescue.vue"],
   },
   {
     path: "/rename-pages",
     name: "rename-pages",
-    component: RenamePages,
+    component: views["/src/views/rename-pages.vue"],
   },
   {
     path: "/check-revisions",
     name: "check-revisions",
-    component: CheckRevisions,
+    component: views["/src/views/check-revisions.vue"],
   },
 ];
 

@@ -19,16 +19,33 @@ import { userLang, langPacks } from "@/stores/locales";
       // if user dev mode is on but current code dev mode is off, show warning and a button to turn off dev mode
       // @ts-ignore
       import("http://localhost:5173/src/main.ts");
-      const settings = JSON.parse(
-        localStorage.getItem("miniDashboardSettings") || "{}"
-      );
       const turnOffDevMode = function () {
+        const settings = JSON.parse(
+          localStorage.getItem("miniDashboardSettings") || "{}"
+        );
         settings.devMode = false;
         localStorage.setItem("miniDashboardSettings", JSON.stringify(settings));
         location.reload();
       };
-      const devModeWarningHTML = `Waiting dev server... <a href='#' onclick='(${turnOffDevMode.toString()})()'>Click Here</a> to turn off dev mode.`;
-      document.querySelector("#mini-dashboard")!.innerHTML = devModeWarningHTML;
+
+      const devModeWarningContainer = document.createElement("div");
+      devModeWarningContainer.textContent =
+        "Waiting dev server... refresh the page if you wait too long. ";
+
+      const turnOffLink = document.createElement("a");
+      turnOffLink.href = "#";
+      turnOffLink.textContent = "Click Here";
+      turnOffLink.onclick = turnOffDevMode;
+
+      devModeWarningContainer.appendChild(turnOffLink);
+      devModeWarningContainer.appendChild(
+        document.createTextNode(" to turn off dev mode.")
+      );
+
+      document.querySelector("#mini-dashboard")!.innerHTML = "";
+      document
+        .querySelector("#mini-dashboard")!
+        .appendChild(devModeWarningContainer);
     } else {
       // if user dev mode is off but current code dev mode is on, show warning in console
       console.warn(

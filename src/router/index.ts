@@ -23,11 +23,6 @@ const routes: Array<RouteRecordRaw> = [
     component: views["/src/views/settings-view.vue"],
   },
   {
-    path: "/file-uploader",
-    name: "file-uploader",
-    component: views["/src/views/file-uploader.vue"],
-  },
-  {
     path: "/file-manager",
     name: "file-manager",
     component: views["/src/views/file-manager.vue"],
@@ -71,6 +66,11 @@ const routes: Array<RouteRecordRaw> = [
     path: "/check-revisions",
     name: "check-revisions",
     component: views["/src/views/check-revisions.vue"],
+  },
+  {
+    path: "/github-files",
+    name: "github-files",
+    component: views["/src/views/github-files.vue"],
   },
 ];
 

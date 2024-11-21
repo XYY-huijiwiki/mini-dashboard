@@ -19,11 +19,6 @@
       </template>
       <template #action>
         <n-space>
-          <router-link :to="{ name: 'file-uploader' }">
-            <n-button size="small">
-              {{ t("file-uploader.title") }}
-            </n-button>
-          </router-link>
           <router-link :to="{ name: 'file-manager' }">
             <n-button size="small">
               {{ t("file-manager.title") }}
@@ -105,6 +100,9 @@
       </router-link>
       <router-link to="/check-revisions">
         <n-button>check-revisions</n-button>
+      </router-link>
+      <router-link to="/github-files">
+        <n-button>github-files</n-button>
       </router-link>
     </n-space>
   </div>

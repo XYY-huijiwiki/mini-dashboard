@@ -8,7 +8,7 @@ import { userLang, langPacks } from "@/stores/locales";
 (async () => {
   // get settings object
   const settings = JSON.parse(
-    localStorage.getItem("miniDashboardSettings") || "{}"
+    localStorage.getItem("miniDashboardSettings") || "{}",
   );
 
   // dev mode (true for dev and false for prod)
@@ -21,7 +21,7 @@ import { userLang, langPacks } from "@/stores/locales";
       import("http://localhost:5173/src/main.ts");
       const turnOffDevMode = function () {
         const settings = JSON.parse(
-          localStorage.getItem("miniDashboardSettings") || "{}"
+          localStorage.getItem("miniDashboardSettings") || "{}",
         );
         settings.devMode = false;
         localStorage.setItem("miniDashboardSettings", JSON.stringify(settings));
@@ -39,7 +39,7 @@ import { userLang, langPacks } from "@/stores/locales";
 
       devModeWarningContainer.appendChild(turnOffLink);
       devModeWarningContainer.appendChild(
-        document.createTextNode(" to turn off dev mode.")
+        document.createTextNode(" to turn off dev mode."),
       );
 
       document.querySelector("#mini-dashboard")!.innerHTML = "";
@@ -49,15 +49,20 @@ import { userLang, langPacks } from "@/stores/locales";
     } else {
       // if user dev mode is off but current code dev mode is on, show warning in console
       console.warn(
-        "[Mini Dashboard]User dev mode is off. Turn on dev mode on settings to load dev server."
+        "[Mini Dashboard]User dev mode is off. Turn on dev mode on settings to load dev server.",
       );
     }
     return;
   }
 
+  // remover outer .mw-parser-output to prenvent style conflict
+  document
+    .querySelector(".mw-parser-output:has(> #mini-dashboard)")
+    ?.classList.remove("mw-parser-output");
+
   // i18n
   const language = JSON.parse(
-    localStorage.getItem("miniDashboardSettings") || `{"language":"auto"}`
+    localStorage.getItem("miniDashboardSettings") || `{"language":"auto"}`,
   ).language;
   const locale = language === "auto" ? userLang : language;
   const i18n = createI18n({

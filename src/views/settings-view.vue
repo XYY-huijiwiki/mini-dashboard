@@ -45,7 +45,7 @@ function clearData() {
             {{
               t("settings.text-auto-language", [
                 new Intl.DisplayNames([langCode], { type: "language" }).of(
-                  userLang
+                  userLang,
                 ),
               ])
             }}

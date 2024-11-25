@@ -39,6 +39,36 @@
     "text-destroy-and-rescue-title": "Zerstören und Retten",
     "text-destroy-and-rescue-description": "Seiten in Stapeln löschen oder wiederherstellen."
   },
+  "github-files": {
+    "title": "GitHub-Dateien",
+    "table-header-name": "Name",
+    "table-header-updated-at": "Geändert",
+    "table-header-uploader": "Geändert von",
+    "table-header-size": "Größe",
+    "table-header-status": "Status",
+    "label-file-type": "Typ",
+    "label-file-size": "Größe",
+    "btn-search": "Suchen",
+    "btn-sort": "Sortieren",
+    "btn-sort-type": "Typ",
+    "btn-sort-name": "Name",
+    "btn-sort-size": "Größe",
+    "btn-sort-updated-at": "Geändert",
+    "btn-sort-uploader": "Geändert von",
+    "btn-sort-asc": "Aufsteigend",
+    "btn-sort-desc": "Absteigend",
+    "btn-viewer-details-list": "Liste",
+    "btn-viewer-compact-list": "Kompaktliste",
+    "btn-viewer-tiles-list": "Kacheln",
+    "btn-details": "Details",
+    "btn-preview": "Vorschau",
+    "btn-link-copy": "Link kopieren",
+    "msg-link-copied": "Link kopiert",
+    "btn-delete": "Löschen",
+    "btn-download": "Herunterladen",
+    "btn-rename": "Umbenennen",
+    "msg-number-files-selected": "{0} Dateien ausgewählt"
+  },
   "file-preview": {
     "title": "Vorschau",
     "label-file-type": "Typ",
@@ -81,14 +111,6 @@
     "success-file-page-renamed": "Dateiseite umbenannt",
     "error-file-page-rename-failed": "Dateiseite konnte nicht umbenannt werden",
     "message-update-details-confirm": "Möchten Sie die Details von {0} wirklich aktualisieren?"
-  },
-  "file-uploader": {
-    "title": "Datei hochladen",
-    "label-file-source": "Dateiquelle",
-    "label-file-license": "Dateilizenz",
-    "btn-upload": "Hochladen",
-    "label-drop-files-here": "Klicken oder ziehen Sie Dateien in diesen Bereich, um sie hochzuladen",
-    "label-supported-file-types": "Derzeit unterstützte Dateitypen zum Hochladen: {0}"
   },
   "data-exporter": {
     "title": "Datenexporter",

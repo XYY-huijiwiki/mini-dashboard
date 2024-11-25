@@ -38,6 +38,36 @@
     "text-destroy-and-rescue-title": "Destroy and Rescue",
     "text-destroy-and-rescue-description": "Delete or restore pages in batches."
   },
+  "github-files": {
+    "title": "GitHub Files",
+    "table-header-name": "Name",
+    "table-header-updated-at": "Updated At",
+    "table-header-uploader": "Uploader",
+    "table-header-size": "Size",
+    "table-header-status": "Status",
+    "label-file-type": "Type",
+    "label-file-size": "Size",
+    "btn-search": "Search",
+    "btn-sort": "Sort",
+    "btn-sort-type": "Type",
+    "btn-sort-name": "Name",
+    "btn-sort-size": "Size",
+    "btn-sort-updated-at": "Updated At",
+    "btn-sort-uploader": "Uploader",
+    "btn-sort-asc": "Ascending",
+    "btn-sort-desc": "Descending",
+    "btn-viewer-details-list": "List",
+    "btn-viewer-compact-list": "Compact List",
+    "btn-viewer-tiles-list": "Tiles",
+    "btn-details": "Details",
+    "btn-preview": "Preview",
+    "btn-link-copy": "Copy Link",
+    "msg-link-copied": "Link copied",
+    "btn-delete": "Delete",
+    "btn-download": "Download",
+    "btn-rename": "Rename",
+    "msg-number-files-selected": "{0} files selected"
+  },
   "file-preview": {
     "title": "Preview",
     "label-file-type": "Type",
@@ -80,14 +110,6 @@
     "success-file-page-renamed": "File page renamed",
     "error-file-page-rename-failed": "Failed to rename file page",
     "message-update-details-confirm": "Are you sure you want to update details of {0}?"
-  },
-  "file-uploader": {
-    "title": "File Uploader",
-    "label-file-source": "File Source",
-    "label-file-license": "File License",
-    "btn-upload": "Upload",
-    "label-drop-files-here": "Click or drag files here to upload",
-    "label-supported-file-types": "Supported file types: {0}"
   },
   "data-exporter": {
     "title": "Data Exporter",

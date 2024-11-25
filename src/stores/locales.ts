@@ -92,4 +92,15 @@ const useLocalesStore = defineStore("locales", () => {
   return { langCode, langPackNaiveUI };
 });
 
-export { useLocalesStore, supportedLangs, userLang, langPacks };
+const dayjsLocales = asyncComputed(async () => {
+  switch (userLang) {
+    case "de":
+      return (await import("dayjs/locale/de")).default;
+    case "zh":
+      return (await import("dayjs/locale/zh-cn")).default;
+    default:
+      return null;
+  }
+}, null);
+
+export { useLocalesStore, supportedLangs, userLang, langPacks, dayjsLocales };

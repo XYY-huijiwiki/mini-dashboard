@@ -117,4 +117,42 @@ declare global {
     RufflePlayer: any;
     dev: string | false;
   }
+
+  type WarningType =
+    | "not used"
+    | "wanted"
+    | "no source"
+    | "no license"
+    | "asset broken";
+  interface FileDetail {
+    name: string;
+    type: string | null;
+    size: number;
+    html_url: string;
+    thumb_url: string;
+    download_url: string;
+    desc: string;
+    updated_at: string;
+    uploader: string;
+    uploader_html_url: string;
+    warnings: WarningType[];
+  }
+  interface FileDetailFromGithub {
+    id: number;
+    tag_name: string;
+    html_url: string;
+    body: string;
+    assets_broken: boolean;
+    assets: {
+      id: number;
+      name: string;
+      size: number;
+      browser_download_url: string;
+      updated_at: string;
+      uploader: {
+        login: string;
+        html_url: string;
+      };
+    }[];
+  }
 }

@@ -4,13 +4,17 @@ defineProps({
     type: Number,
     default: 24,
   },
+  verticalAlign: {
+    type: String,
+    default: "sub",
+  },
 });
 </script>
 
 <template>
   <span
     class="material-symbols-outlined"
-    :style="{ 'vertical-align': 'sub', 'font-size': `${size}px` }"
+    :style="{ 'vertical-align': verticalAlign, 'font-size': `${size}px` }"
   >
     <slot></slot>
   </span>

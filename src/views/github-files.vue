@@ -1,5 +1,5 @@
 <template>
-  <n-flex vertical>
+  <n-flex vertical class="h-full">
     <n-card
       :style="{
         backgroundColor: checkedRowKeys.length ? undefined : 'transparent',

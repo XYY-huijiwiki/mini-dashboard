@@ -1,5 +1,10 @@
 <template>
-  <n-card closable @close="fileDetail = undefined" class="w-full h-full">
+  <n-card
+    closable
+    @close="fileDetail = undefined"
+    class="w-full h-full"
+    content-style="height: 0; display: flex; flex-direction: column;"
+  >
     <template #header>
       <n-ellipsis>
         <n-flex>
@@ -15,15 +20,17 @@
       <video
         v-if="fileDetail?.type?.startsWith('video')"
         controls
-        class="w-full h-full"
+        class="w-full h-0 flex-1 object-contain bg-black"
         :poster="'https://ik.imagekit.io/gwa1ycz7gc/' + fileDetail?.thumb_url"
       >
         <source :src="fileDetail?.download_url" :type="fileDetail?.type" />
       </video>
       <!-- image -->
-      <picture v-else-if="fileDetail?.type?.startsWith('image')">
-        <img :src="fileDetail?.download_url" class="w-full h-full" />
-      </picture>
+      <img
+        v-else-if="fileDetail?.type?.startsWith('image')"
+        :src="fileDetail?.download_url"
+        class="w-full h-0 flex-1 object-contain bg-black"
+      />
       <!-- audio -->
       <audio
         v-else-if="fileDetail?.type?.startsWith('audio')"

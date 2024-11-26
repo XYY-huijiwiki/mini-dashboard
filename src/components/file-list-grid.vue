@@ -1,7 +1,6 @@
 <template>
-  <n-card>
+  <n-card class="h-full" content-class="shrink-0 h-0">
     <n-infinite-scroll
-      style="height: calc(100vh - 215.4px)"
       :distance="270"
       @load="count = Math.min(count + 10, data.length)"
     >

@@ -4,7 +4,11 @@ import { useLocalesStore } from "@/stores/locales";
 import { useSettingsStore } from "@/stores/settings";
 import { storeToRefs } from "pinia";
 import { useI18n } from "vue-i18n";
-import { computed } from "vue";
+import { computed, ref } from "vue";
+import { useFullscreen } from "@vueuse/core";
+
+let fullscreenHTML = ref<HTMLElement>();
+const { isFullscreen, toggle } = useFullscreen(fullscreenHTML);
 
 let dev = import.meta.env.DEV;
 
@@ -22,7 +26,7 @@ let { globalLoading } = storeToRefs(useSettingsStore());
     :dateLocale="langPackNaiveUI.dateLocale"
   >
     <n-spin :show="globalLoading">
-      <n-card>
+      <n-card ref="fullscreenHTML" content-class="shrink-0 h-0 max-h-screen">
         <!-- 卡片左上角：返回按钮和标题 -->
         <template #header>
           <n-space align="center" :wrap="false" :wrap-item="false">
@@ -45,9 +49,21 @@ let { globalLoading } = storeToRefs(useSettingsStore());
           </n-space>
         </template>
 
-        <!-- 卡片右上角按钮：设置 -->
-        <template #header-extra v-if="$route.name !== 'settings'">
-          <n-button quaternary circle @click="$router.push('/settings')">
+        <!-- 卡片右上角按钮：全屏、设置 -->
+        <template #header-extra>
+          <n-button quaternary circle @click="toggle">
+            <template #icon>
+              <material-symbol>
+                {{ isFullscreen ? "fullscreen_exit" : "fullscreen" }}
+              </material-symbol>
+            </template>
+          </n-button>
+          <n-button
+            quaternary
+            circle
+            @click="$router.push('/settings')"
+            v-if="$route.name !== 'settings'"
+          >
             <template #icon>
               <material-symbol> settings </material-symbol>
             </template>

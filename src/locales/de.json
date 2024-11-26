@@ -67,7 +67,9 @@
     "btn-delete": "Löschen",
     "btn-download": "Herunterladen",
     "btn-rename": "Umbenennen",
-    "msg-number-files-selected": "{0} Dateien ausgewählt"
+    "msg-number-files-selected": "{0} Dateien ausgewählt",
+    "btn-view-in-github": "In GitHub anzeigen",
+    "no-preview": "Für diese Datei scheint es keine Vorschau zu geben, die wir Ihnen zeigen können."
   },
   "file-preview": {
     "title": "Vorschau",

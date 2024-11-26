@@ -1,5 +1,5 @@
 <template>
-  <material-symbol>
+  <material-symbol :size="size">
     {{ getIconName(fileType) }}
   </material-symbol>
 </template>
@@ -8,7 +8,8 @@
 import materialSymbol from "./material-symbol.vue";
 
 defineProps<{
-  fileType: string | null | undefined;
+  fileType?: string | null;
+  size?: number;
 }>();
 
 const type2iconMapping = {
@@ -22,7 +23,7 @@ const type2iconMapping = {
   code: "",
 };
 
-function getIconName(type: string | undefined | null): String {
+function getIconName(type: string | undefined | null): string {
   type = type?.toString().split("/")[0];
   const supportedFileTypes = Object.keys(type2iconMapping);
   return supportedFileTypes.includes(type || "")

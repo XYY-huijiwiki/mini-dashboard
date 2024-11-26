@@ -66,7 +66,9 @@
     "btn-delete": "删除",
     "btn-download": "下载",
     "btn-rename": "重命名",
-    "msg-number-files-selected": "已选择{0}个文件"
+    "msg-number-files-selected": "已选择{0}个文件",
+    "btn-view-in-github": "在GitHub中查看",
+    "no-preview": "嗯… 看起来此文件没有可向你显示的预览。"
   },
 
   "file-preview": {

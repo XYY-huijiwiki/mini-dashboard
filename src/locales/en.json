@@ -66,7 +66,9 @@
     "btn-delete": "Delete",
     "btn-download": "Download",
     "btn-rename": "Rename",
-    "msg-number-files-selected": "{0} files selected"
+    "msg-number-files-selected": "{0} files selected",
+    "btn-view-in-github": "View in GitHub",
+    "no-preview": "Hmm… looks like this file doesn't have a preview we can show you."
   },
   "file-preview": {
     "title": "Preview",

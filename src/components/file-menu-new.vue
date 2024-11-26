@@ -61,7 +61,7 @@ const options: ComputedRef<DropdownOption[]> = computed(() => [
   {
     label: t("file-manager.dropdown-option-download"),
     icon: () => h(materialSymbol, { size: 20 }, () => "download"),
-    disabled: true,
+    disabled: props.data.length > 1,
     key: "download",
   },
   {
@@ -90,7 +90,7 @@ async function dropdownSelect(key: string | number) {
       break;
     case "link-copy":
       navigator.clipboard.writeText(
-        props.data.map((item) => item.html_url).join("\n"),
+        props.data.map((item) => item.html_url).join("\n")
       );
       $message.success(t("file-manager.message-link-copied"));
       break;
@@ -107,11 +107,12 @@ async function dropdownSelect(key: string | number) {
     case "details":
       emit("detail", props.data[0]);
       break;
-    // case "download":
-    //   globalModalContent.value = "download";
-    //   globalModalData.value = props.data;
-    //   globalModalShow.value = true;
-    //   break;
+    case "download":
+      let a = document.createElement("a");
+      a.href = props.data[0].download_url;
+      a.download = props.data[0].name;
+      a.click();
+      break;
     default:
       break;
   }

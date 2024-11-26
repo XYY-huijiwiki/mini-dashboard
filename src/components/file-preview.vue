@@ -1,46 +1,50 @@
 <template>
-  <n-card closable @close="model = undefined" class="w-full h-full">
+  <n-card closable @close="fileDetail = undefined" class="w-full h-full">
     <template #header>
       <n-ellipsis>
         <n-flex>
           <n-icon>
-            <file-icon :file-type="model?.type" />
+            <file-icon :file-type="fileDetail?.type" />
           </n-icon>
-          <n-text>{{ model?.name }}</n-text>
+          <n-text>{{ fileDetail?.name }}</n-text>
         </n-flex>
       </n-ellipsis>
     </template>
     <template #default>
+      <!-- video -->
       <video
-        v-if="model?.type?.startsWith('video')"
+        v-if="fileDetail?.type?.startsWith('video')"
         controls
         class="w-full h-full"
-        :poster="model?.thumb_url"
+        :poster="'https://ik.imagekit.io/gwa1ycz7gc/' + fileDetail?.thumb_url"
       >
-        <source :src="model?.download_url" :type="model?.type" />
+        <source :src="fileDetail?.download_url" :type="fileDetail?.type" />
       </video>
-      <picture v-else-if="model?.type?.startsWith('image')">
-        <img :src="model?.download_url" class="w-full h-full" />
+      <!-- image -->
+      <picture v-else-if="fileDetail?.type?.startsWith('image')">
+        <img :src="fileDetail?.download_url" class="w-full h-full" />
       </picture>
+      <!-- audio -->
       <audio
-        v-else-if="model?.type?.startsWith('audio')"
+        v-else-if="fileDetail?.type?.startsWith('audio')"
         controls
         class="w-full"
         ref="audioEle"
       >
-        <source :src="model?.download_url" :type="model?.type" />
+        <source :src="fileDetail?.download_url" :type="fileDetail?.type" />
       </audio>
+      <!-- no preview -->
       <n-result
         v-else
-        :title="model?.name"
+        :title="fileDetail?.name"
         :description="t('github-files.no-preview')"
       >
         <template #icon>
           <material-symbol :size="80">unknown_document</material-symbol>
         </template>
         <template #footer>
-          <n-button type="primary" tag="a" :href="model?.download_url">{{
-            t("github-files.dropdown-option-download")
+          <n-button tag="a" :href="fileDetail?.download_url">{{
+            t("github-files.btn-download")
           }}</n-button>
         </template>
       </n-result>
@@ -51,8 +55,8 @@
 <script setup lang="ts">
 import fileIcon from "./file-icon.vue";
 import { useI18n } from "vue-i18n";
-const { t } = useI18n();
-const model = defineModel<FileDetail>();
+let { t } = useI18n();
+let fileDetail = defineModel<FileDetail>();
 </script>
 
 <style scoped></style>

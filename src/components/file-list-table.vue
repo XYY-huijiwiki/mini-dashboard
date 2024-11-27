@@ -20,7 +20,7 @@
     "
     @update-filters="(data: DataTableFilterState) => (filters = data)"
   />
-  <file-menu-new
+  <file-menu
     :data="checkedItems"
     v-model:show="showDropdown"
     @preview="emit('preview')"

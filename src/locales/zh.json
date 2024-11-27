@@ -25,14 +25,10 @@
     "text-export-backup": "导出两份文件，一份用于修改，一份用于备份。",
     "label-source-code": "源代码",
     "btn-github": "GitHub",
-    "btn-xyy-wiki": "羊羊百科",
-    "label-show-update-details": "显示“更新详细信息”按钮",
-    "text-show-update-details": "在文件管理页面显示“更新详细信息”按钮。除非更改了详细信息的结构，否则不需要这么做。"
+    "btn-xyy-wiki": "羊羊百科"
   },
   "home": {
     "title": "迷你控制中心",
-    "text-special-file-title": "特殊文件",
-    "text-special-file-description": "上传、下载、查看、删除或重命名特殊文件。目前支持的格式有：{0}",
     "text-cartoon-data-title": "剧集数据",
     "text-cartoon-data-description": "导出或导入动画剧集数据。",
     "text-destroy-and-rescue-title": "经典爆破与搜索救援",
@@ -68,53 +64,11 @@
     "btn-rename": "重命名",
     "msg-number-files-selected": "已选择{0}个文件",
     "btn-view-in-github": "在GitHub中查看",
-    "no-preview": "嗯… 看起来此文件没有可向你显示的预览。"
+    "msg-no-preview": "嗯… 看起来此文件没有可向你显示的预览。",
+    "label-basic-info": "基本信息",
+    "label-file-desc": "文件描述",
+    "label-file-usage": "文件用途"
   },
-
-  "file-preview": {
-    "title": "预览",
-    "label-file-type": "类型",
-    "label-file-name": "名称",
-    "label-file-size": "大小",
-    "label-video-frame-width": "帧宽度",
-    "label-video-frame-height": "帧高度",
-    "label-video-total-bitrate": "总比特率",
-    "label-media-length": "时长",
-    "label-audio-bitrate": "比特率",
-    "label-file-source": "文件来源",
-    "label-file-license": "文件许可",
-    "no-preview": "嗯… 看起来此文件没有可向你显示的预览。"
-  },
-  "file-manager": {
-    "title": "文件管理",
-    "label-file-name": "文件名",
-    "label-file-type": "文件类型",
-    "label-file-type-audio": "音频",
-    "label-file-type-model": "模型",
-    "label-file-type-video": "视频",
-    "label-file-size": "文件大小",
-    "label-file-upload-time": "上传时间",
-    "btn-search": "搜索",
-    "dropdown-option-preview": "预览",
-    "dropdown-option-link-copy": "复制链接",
-    "dropdown-option-rename": "重命名",
-    "dropdown-option-delete": "删除",
-    "dropdown-option-details": "详细信息",
-    "dropdown-option-download": "下载",
-    "dropdown-option-update-details": "更新详细信息",
-    "message-link-copied": "链接已复制",
-    "message-delete-confirm": "确定要删除{0}吗？请填写删除原因：",
-    "message-download-confirm": "确定要下载{0}吗？（文件大小为{1}）",
-    "message-download-success": "下载成功",
-    "error-same-file-name": "文件名与原文件相同",
-    "error-empty-file-name": "文件名不能为空",
-    "success-data-page-renamed": "数据页面重命名成功",
-    "error-data-page-rename-failed": "数据页面重命名失败",
-    "success-file-page-renamed": "文件页面重命名成功",
-    "error-file-page-rename-failed": "文件页面重命名失败",
-    "message-update-details-confirm": "确定要更新{0}的详细信息吗？"
-  },
-
   "data-exporter": {
     "title": "数据导出",
     "btn-export": "导出"

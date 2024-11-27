@@ -42,7 +42,7 @@
       </n-flex>
     </n-infinite-scroll>
   </n-card>
-  <file-menu-new
+  <file-menu
     :data="checkedItems"
     v-model:show="showDropdown"
     @preview="emit('preview')"

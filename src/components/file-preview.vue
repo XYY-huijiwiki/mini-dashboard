@@ -44,7 +44,7 @@
       <n-result
         v-else
         :title="fileDetail?.name"
-        :description="t('github-files.no-preview')"
+        :description="t('github-files.msg-no-preview')"
       >
         <template #icon>
           <material-symbol :size="80">unknown_document</material-symbol>

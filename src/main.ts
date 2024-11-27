@@ -6,63 +6,35 @@ import { createPinia } from "pinia";
 import { userLang, langPacks } from "@/stores/locales";
 
 (async () => {
-  // get settings object
-  const settings = JSON.parse(
-    localStorage.getItem("miniDashboardSettings") || "{}",
-  );
-
-  // dev mode (true for dev and false for prod)
-  const userDevModeOption: Boolean = settings.devMode || false;
-  const currentCodeDevMode: Boolean = import.meta.env.DEV;
-  if (userDevModeOption !== currentCodeDevMode) {
-    if (userDevModeOption) {
-      // if user dev mode is on but current code dev mode is off, show warning and a button to turn off dev mode
-      // @ts-ignore
-      import("http://localhost:5173/src/main.ts");
-      const turnOffDevMode = function () {
-        const settings = JSON.parse(
-          localStorage.getItem("miniDashboardSettings") || "{}",
-        );
-        settings.devMode = false;
-        localStorage.setItem("miniDashboardSettings", JSON.stringify(settings));
-        location.reload();
-      };
-
-      const devModeWarningContainer = document.createElement("div");
-      devModeWarningContainer.textContent =
-        "Waiting dev server... refresh the page if you wait too long. ";
-
-      const turnOffLink = document.createElement("a");
-      turnOffLink.href = "#";
-      turnOffLink.textContent = "Click Here";
-      turnOffLink.onclick = turnOffDevMode;
-
-      devModeWarningContainer.appendChild(turnOffLink);
-      devModeWarningContainer.appendChild(
-        document.createTextNode(" to turn off dev mode."),
-      );
-
-      document.querySelector("#mini-dashboard")!.innerHTML = "";
-      document
-        .querySelector("#mini-dashboard")!
-        .appendChild(devModeWarningContainer);
-    } else {
-      // if user dev mode is off but current code dev mode is on, show warning in console
-      console.warn(
-        "[Mini Dashboard]User dev mode is off. Turn on dev mode on settings to load dev server.",
-      );
-    }
+  // ===== dev mode =====
+  let dev = import.meta.env.DEV;
+  let devServerUrl = new URL(import.meta.url);
+  let currentUrl = new URL(location.href);
+  // if in prod mode and dev-server-name is set, load dev server
+  if (!dev && currentUrl.searchParams.has("dev-server-name")) {
+    let devServerHostname = currentUrl.searchParams.get("dev-server-name");
+    let devServerPort = currentUrl.searchParams.get("dev-server-port");
+    import(
+      /* @vite-ignore */
+      `${devServerHostname}:${devServerPort}/src/main.ts`
+    );
     return;
   }
+  // if in dev mode and hasn't been redirected yet, redirect to target url
+  if (dev && location.hostname !== "xyy.huijiwiki.com") {
+    let targetUrl = "https://xyy.huijiwiki.com/wiki/Project:迷你控制中心";
+    location.href = `${targetUrl}?dev-server-hostname=${devServerUrl.hostname}&dev-server-port=${devServerUrl.port}`;
+  }
 
+  // ===== styling =====
   // remover outer .mw-parser-output to prenvent style conflict
   document
     .querySelector(".mw-parser-output:has(> #mini-dashboard)")
     ?.classList.remove("mw-parser-output");
 
-  // i18n
+  // ===== i18n =====
   const language = JSON.parse(
-    localStorage.getItem("miniDashboardSettings") || `{"language":"auto"}`,
+    localStorage.getItem("miniDashboardSettings") || `{"language":"auto"}`
   ).language;
   const locale = language === "auto" ? userLang : language;
   const i18n = createI18n({

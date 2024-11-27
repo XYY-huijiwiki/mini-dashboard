@@ -13,19 +13,9 @@ const routes: Array<RouteRecordRaw> = [
     component: views["/src/views/home-view.vue"],
   },
   {
-    path: "/preview/:fileName",
-    name: "filePreview",
-    component: views["/src/views/file-preview.vue"],
-  },
-  {
     path: "/settings",
     name: "settings",
     component: views["/src/views/settings-view.vue"],
-  },
-  {
-    path: "/file-manager",
-    name: "file-manager",
-    component: views["/src/views/file-manager.vue"],
   },
   {
     path: "/data-importer",

@@ -74,7 +74,7 @@
             </template>
           </n-input>
           <n-button @click="searchClick(searchText)" round secondary>
-            {{ t("file-manager.btn-search") }}
+            {{ t("github-files.btn-search") }}
           </n-button>
         </n-input-group>
         <n-flex :wrap="false">

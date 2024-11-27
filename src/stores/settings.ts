@@ -7,9 +7,6 @@ interface Settings {
   language: "auto" | string;
   dataType: "xlsx" | "json";
   exportBackup: boolean;
-  showUpdateDetails: boolean;
-  devMode: boolean;
-  githubToken: string;
 }
 
 export const useSettingsStore = defineStore("settings", () => {
@@ -18,14 +15,11 @@ export const useSettingsStore = defineStore("settings", () => {
     language: "auto",
     dataType: "xlsx",
     exportBackup: false,
-    showUpdateDetails: false,
-    devMode: false,
-    githubToken: "",
   };
   // init settings from localStorage or use default settings
   const settings: Ref<Settings> = useLocalStorage(
     "miniDashboardSettings",
-    defaultSettings,
+    defaultSettings
   );
   // if any subitem of settings is undefined, use default settings
   for (const key in defaultSettings) {

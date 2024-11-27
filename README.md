@@ -22,3 +22,9 @@ npm run dev
 ```
 
 根据提示打开迷你控制中心的页面，在迷你控制中心的设置中开启开发者模式并刷新页面。
+
+## TO DO
+
+- ![alt text](image.png)
+- 重复文件提示
+  ![alt text](image-1.png)

@@ -1,10 +1,8 @@
 <template>
-  <div>
-    <n-spin :show="loading">
-      <error-view v-if="error" />
-      <p v-html="docHTML" v-else></p>
-    </n-spin>
-  </div>
+  <n-spin :show="loading">
+    <error-view v-if="error" />
+    <n-scrollbar v-html="docHTML" v-else></n-scrollbar>
+  </n-spin>
 </template>
 
 <script setup lang="ts">

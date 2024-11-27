@@ -31,12 +31,7 @@ export default defineConfig(({ command }) => {
       manifest: true,
       minify: "terser",
     },
-    server: {
-      host: true,
-    },
-    base:
-      command === "build"
-        ? "https://xyy-huijiwiki.github.io/mini-dashboard/"
-        : "/",
+    server: {},
+    base: "/",
   };
 });

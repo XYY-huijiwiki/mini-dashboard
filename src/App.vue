@@ -73,9 +73,7 @@ let { globalLoading } = storeToRefs(useSettingsStore());
         <!-- 卡片主体部分：路由 -->
         <template #default>
           <router-view v-slot="{ Component }">
-            <keep-alive include="file-manager">
-              <component :is="Component" />
-            </keep-alive>
+            <component :is="Component" />
           </router-view>
         </template>
       </n-card>

@@ -7,9 +7,6 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    DeleteDialog: typeof import('./src/components/delete-dialog.vue')['default']
-    DetailsDialog: typeof import('./src/components/details-dialog.vue')['default']
-    DownloadDialog: typeof import('./src/components/download-dialog.vue')['default']
     FileDetails: typeof import('./src/components/file-details.vue')['default']
     FileIcon: typeof import('./src/components/file-icon.vue')['default']
     FileListGrid: typeof import('./src/components/file-list-grid.vue')['default']
@@ -44,7 +41,6 @@ declare module 'vue' {
     NInputGroup: typeof import('naive-ui')['NInputGroup']
     NInputGroupLabel: typeof import('naive-ui')['NInputGroupLabel']
     NLi: typeof import('naive-ui')['NLi']
-    NLink: typeof import('naive-ui')['NLink']
     NPopover: typeof import('naive-ui')['NPopover']
     NProgress: typeof import('naive-ui')['NProgress']
     NRadio: typeof import('naive-ui')['NRadio']
@@ -64,9 +60,7 @@ declare module 'vue' {
     NUl: typeof import('naive-ui')['NUl']
     NUpload: typeof import('naive-ui')['NUpload']
     NUploadTrigger: typeof import('naive-ui')['NUploadTrigger']
-    RenameDialog: typeof import('./src/components/rename-dialog.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    UpdateDetailsDialog: typeof import('./src/components/update-details-dialog.vue')['default']
   }
 }

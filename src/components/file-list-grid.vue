@@ -1,9 +1,6 @@
 <template>
   <n-card class="h-full" content-class="shrink-0 h-0">
-    <n-infinite-scroll
-      :distance="270"
-      @load="count = Math.min(count + 10, data.length)"
-    >
+    <n-infinite-scroll :distance="270" @load="count = Math.min(count + 10, data.length)">
       <n-flex>
         <div
           class="tile"
@@ -32,12 +29,9 @@
             </n-button>
           </div>
           <div class="date line-clamp-1">
-            {{ dayjs(data[i - 1].updated_at).format("ll") }}
+            {{ dayjs(data[i - 1].updated_at).format('ll') }}
           </div>
-          <n-checkbox
-            class="checkbox"
-            :checked="checkedRowKeys.includes(data[i - 1].name)"
-          />
+          <n-checkbox class="checkbox" :checked="checkedRowKeys.includes(data[i - 1].name)" />
         </div>
       </n-flex>
     </n-infinite-scroll>
@@ -55,95 +49,88 @@
 </template>
 
 <script setup lang="ts">
-import type { DataTableFilterState, DataTableCreateRowKey } from "naive-ui";
-import { computed, nextTick, ref, watch } from "vue";
-import dayjs from "dayjs";
-import { dayjsLocales } from "@/stores/locales";
-import localizedFormat from "dayjs/plugin/localizedFormat";
-dayjs.extend(localizedFormat);
-dayjs.locale(dayjsLocales.value || "en");
-let emit = defineEmits(["preview", "detail"]);
+import type { DataTableFilterState, DataTableCreateRowKey } from 'naive-ui'
+import { computed, nextTick, ref, watch } from 'vue'
+import dayjs from 'dayjs'
+import { dayjsLocales } from '@/stores/locales'
+import localizedFormat from 'dayjs/plugin/localizedFormat'
+dayjs.extend(localizedFormat)
+dayjs.locale(dayjsLocales.value || 'en')
+let emit = defineEmits(['preview', 'detail'])
 let { data: rawData, checkedItems } = defineProps<{
-  data: FileDetail[];
-  checkedItems: FileDetail[];
-}>();
-let checkedRowKeys = defineModel<ReturnType<DataTableCreateRowKey>[]>(
-  "checkedRowKeys",
-  { required: true }
-);
-let sorterKey = defineModel<SorterKey>("sorterKey", {
+  data: FileDetail[]
+  checkedItems: FileDetail[]
+}>()
+let checkedRowKeys = defineModel<ReturnType<DataTableCreateRowKey>[]>('checkedRowKeys', {
   required: true,
-});
-let sorterOrder = defineModel<SorterOrder>("sorterOrder", { required: true });
-type SorterKey = "type" | "name" | "updated_at" | "uploader" | "size";
-type SorterOrder = "ascend" | "descend";
-let filters = defineModel<DataTableFilterState>("filters", { required: true });
+})
+let sorterKey = defineModel<SorterKey>('sorterKey', {
+  required: true,
+})
+let sorterOrder = defineModel<SorterOrder>('sorterOrder', { required: true })
+type SorterKey = 'type' | 'name' | 'updated_at' | 'uploader' | 'size'
+type SorterOrder = 'ascend' | 'descend'
+let filters = defineModel<DataTableFilterState>('filters', { required: true })
 
 let data = computed(() => {
-  let res = rawData;
-  console.log(filters.value.name);
+  let res = rawData
+  console.log(filters.value.name)
   if (filters.value.name) {
     res = res.filter((i) =>
       // @ts-ignore
-      i.name.toLowerCase().includes(filters.value.name.toLowerCase())
-    );
+      i.name.toLowerCase().includes(filters.value.name.toLowerCase()),
+    )
   }
-  if (sorterKey.value === "size") {
+  if (sorterKey.value === 'size') {
     return res.sort((a, b) =>
-      sorterOrder.value === "ascend"
-        ? a["size"] - b["size"]
-        : b["size"] - a["size"]
-    );
+      sorterOrder.value === 'ascend' ? a['size'] - b['size'] : b['size'] - a['size'],
+    )
   } else {
     return res.sort((a, b) =>
-      sorterOrder.value === "ascend"
-        ? ((a[sorterKey.value] || "") as string).localeCompare(
-            (b[sorterKey.value] || "") as string
-          )
-        : ((b[sorterKey.value] || "") as string).localeCompare(
-            (a[sorterKey.value] || "") as string
-          )
-    );
+      sorterOrder.value === 'ascend'
+        ? ((a[sorterKey.value] || '') as string).localeCompare((b[sorterKey.value] || '') as string)
+        : ((b[sorterKey.value] || '') as string).localeCompare(
+            (a[sorterKey.value] || '') as string,
+          ),
+    )
   }
-});
-let count = ref(Math.min(30, data.value.length));
+})
+let count = ref(Math.min(30, data.value.length))
 watch(data, () => {
-  count.value = Math.min(30, data.value.length);
-});
+  count.value = Math.min(30, data.value.length)
+})
 
 // select and context menu
-let showDropdown = ref(false);
-let dropdownX = ref(0);
-let dropdownY = ref(0);
+let showDropdown = ref(false)
+let dropdownX = ref(0)
+let dropdownY = ref(0)
 async function handleTileClick(item: FileDetail, e: MouseEvent) {
-  let triggerClassList = (e.target as HTMLElement).classList;
+  let triggerClassList = (e.target as HTMLElement).classList
   if (e.button !== 0) {
     // do nothing if click event is not triggered by left button
-    return;
-  } else if (triggerClassList.contains("n-checkbox-box__border")) {
+    return
+  } else if (triggerClassList.contains('n-checkbox-box__border')) {
     // if target is .n-checkbox-box__border, toggle checkbox
     if (checkedRowKeys.value.includes(item.name)) {
-      checkedRowKeys.value = checkedRowKeys.value.filter(
-        (i) => i !== item.name
-      );
+      checkedRowKeys.value = checkedRowKeys.value.filter((i) => i !== item.name)
     } else {
-      checkedRowKeys.value = [...checkedRowKeys.value, item.name];
+      checkedRowKeys.value = [...checkedRowKeys.value, item.name]
     }
   } else {
     // else, single select this row
-    checkedRowKeys.value = [item.name];
+    checkedRowKeys.value = [item.name]
   }
 }
 async function handleContextMenu(item: FileDetail, e: MouseEvent) {
-  e.preventDefault();
+  e.preventDefault()
   // if this row is unchecked, cancel other checked rows and check this row
   if (!checkedRowKeys.value.includes(item.name)) {
-    checkedRowKeys.value = [item.name];
+    checkedRowKeys.value = [item.name]
   }
-  await nextTick();
-  dropdownX.value = e.clientX;
-  dropdownY.value = e.clientY;
-  showDropdown.value = true;
+  await nextTick()
+  dropdownX.value = e.clientX
+  dropdownY.value = e.clientY
+  showDropdown.value = true
 }
 </script>
 
@@ -163,7 +150,7 @@ async function handleContextMenu(item: FileDetail, e: MouseEvent) {
     0 0 2px rgba(0, 0, 0, 0.12),
     0 2px 4px rgba(0, 0, 0, 0.14);
 }
-.tile:has(.checkbox[aria-checked="true"]) {
+.tile:has(.checkbox[aria-checked='true']) {
   background-color: rgba(255, 255, 255, 0.2);
   border: 2px solid var(--primary);
 }
@@ -200,7 +187,7 @@ div.thumb {
   margin: 8px;
   visibility: hidden;
 }
-.checkbox[aria-checked="true"] {
+.checkbox[aria-checked='true'] {
   visibility: visible;
 }
 .tile:hover .checkbox {

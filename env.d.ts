@@ -1,5 +1,5 @@
 /// <reference types="vite/client" />
-import type { MediaType } from "mediainfo.js";
+
 import type {
   MessageApi,
   DialogApi,

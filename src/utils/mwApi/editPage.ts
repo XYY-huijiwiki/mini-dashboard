@@ -1,13 +1,13 @@
 interface EditResponse {
   edit: {
-    result: string;
-    pageid: number;
-    title: string;
-    contentmodel: string;
-    oldrevid: number;
-    newrevid: number;
-    newtimestamp: string;
-  };
+    result: string
+    pageid: number
+    title: string
+    contentmodel: string
+    oldrevid: number
+    newrevid: number
+    newtimestamp: string
+  }
 }
 
 /**
@@ -28,42 +28,39 @@ interface EditResponse {
  * @returns {Promise<EditResponse>} A promise that resolves with the edit response.
  */
 async function editPage(editParams: {
-  title: string;
-  pageid?: number;
-  section?: number | "new";
-  sectiontitle?: string;
-  text: string;
-  summary?: string;
-  tags?: string;
-  minor?: boolean;
-  notminor?: boolean;
-  bot?: boolean;
-  createonly?: boolean;
+  title: string
+  pageid?: number
+  section?: number | 'new'
+  sectiontitle?: string
+  text: string
+  summary?: string
+  tags?: string
+  minor?: boolean
+  notminor?: boolean
+  bot?: boolean
+  createonly?: boolean
 }): Promise<boolean> {
   // check if the user is bot when bot is not specified
-  if (
-    editParams.bot === undefined &&
-    mw.config.get("wgUserGroups").includes("bot")
-  ) {
-    editParams.bot = true;
+  if (editParams.bot === undefined && mw.config.get('wgUserGroups').includes('bot')) {
+    editParams.bot = true
   }
   return new Promise((resolve) => {
     new mw.Api()
-      .postWithToken("csrf", {
-        action: "edit",
+      .postWithToken('csrf', {
+        action: 'edit',
         ...editParams,
       })
       .done((data: EditResponse) => {
-        $message.success("编辑成功");
-        console.log(data);
-        resolve(true);
+        $message.success('编辑成功')
+        console.log(data)
+        resolve(true)
       })
       .fail((data: string) => {
-        $message.error(`编辑失败（${data}）`);
-        console.log(data);
-        resolve(false);
-      });
-  });
+        $message.error(`编辑失败（${data}）`)
+        console.log(data)
+        resolve(false)
+      })
+  })
 }
 
-export default editPage;
+export default editPage

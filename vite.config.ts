@@ -1,37 +1,29 @@
-import { fileURLToPath, URL } from "node:url";
+import { fileURLToPath, URL } from 'node:url'
 
-import { defineConfig } from "vite";
-import vue from "@vitejs/plugin-vue";
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import vueDevTools from 'vite-plugin-vue-devtools'
 
-import Components from "unplugin-vue-components/vite";
-import { NaiveUiResolver } from "unplugin-vue-components/resolvers";
+import Components from 'unplugin-vue-components/vite'
+import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
 
 // https://vitejs.dev/config/
-export default defineConfig(({ command }) => {
-  return {
-    plugins: [
-      vue({
-        template: {
-          compilerOptions: {
-            isCustomElement: (tag) => tag === "model-viewer",
-          },
-        },
-      }),
-      Components({
-        resolvers: [NaiveUiResolver()],
-      }),
-    ],
-    resolve: {
-      alias: {
-        "@": fileURLToPath(new URL("./src", import.meta.url)),
-        "node:buffer": "buffer",
-      },
+export default defineConfig({
+  plugins: [
+    vue(),
+    vueDevTools(),
+    Components({
+      resolvers: [NaiveUiResolver()],
+    }),
+  ],
+  resolve: {
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
-    build: {
-      manifest: true,
-      minify: "terser",
-    },
-    server: {},
-    base: "/",
-  };
-});
+  },
+  build: {
+    manifest: true,
+    minify: 'terser',
+  },
+  base: 'https://xyy-huijiwiki.github.io/mini-dashboard/',
+})

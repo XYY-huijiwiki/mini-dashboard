@@ -1,22 +1,22 @@
 <script lang="ts" setup>
-import { darkTheme, useOsTheme } from "naive-ui";
-import { useLocalesStore } from "@/stores/locales";
-import { useSettingsStore } from "@/stores/settings";
-import { storeToRefs } from "pinia";
-import { useI18n } from "vue-i18n";
-import { computed, ref } from "vue";
-import { useFullscreen } from "@vueuse/core";
+import { darkTheme, useOsTheme } from 'naive-ui'
+import { useLocalesStore } from '@/stores/locales'
+import { useSettingsStore } from '@/stores/settings'
+import { storeToRefs } from 'pinia'
+import { useI18n } from 'vue-i18n'
+import { computed, ref } from 'vue'
+import { useFullscreen } from '@vueuse/core'
 
-let fullscreenHTML = ref<HTMLElement>();
-const { isFullscreen, toggle } = useFullscreen(fullscreenHTML);
+let fullscreenHTML = ref<HTMLElement>()
+const { isFullscreen, toggle } = useFullscreen(fullscreenHTML)
 
-let dev = import.meta.env.DEV;
+let dev = import.meta.env.DEV
 
-let { t } = useI18n();
+let { t } = useI18n()
 
-let theme = computed(() => (useOsTheme().value === "dark" ? darkTheme : null));
-let { langPackNaiveUI } = storeToRefs(useLocalesStore());
-let { globalLoading } = storeToRefs(useSettingsStore());
+let theme = computed(() => (useOsTheme().value === 'dark' ? darkTheme : null))
+let { langPackNaiveUI } = storeToRefs(useLocalesStore())
+let { globalLoading } = storeToRefs(useSettingsStore())
 </script>
 
 <template>
@@ -40,11 +40,9 @@ let { globalLoading } = storeToRefs(useSettingsStore());
                 <material-symbol> home </material-symbol>
               </template>
             </n-button>
-            <n-tag v-if="dev">{{ t("dev-tag") }}</n-tag>
+            <n-tag v-if="dev">{{ t('dev-tag') }}</n-tag>
             <n-ellipsis>
-              {{
-                $route.params.fileName || t(`${$route.name?.toString()}.title`)
-              }}
+              {{ $route.params.fileName || t(`${$route.name?.toString()}.title`) }}
             </n-ellipsis>
           </n-space>
         </template>
@@ -54,7 +52,7 @@ let { globalLoading } = storeToRefs(useSettingsStore());
           <n-button quaternary circle @click="toggle">
             <template #icon>
               <material-symbol>
-                {{ isFullscreen ? "fullscreen_exit" : "fullscreen" }}
+                {{ isFullscreen ? 'fullscreen_exit' : 'fullscreen' }}
               </material-symbol>
             </template>
           </n-button>

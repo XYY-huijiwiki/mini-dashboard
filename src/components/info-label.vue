@@ -10,9 +10,9 @@
 </template>
 
 <script setup lang="ts">
-import { Info16Regular } from "@vicons/fluent";
+import { Info16Regular } from '@vicons/fluent'
 
 defineProps({
   content: String,
-});
+})
 </script>

@@ -4,28 +4,28 @@
  */
 interface UndeleteParams {
   /** Title of the page to undelete. */
-  title: string;
+  title: string
 
   /** Reason for restoring. */
-  reason?: string;
+  reason?: string
 
   /** Change tags to apply to the entry in the deletion log. */
-  tags?: string[];
+  tags?: string[]
 
   /** Timestamps of the revisions to undelete. */
-  timestamps?: string[];
+  timestamps?: string[]
 
   /** IDs of the file revisions to restore. */
-  fileids?: number[];
+  fileids?: number[]
 
   /** Undelete all revisions of the associated talk page, if any. */
-  undeletetalk?: boolean;
+  undeletetalk?: boolean
 
   /** Unconditionally add or remove the page from the current user's watchlist. */
-  watchlist?: "nochange" | "preferences" | "unwatch" | "watch";
+  watchlist?: 'nochange' | 'preferences' | 'unwatch' | 'watch'
 
   /** Watchlist expiry timestamp. */
-  watchlistexpiry?: string;
+  watchlistexpiry?: string
 }
 
 /**
@@ -33,37 +33,37 @@ interface UndeleteParams {
  */
 interface UndeleteResponse {
   undelete: {
-    fileversions: number;
-    reason: string;
-    revisions: number;
-    title: string;
-  };
+    fileversions: number
+    reason: string
+    revisions: number
+    title: string
+  }
 }
 
-const isDev = import.meta.env.DEV;
+const isDev = import.meta.env.DEV
 
 async function undeletePage(
   undeleteParams: UndeleteParams,
 ): Promise<{ ok: true; body: UndeleteResponse } | { ok: false; body: string }> {
   return new Promise((resolve) => {
-    isDev ? console.groupCollapsed("undeletePage") : null;
+    isDev ? console.groupCollapsed('undeletePage') : null
     new mw.Api()
-      .postWithToken("csrf", {
-        action: "undelete",
+      .postWithToken('csrf', {
+        action: 'undelete',
         ...undeleteParams,
       })
       .done((data: UndeleteResponse) => {
-        isDev ? console.log(data) : null;
-        resolve({ ok: true, body: data });
+        isDev ? console.log(data) : null
+        resolve({ ok: true, body: data })
       })
       .fail((data: string) => {
-        isDev ? console.log(data) : null;
-        resolve({ ok: false, body: data });
+        isDev ? console.log(data) : null
+        resolve({ ok: false, body: data })
       })
       .always(() => {
-        isDev ? console.groupEnd() : null;
-      });
-  });
+        isDev ? console.groupEnd() : null
+      })
+  })
 }
 
-export default undeletePage;
+export default undeletePage

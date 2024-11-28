@@ -21,7 +21,7 @@
           {{ revision.comment }}
         </template>
         <template #footer>
-          {{ dayjs(revision.timestamp).format("YYYY-MM-DD HH:mm:ss") }} by
+          {{ dayjs(revision.timestamp).format('YYYY-MM-DD HH:mm:ss') }} by
           {{ revision.user }}
         </template>
       </n-timeline-item>
@@ -34,67 +34,65 @@
 /*
  * In this file, "arv-" stands for "all revisions"
  */
-import { ref, onBeforeMount, type Ref } from "vue";
-import dayjs from "dayjs";
-import { useI18n } from "vue-i18n";
+import { ref, onBeforeMount, type Ref } from 'vue'
+import dayjs from 'dayjs'
+import { useI18n } from 'vue-i18n'
 
 // configure i18n
-const { t } = useI18n();
+const { t } = useI18n()
 
 type ArvResponse = {
-  batchcomplete: string;
+  batchcomplete: string
   continue: {
-    arvcontinue: string;
-    continue: string;
-  };
+    arvcontinue: string
+    continue: string
+  }
   query: {
     allrevisions: {
-      ns: number;
-      pageid: number;
-      title: string;
+      ns: number
+      pageid: number
+      title: string
       revisions: {
-        revid: number;
-        parentid: number;
-        user: string;
-        timestamp: string;
-        comment: string;
-        tags?: string[];
-      }[];
-    }[];
-  };
-};
+        revid: number
+        parentid: number
+        user: string
+        timestamp: string
+        comment: string
+        tags?: string[]
+      }[]
+    }[]
+  }
+}
 type ArvData = {
-  ns: number;
-  pageid: number;
-  title: string;
-  revid: number;
-  parentid: number;
-  user: string;
-  timestamp: string;
-  comment: string;
-  tags?: string[];
-}[];
+  ns: number
+  pageid: number
+  title: string
+  revid: number
+  parentid: number
+  user: string
+  timestamp: string
+  comment: string
+  tags?: string[]
+}[]
 
-let arvData: Ref<undefined | ArvData> = ref();
-let arvContinue: Ref<string> = ref("");
+let arvData: Ref<undefined | ArvData> = ref()
+let arvContinue: Ref<string> = ref('')
 async function loadRevisions() {
   // fetch the data
   let fetchParams = {
-    action: "query",
-    list: "allrevisions",
-    arvlimit: "500",
-    format: "json",
-    arvprop: "ids|timestamp|flags|comment|user|tags",
-  };
-  arvContinue.value &&
-    (fetchParams = { ...fetchParams, ...{ arvcontinue: arvContinue.value } });
-  let response = await fetch(
-    `/api.php?${new URLSearchParams(fetchParams).toString()}`,
-  );
-  let data: ArvResponse = await response.json();
-  console.log(data);
+    action: 'query',
+    list: 'allrevisions',
+    arvlimit: '500',
+    format: 'json',
+    arvprop: 'ids|timestamp|flags|comment|user|tags',
+    arvcontinue: '',
+  }
+  arvContinue.value && (fetchParams = { ...fetchParams, arvcontinue: arvContinue.value })
+  let response = await fetch(`/api.php?${new URLSearchParams(fetchParams).toString()}`)
+  let data: ArvResponse = await response.json()
+  console.log(data)
   // process the data
-  let processedData = [];
+  let processedData = []
   for (let page of data.query.allrevisions) {
     for (let rev of page.revisions) {
       processedData.push({
@@ -107,31 +105,31 @@ async function loadRevisions() {
         timestamp: rev.timestamp,
         comment: rev.comment,
         tags: rev.tags,
-      });
+      })
     }
   }
-  arvData.value && (processedData = arvData.value.concat(processedData));
-  processedData.sort((a, b) => (a.revid > b.revid ? -1 : 1));
+  arvData.value && (processedData = arvData.value.concat(processedData))
+  processedData.sort((a, b) => (a.revid > b.revid ? -1 : 1))
   // update the refs
-  arvData.value = processedData;
-  arvContinue.value = data.continue?.arvcontinue;
+  arvData.value = processedData
+  arvContinue.value = data.continue?.arvcontinue
   // log (dev only)
-  import.meta.env.DEV && console.log("arvData", arvData.value);
+  import.meta.env.DEV && console.log('arvData', arvData.value)
 }
 onBeforeMount(async () => {
-  await loadRevisions();
-});
+  await loadRevisions()
+})
 
 function openDiff(revid: number) {
   // if InPageEdit is enabled, open the diff in InPageEdit
-  if (typeof InPageEdit !== "undefined") {
+  if (typeof InPageEdit !== 'undefined') {
     InPageEdit.diff({
       fromrev: revid,
-      torelative: "prev",
-    });
+      torelative: 'prev',
+    })
   } else {
     // otherwise, open the diff in a new tab
-    window.open(`/index.php?diff=${revid}`);
+    window.open(`/index.php?diff=${revid}`)
   }
 }
 </script>

@@ -1,9 +1,9 @@
 interface DeleteResponse {
   delete: {
-    title: string;
-    reason: string;
-    logid: number;
-  };
+    title: string
+    reason: string
+    logid: number
+  }
 }
 
 /**
@@ -14,27 +14,24 @@ interface DeleteResponse {
  * @param {string} editParams.reason - The reason for deleting the page.
  * @returns {Promise<boolean>} A promise that resolves to true if the page was successfully deleted, false otherwise.
  */
-async function deletePage(editParams: {
-  title: string;
-  reason: string;
-}): Promise<boolean> {
+async function deletePage(editParams: { title: string; reason: string }): Promise<boolean> {
   return new Promise((resolve) => {
     new mw.Api()
-      .postWithToken("csrf", {
-        action: "delete",
+      .postWithToken('csrf', {
+        action: 'delete',
         ...editParams,
       })
       .done((data: DeleteResponse) => {
-        $message.success("删除成功");
-        console.log(data);
-        resolve(true);
+        $message.success('删除成功')
+        console.log(data)
+        resolve(true)
       })
       .fail((data: string) => {
-        $message.error(`删除失败（${data}）`);
-        console.log(data);
-        resolve(false);
-      });
-  });
+        $message.error(`删除失败（${data}）`)
+        console.log(data)
+        resolve(false)
+      })
+  })
 }
 
-export default deletePage;
+export default deletePage

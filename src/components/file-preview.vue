@@ -41,17 +41,13 @@
         <source :src="fileDetail?.download_url" :type="fileDetail?.type" />
       </audio>
       <!-- no preview -->
-      <n-result
-        v-else
-        :title="fileDetail?.name"
-        :description="t('github-files.msg-no-preview')"
-      >
+      <n-result v-else :title="fileDetail?.name" :description="t('github-files.msg-no-preview')">
         <template #icon>
           <material-symbol :size="80">unknown_document</material-symbol>
         </template>
         <template #footer>
           <n-button tag="a" :href="fileDetail?.download_url">{{
-            t("github-files.btn-download")
+            t('github-files.btn-download')
           }}</n-button>
         </template>
       </n-result>
@@ -60,10 +56,10 @@
 </template>
 
 <script setup lang="ts">
-import fileIcon from "./file-icon.vue";
-import { useI18n } from "vue-i18n";
-let { t } = useI18n();
-let fileDetail = defineModel<FileDetail>();
+import fileIcon from './file-icon.vue'
+import { useI18n } from 'vue-i18n'
+let { t } = useI18n()
+let fileDetail = defineModel<FileDetail>()
 </script>
 
 <style scoped></style>

@@ -6,9 +6,9 @@ defineProps({
   },
   verticalAlign: {
     type: String,
-    default: "sub",
+    default: 'sub',
   },
-});
+})
 </script>
 
 <template>

@@ -1,8 +1,8 @@
-import { defineStore, storeToRefs } from "pinia";
-import { type Ref, computed, watch } from "vue";
-import { useSettingsStore } from "@/stores/settings";
-import { asyncComputed } from "@vueuse/core";
-import { useI18n } from "vue-i18n";
+import { defineStore, storeToRefs } from 'pinia'
+import { type Ref, computed, watch } from 'vue'
+import { useSettingsStore } from '@/stores/settings'
+import { asyncComputed } from '@vueuse/core'
+import { useI18n } from 'vue-i18n'
 
 /**
  * Creates an object of language packs from the `locales` directory.
@@ -10,69 +10,65 @@ import { useI18n } from "vue-i18n";
  */
 const langPacks = Object.fromEntries(
   Object.entries(
-    import.meta.glob("@/locales/*.json", {
-      import: "default",
+    import.meta.glob('@/locales/*.json', {
+      import: 'default',
     }),
   ).map(([path, langPack]) => {
     // Extract the language code from the file path.
-    const langCode = path.split("/").reverse()[0].replace(".json", "");
-    return [langCode, langPack];
+    const langCode = path.split('/').reverse()[0].replace('.json', '')
+    return [langCode, langPack]
   }),
 ) as {
-  [k: string]: () => Promise<typeof import("@/locales/en.json")>;
-};
+  [k: string]: () => Promise<typeof import('@/locales/en.json')>
+}
 
 /**
  * An array of supported languages from the language packs.
  * @type {string[]}
  */
-const supportedLangs: string[] = Object.keys(langPacks);
+const supportedLangs: string[] = Object.keys(langPacks)
 
-const userLangs = navigator.languages.map((lang) => lang.slice(0, 2));
+const userLangs = navigator.languages.map((lang) => lang.slice(0, 2))
 const userLang = (() => {
-  let userLang = "en";
+  let userLang = 'en'
   for (let index = 0; index < userLangs.length; index++) {
-    const element = userLangs[index];
+    const element = userLangs[index]
     if (supportedLangs.includes(element)) {
-      userLang = element;
-      break;
+      userLang = element
+      break
     }
   }
-  return userLang;
-})();
+  return userLang
+})()
 
-const useLocalesStore = defineStore("locales", () => {
+const useLocalesStore = defineStore('locales', () => {
   // language code
-  const { settings } = storeToRefs(useSettingsStore());
+  const { settings } = storeToRefs(useSettingsStore())
   const langCode: Ref<string> = computed(() => {
-    if (settings.value.language === "auto") {
+    if (settings.value.language === 'auto') {
       // if the language in the settings is auto and supported, use the language in the settings
       // if the language in the settings is auto and not supported, use English (en)
-      return userLang;
+      return userLang
     } else {
       // if the language in the settings is not auto, use the language in the settings
-      return settings.value.language;
+      return settings.value.language
     }
-  });
+  })
 
   // language pack for naive ui
   const langPackNaiveUI = asyncComputed(
     async () => {
       // get lang pack
-      if (langCode.value === "de") {
-        const locale = (await import("naive-ui/es/locales/common/deDE"))
-          .default;
-        const dateLocale = (await import("naive-ui/es/locales/date/deDE"))
-          .default;
-        return { locale, dateLocale };
-      } else if (langCode.value === "zh") {
-        const locale = (await import("naive-ui/es/locales/common/zhCN"))
-          .default;
-        const dateLocale = (await import("naive-ui/es/locales/date/zhCN"))
-          .default;
-        return { locale, dateLocale };
+      if (langCode.value === 'de') {
+        const locale = (await import('naive-ui/es/locales/common/deDE')).default
+        const dateLocale = (await import('naive-ui/es/locales/date/deDE')).default
+        return { locale, dateLocale }
+      } else if (langCode.value === 'zh') {
+        const locale = (await import('naive-ui/es/locales/common/zhCN')).default
+        const dateLocale = (await import('naive-ui/es/locales/date/zhCN')).default
+        return { locale, dateLocale }
       } else {
-        return { locale: null, dateLocale: null };
+        return { locale: null, dateLocale: null }
       }
     },
     // default value
@@ -80,27 +76,27 @@ const useLocalesStore = defineStore("locales", () => {
       locale: null,
       dateLocale: null,
     },
-  );
+  )
 
   // when langCode changed, update vue-i18n
-  const { locale, setLocaleMessage } = useI18n();
+  const { locale, setLocaleMessage } = useI18n()
   watch(langCode, async (newVal) => {
-    setLocaleMessage(newVal, await langPacks[newVal]());
-    locale.value = newVal;
-  });
+    setLocaleMessage(newVal, await langPacks[newVal]())
+    locale.value = newVal
+  })
 
-  return { langCode, langPackNaiveUI };
-});
+  return { langCode, langPackNaiveUI }
+})
 
 const dayjsLocales = asyncComputed(async () => {
   switch (userLang) {
-    case "de":
-      return (await import("dayjs/locale/de")).default;
-    case "zh":
-      return (await import("dayjs/locale/zh-cn")).default;
+    case 'de':
+      return (await import('dayjs/locale/de')).default
+    case 'zh':
+      return (await import('dayjs/locale/zh-cn')).default
     default:
-      return null;
+      return null
   }
-}, null);
+}, null)
 
-export { useLocalesStore, supportedLangs, userLang, langPacks, dayjsLocales };
+export { useLocalesStore, supportedLangs, userLang, langPacks, dayjsLocales }

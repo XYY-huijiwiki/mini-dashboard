@@ -1,42 +1,42 @@
 interface UploadResponse {
   edit: {
-    result: string;
-    pageid: number;
-    title: string;
-    contentmodel: string;
-    oldrevid: number;
-    newrevid: number;
-    newtimestamp: string;
-  };
+    result: string
+    pageid: number
+    title: string
+    contentmodel: string
+    oldrevid: number
+    newrevid: number
+    newtimestamp: string
+  }
 }
 
 async function uploadFile(file: File, text?: string): Promise<boolean> {
   return new Promise((resolve) => {
     new mw.Api()
       .postWithToken(
-        "csrf",
+        'csrf',
         {
-          action: "upload",
+          action: 'upload',
           file: file,
           filename: file.name,
           ignorewarnings: true,
           text: text,
         },
         {
-          contentType: "multipart/form-data",
+          contentType: 'multipart/form-data',
         },
       )
       .done((data: UploadResponse) => {
-        $message.success("上传成功");
-        console.log(data);
-        resolve(true);
+        $message.success('上传成功')
+        console.log(data)
+        resolve(true)
       })
       .fail((data: string) => {
-        $message.error(`上传失败（${data}）`);
-        console.log(data);
-        resolve(false);
-      });
-  });
+        $message.error(`上传失败（${data}）`)
+        console.log(data)
+        resolve(false)
+      })
+  })
 }
 
-export default uploadFile;
+export default uploadFile

@@ -7,12 +7,12 @@ import { userLang, langPacks } from '@/stores/locales'
 ;(async () => {
   // ===== dev mode =====
   let dev = import.meta.env.DEV
-  let currentUrl = new URL(location.href)
+  let devServer = new URL(location.href).searchParams.get('dev-server')
   // if in prod mode and `?dev-server` is set, load dev server
-  if (!dev && currentUrl.searchParams.has('dev-server')) {
+  if (!dev && devServer) {
     import(
       /* @vite-ignore */
-      import.meta.url
+      devServer
     )
     return
   }
@@ -20,6 +20,7 @@ import { userLang, langPacks } from '@/stores/locales'
   if (dev && location.hostname !== 'xyy.huijiwiki.com') {
     let targetUrl = 'https://xyy.huijiwiki.com/wiki/Project:迷你控制中心'
     location.href = `${targetUrl}?dev-server=${import.meta.url}`
+    return
   }
 
   // ===== styling =====

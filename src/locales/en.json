@@ -29,6 +29,8 @@
   },
   "home": {
     "title": "Mini Dashboard",
+    "text-github-files-title": "Files Stored in GitHub",
+    "text-github-files-description": "GitHub provides almost infinite storage for files. You can use this feature to store files that are not allowed (because of file size or type) to be uploaded to XYY huijiwiki.",
     "text-cartoon-data-title": "Cartoon Episode Data",
     "text-cartoon-data-description": "Export or import Cartoon episode data.",
     "text-destroy-and-rescue-title": "Destroy and Rescue",

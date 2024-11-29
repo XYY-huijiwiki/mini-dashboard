@@ -29,6 +29,8 @@
   },
   "home": {
     "title": "迷你控制中心",
+    "text-github-files-title": "储存在GitHub的文件",
+    "text-github-files-description": "GitHub提供几乎无限的文件存储空间。您可以使用此功能存储因文件大小或类型而无法上传到羊羊百科的文件。",
     "text-cartoon-data-title": "剧集数据",
     "text-cartoon-data-description": "导出或导入动画剧集数据。",
     "text-destroy-and-rescue-title": "经典爆破与搜索救援",
@@ -60,12 +62,10 @@
     "msg-download-failed": "下载失败",
     "msg-download-failed-desc": "你要下载的文件（{0}）不可用。",
     "btn-rename": "重命名",
-
     "btn-cut": "剪切",
     "btn-copy": "复制",
     "btn-paste": "粘贴",
     "btn-share": "分享",
-
     "msg-number-files-selected": "已选择{0}个文件",
     "btn-view-in-github": "在GitHub中查看",
     "msg-no-preview": "嗯… 看起来此文件没有可向你显示的预览。",

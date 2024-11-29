@@ -25,6 +25,5 @@ npm run dev
 
 ## TO DO
 
-- ![alt text](image.png)
 - 重复文件提示
   ![alt text](image-1.png)

@@ -97,8 +97,6 @@ let sorterKey = defineModel<SorterKey>('sorterKey', {
   required: true,
 })
 let sorterOrder = defineModel<SorterOrder>('sorterOrder', { required: true })
-type SorterKey = 'type' | 'name' | 'updated_at' | 'uploader' | 'size'
-type SorterOrder = 'ascend' | 'descend'
 let filters = defineModel<DataTableFilterState>('filters', { required: true })
 
 let data = computed(() => {

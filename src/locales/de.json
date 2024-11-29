@@ -30,6 +30,8 @@
   },
   "home": {
     "title": "Mini-Dashboard",
+    "text-github-files-title": "Dateien auf GitHub gespeichert",
+    "text-github-files-description": "GitHub bietet nahezu unbegrenzten Speicherplatz für Dateien. Sie können diese Funktion verwenden, um Dateien zu speichern, die aufgrund ihrer Größe oder ihres Typs nicht auf XYY huijiwiki hochgeladen werden dürfen.",
     "text-cartoon-data-title": "Animationsfolgendaten",
     "text-cartoon-data-description": "Animationsfolgendaten exportieren oder importieren.",
     "text-destroy-and-rescue-title": "Zerstören und Retten",

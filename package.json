@@ -19,7 +19,9 @@
   },
   "dependencies": {
     "@anmiles/sleep": "^4.0.1",
-    "@vueuse/core": "^11.3.0",
+    "@coleqiu/vue-drag-select": "^2.0.6-beta.1",
+    "@vueuse/components": "^12.0.0",
+    "@vueuse/core": "^12.0.0",
     "dayjs": "^1.11.10",
     "filesize": "^10.0.12",
     "markdown-it": "^14.0.0",
@@ -29,6 +31,7 @@
     "vue": "^3.4.21",
     "vue-i18n": "^10.0.4",
     "vue-router": "^4.2.4",
+    "vue-virtual-scroller": "^2.0.0-beta.8",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
   },
   "devDependencies": {
@@ -48,8 +51,9 @@
     "eslint": "^9.15.0",
     "eslint-plugin-oxlint": "^0.11.0",
     "eslint-plugin-vue": "^9.30.0",
-    "naive-ui": "^2.34.3",
     "jsdom": "^25.0.1",
+    "less": "^4.2.1",
+    "naive-ui": "^2.34.3",
     "npm-run-all2": "^7.0.1",
     "oxlint": "^0.11.0",
     "prettier": "^3.3.3",

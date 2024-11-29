@@ -8,8 +8,7 @@
       :options="options"
       v-model:show="show"
       @clickoutside="show = false"
-      @select="dropdownSelect"
-      row-class-name="data-table-row"
+      @select="(key) => emit(key)"
     >
       <slot></slot>
     </n-dropdown>
@@ -34,7 +33,15 @@ const props = defineProps<{
 // show
 let show = defineModel<boolean>('show')
 // on-preview
-let emit = defineEmits(['preview', 'detail'])
+let emit = defineEmits([
+  'preview',
+  'detail',
+  'link-copy',
+  'delete',
+  'download',
+  'rename',
+  'details',
+])
 
 // options
 const options: ComputedRef<DropdownOption[]> = computed(() => [
@@ -61,7 +68,7 @@ const options: ComputedRef<DropdownOption[]> = computed(() => [
   {
     label: t('github-files.btn-download'),
     icon: () => h(materialSymbol, { size: 20 }, () => 'download'),
-    disabled: props.data.length > 1,
+    disabled: props.data.length === 0,
     key: 'download',
   },
   {
@@ -69,7 +76,6 @@ const options: ComputedRef<DropdownOption[]> = computed(() => [
     icon: () => h(materialSymbol, { size: 20 }, () => 'edit'),
     disabled: true,
     key: 'rename',
-    // disabled: props.data.length > 1,
   },
   {
     type: 'divider',
@@ -81,41 +87,6 @@ const options: ComputedRef<DropdownOption[]> = computed(() => [
     disabled: props.data.length > 1,
   },
 ])
-
-// click option
-async function dropdownSelect(key: string | number) {
-  switch (key) {
-    case 'preview':
-      emit('preview', props.data[0])
-      break
-    case 'link-copy':
-      navigator.clipboard.writeText(props.data.map((item) => item.html_url).join('\n'))
-      $message.success(t('github-files.message-link-copied'))
-      break
-    // case "rename":
-    //   globalModalContent.value = "rename";
-    //   globalModalData.value = props.data;
-    //   globalModalShow.value = true;
-    //   break;
-    // case "delete":
-    //   globalModalContent.value = "delete";
-    //   globalModalData.value = props.data;
-    //   globalModalShow.value = true;
-    //   break;
-    case 'details':
-      emit('detail', props.data[0])
-      break
-    case 'download':
-      let a = document.createElement('a')
-      a.href = props.data[0].download_url
-      a.download = props.data[0].name
-      a.click()
-      break
-    default:
-      break
-  }
-  show.value = false
-}
 </script>
 
 <style scoped></style>

@@ -19,14 +19,6 @@
             {{ t('github-files.title') }}
           </n-button>
         </router-link>
-        <n-button
-          size="small"
-          tag="a"
-          href="https://github.com/XYY-huijiwiki/files/releases/new"
-          target="_blank"
-        >
-          {{ t('github-files.upload-files-in-github') }}
-        </n-button>
       </n-space>
     </template>
   </n-thing>
@@ -110,7 +102,6 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import { Github } from '@vicons/fa'
+import { ref } from 'vue'
 const { t } = useI18n()
 </script>
-
-<style scoped></style>

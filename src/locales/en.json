@@ -37,13 +37,20 @@
   "github-files": {
     "title": "GitHub Files",
     "table-header-name": "Name",
-    "table-header-updated-at": "Updated At",
+    "table-header-date-modified": "Date modified",
     "table-header-uploader": "Uploader",
     "table-header-size": "Size",
     "table-header-status": "Status",
+    "status-normal": "Normal",
+    "status-unused": "Not Used",
+    "status-wanted": "Wanted",
+    "status-no-source": "No Source",
+    "status-no-license": "No License",
+    "status-asset-broken": "Asset Broken",
     "label-file-type": "Type",
     "label-file-size": "Size",
     "btn-search": "Search",
+    "btn-new": "New",
     "btn-sort": "Sort",
     "btn-sort-type": "Type",
     "btn-sort-name": "Name",
@@ -61,13 +68,38 @@
     "msg-link-copied": "Link copied",
     "btn-delete": "Delete",
     "btn-download": "Download",
+    "msg-download-failed": "Download failed",
+    "msg-download-failed-desc": "The file you are trying to download ({0}) is not available.",
     "btn-rename": "Rename",
+
+    "btn-cut": "Cut",
+    "btn-copy": "Copy",
+    "btn-paste": "Paste",
+    "btn-share": "Share",
+
     "msg-number-files-selected": "{0} files selected",
     "btn-view-in-github": "View in GitHub",
     "msg-no-preview": "Hmm… looks like this file doesn't have a preview we can show you.",
     "label-basic-info": "Basic Info",
     "label-file-desc": "File Description",
-    "label-file-usage": "File Usage"
+    "label-file-usage": "File Usage",
+    "msg-file-no-usage": "No pages link to this file.",
+    "sort": {
+      "btn-sort": "Sort",
+      "btn-type": "Type",
+      "btn-name": "Name",
+      "btn-size": "Size",
+      "btn-date-modified": "Date modified",
+      "btn-uploader": "Uploader",
+      "btn-asc": "Ascending",
+      "btn-desc": "Descending"
+    },
+    "view": {
+      "btn-view": "View",
+      "btn-list": "List",
+      "btn-details": "Details",
+      "btn-tiles": "Tiles"
+    }
   },
   "data-exporter": {
     "title": "Data Exporter",

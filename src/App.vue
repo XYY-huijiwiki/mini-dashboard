@@ -14,7 +14,8 @@ let dev = import.meta.env.DEV
 
 let { t } = useI18n()
 
-let theme = computed(() => (useOsTheme().value === 'dark' ? darkTheme : null))
+let OSThemeStr = useOsTheme()
+let theme = computed(() => (OSThemeStr.value === 'dark' ? darkTheme : null))
 let { langPackNaiveUI } = storeToRefs(useLocalesStore())
 let { globalLoading } = storeToRefs(useSettingsStore())
 </script>
@@ -26,10 +27,10 @@ let { globalLoading } = storeToRefs(useSettingsStore())
     :dateLocale="langPackNaiveUI.dateLocale"
   >
     <n-spin :show="globalLoading">
-      <n-card ref="fullscreenHTML" content-class="shrink-0 h-0 max-h-screen">
+      <n-card ref="fullscreenHTML" content-class="shrink-0 h-0" class="h-screen">
         <!-- 卡片左上角：返回按钮和标题 -->
         <template #header>
-          <n-space align="center" :wrap="false" :wrap-item="false">
+          <n-space align="center" :wrap="false" :wrap-item="false" id="mini-dashboard-title-bar">
             <n-button
               quaternary
               circle
@@ -41,9 +42,7 @@ let { globalLoading } = storeToRefs(useSettingsStore())
               </template>
             </n-button>
             <n-tag v-if="dev">{{ t('dev-tag') }}</n-tag>
-            <n-ellipsis>
-              {{ $route.params.fileName || t(`${$route.name?.toString()}.title`) }}
-            </n-ellipsis>
+            {{ t(`${$route.name?.toString()}.title`) }}
           </n-space>
         </template>
 
@@ -63,7 +62,9 @@ let { globalLoading } = storeToRefs(useSettingsStore())
             v-if="$route.name !== 'settings'"
           >
             <template #icon>
-              <material-symbol> settings </material-symbol>
+              <material-symbol class="duration-1000 ease-in-out hover:rotate-180">
+                settings
+              </material-symbol>
             </template>
           </n-button>
         </template>
@@ -76,8 +77,7 @@ let { globalLoading } = storeToRefs(useSettingsStore())
         </template>
       </n-card>
     </n-spin>
-
-    <!-- global modal -->
-    <global-modal />
   </n-config-provider>
 </template>
+
+<style lang="less" scoped></style>

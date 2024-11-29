@@ -7,7 +7,7 @@
     virtual-scroll
     max-height="calc(100vh - 215.4px)"
     :loading="loading"
-    :size="viewerMode === 'detailsList' ? undefined : 'small'"
+    :size="viewMode === 'details' ? undefined : 'small'"
     :row-key="(row: FileDetail) => row.name"
     :row-props="rowProps"
     :scroll-x="800"
@@ -23,17 +23,21 @@
   <file-menu
     :data="checkedItems"
     v-model:show="showDropdown"
-    @preview="emit('preview')"
-    @detail="emit('detail')"
     :position="{
       x: dropdownX,
       y: dropdownY,
     }"
+    @preview="emit('preview')"
+    @link-copy="emit('link-copy')"
+    @download="emit('download')"
+    @delete="emit('delete')"
+    @rename="emit('rename')"
+    @details="emit('detail')"
   />
 </template>
 
 <script setup lang="ts">
-import { computed, h, ref, nextTick, watch } from 'vue'
+import { h, ref, nextTick, watch, computed } from 'vue'
 import type { Ref } from 'vue'
 import { NA, NText, NTag, NSpace, NEllipsis, NButton, NDataTable } from 'naive-ui'
 import type {
@@ -51,6 +55,9 @@ import { filesize as filesizeNoLocale } from 'filesize'
 import { useLocalesStore } from '@/stores/locales'
 import { storeToRefs } from 'pinia'
 import MaterialSymbol from './material-symbol.vue'
+import type { VNodeChild } from 'vue'
+import { NBaseIcon } from 'naive-ui/es/_internal'
+import { ArrowDownIcon } from 'naive-ui/es/_internal/icons'
 
 let { langCode } = storeToRefs(useLocalesStore())
 let filesize = (size: number) => filesizeNoLocale(size, { locale: langCode.value })
@@ -62,11 +69,19 @@ let dataTable = ref()
 let { data } = defineProps<{
   data: FileDetail[]
   loading: boolean
-  viewerMode: 'detailsList' | 'compactDetailsList'
+  viewMode: 'details' | 'list'
   checkedItems: FileDetail[]
 }>()
 
-let emit = defineEmits(['preview', 'detail'])
+let emit = defineEmits([
+  'preview',
+  'detail',
+  'link-copy',
+  'delete',
+  'download',
+  'rename',
+  'details',
+])
 
 /*
  *
@@ -101,25 +116,42 @@ watch(
  * Data Table Columns
  *
  */
-let columns: Ref<DataTableColumns<FileDetail>> = computed(() => [
+let columns: Ref<DataTableColumns<FileDetail>> = ref([
   {
     type: 'selection',
     fixed: 'left',
   },
   {
-    title: sorterKey.value === 'type' ? '' : () => h(MaterialSymbol, 'draft'),
-    renderSorter: sorterKey.value === 'type' ? undefined : () => h('span'),
+    title: () => {
+      if (sorterKey.value === 'type') {
+        return h(
+          'span',
+          {
+            class: [
+              'n-data-table-sorter',
+              sorterOrder.value === 'ascend' && 'n-data-table-sorter--asc',
+              sorterOrder.value === 'descend' && 'n-data-table-sorter--desc',
+            ],
+            style: { marginLeft: '6px' },
+          },
+          h(NBaseIcon, { clsPrefix: 'n' }, () => h(ArrowDownIcon)),
+        )
+      } else {
+        return h(fileIcon, { size: 28 })
+      }
+    },
+    renderSorter: () => undefined,
     key: 'type',
-    width: '3em',
+    width: '4em',
     sorter: 'default',
     render: (row) => {
-      return h(fileIcon, { fileType: row.type })
+      return h(fileIcon, { fileType: row.type, size: 28 })
       // equivalent to HTML
-      // <file-icon :fileType="row.type"></file-icon>
+      // <file-icon :fileType="row.type" :size="28"></file-icon>
     },
   },
   {
-    title: t('github-files.table-header-name'),
+    title: () => t('github-files.table-header-name'),
     key: 'name',
     resizable: true,
     width: 350,
@@ -127,12 +159,15 @@ let columns: Ref<DataTableColumns<FileDetail>> = computed(() => [
     maxWidth: 500,
     sorter: 'default',
     render: (row) => {
-      return h(
-        NEllipsis,
+      return h(NEllipsis, () =>
         h(
           NButton,
           {
-            'on-click': () => emit('preview'),
+            'on-click': (e: MouseEvent) => {
+              if (e.ctrlKey || e.metaKey) return
+              checkedRowKeys.value = [row.name]
+              emit('preview')
+            },
             tag: 'a',
             text: true,
           },
@@ -147,49 +182,46 @@ let columns: Ref<DataTableColumns<FileDetail>> = computed(() => [
     },
   },
   {
-    title: t('github-files.table-header-updated-at'),
+    title: () => t('github-files.table-header-date-modified'),
     key: 'updated_at',
     width: '10em',
     sorter: 'default',
     render: (row) => {
-      return h(NText, dayjs(row.updated_at).format('ll'))
+      return h(NText, () => dayjs(row.updated_at).format('ll'))
       // equivalent to HTML
       // <n-text>{{ row.updated_at || "N/A" }}</n-text>
     },
   },
+  // {
+  //   title: () => t('github-files.table-header-uploader'),
+  //   key: 'uploader',
+  //   width: '10em',
+  //   sorter: 'default',
+  //   render: (row) => {
+  //     return h(NEllipsis, () => h(NA, { href: row.uploader_html_url }, () => row.uploader))
+  //   },
+  // },
   {
-    title: t('github-files.table-header-uploader'),
-    key: 'uploader',
-    width: '10em',
-    sorter: 'default',
-    render: (row) => {
-      return h(
-        NEllipsis,
-        h(NA, { href: row.uploader_html_url }, () => row.uploader),
-      )
-    },
-  },
-  {
-    title: t('github-files.table-header-size'),
+    title: () => t('github-files.table-header-size'),
     key: 'size',
     width: '8em',
     sorter: 'default',
     render: (row) => {
-      return h(NText, filesize(row.size))
+      return h(NText, () => filesize(row.size))
       // equivalent to HTML
       // <n-text>{{ filesize(..., { locale: langCode }) }}</n-text>
     },
   },
   {
-    title: t('github-files.table-header-status'),
+    title: () => t('github-files.table-header-status'),
     key: 'status',
     minWidth: '10em',
     filterOptions: [
-      { label: 'Not Used', value: 'not used' },
-      { label: 'Wanted', value: 'wanted' },
-      { label: 'No Source', value: 'no source' },
-      { label: 'No License', value: 'no license' },
-      { label: 'Asset Broken', value: 'asset broken' },
+      { label: t('github-files.status-unused'), value: 'unused' },
+      { label: t('github-files.status-wanted'), value: 'wanted' },
+      { label: t('github-files.status-no-source'), value: 'no source' },
+      { label: t('github-files.status-no-license'), value: 'no license' },
+      { label: t('github-files.status-asset-broken'), value: 'asset broken' },
     ],
     filter: (value, row) => {
       return row.warnings.includes(value as WarningType)
@@ -197,8 +229,12 @@ let columns: Ref<DataTableColumns<FileDetail>> = computed(() => [
     render: (row) => {
       return h(NSpace, () => [
         row.warnings.length === 0
-          ? h(NTag, { type: 'success', size: 'small' }, () => 'Normal')
-          : row.warnings.map((warning) => h(NTag, { type: 'error', size: 'small' }, () => warning)),
+          ? h(NTag, { type: 'success', size: 'small' }, () => t('github-files.status-normal'))
+          : row.warnings.map((warning) =>
+              h(NTag, { type: 'error', size: 'small' }, () =>
+                t(`github-files.status-${warning.replace(' ', '-')}`),
+              ),
+            ),
       ])
       // equivalent to HTML
       // <n-space>
@@ -239,8 +275,13 @@ let rowProps = (row: FileDetail) => {
         // do nothing if target is div.n-checkbox-box__border
         // this is to prevent bubble from checkbox
         return
-      } else if (triggerClassList.contains('n-data-table-td--selection')) {
-        // if target is td.n-data-table-td--selection, toggle checkbox
+      } else if (
+        triggerClassList.contains('n-data-table-td--selection') ||
+        e.ctrlKey ||
+        e.metaKey
+      ) {
+        // if checkbox (.n-checkbox-box__border) is clicked, toggle checkbox
+        // if ctrl or cmd key is pressed, toggle checkbox
         if (checkedRowKeys.value.includes(row.name)) {
           checkedRowKeys.value = checkedRowKeys.value.filter((item) => item !== row.name)
         } else {

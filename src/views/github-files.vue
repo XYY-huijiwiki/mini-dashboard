@@ -1,128 +1,34 @@
 <template>
   <n-flex vertical class="h-full">
-    <n-card
-      :style="{
-        backgroundColor: checkedRowKeys.length ? undefined : 'transparent',
-        borderColor: checkedRowKeys.length ? undefined : 'transparent',
-      }"
-      size="small"
-    >
-      <n-flex justify="space-between" :wrap="false" :size="48">
-        <n-scrollbar x-scrollable v-if="checkedRowKeys.length">
-          <n-flex class="flex-1 w-0 shrink-0" :wrap="false">
-            <!-- preview -->
-            <n-button
-              @click="preview = checkedItems[0]"
-              quaternary
-              :disabled="checkedRowKeys.length !== 1"
-            >
-              <template #icon>
-                <material-symbol>visibility</material-symbol>
-              </template>
-              {{ t('github-files.btn-preview') }}
-            </n-button>
-            <!-- link copy -->
-            <n-button @click="linkCopy" quaternary>
-              <template #icon>
-                <material-symbol>link</material-symbol>
-              </template>
-              {{ t('github-files.btn-link-copy') }}
-            </n-button>
-            <!-- delete -->
-            <n-button disabled quaternary>
-              <template #icon>
-                <material-symbol>delete</material-symbol>
-              </template>
-              {{ t('github-files.btn-delete') }}
-            </n-button>
-            <!-- download -->
-            <n-button quaternary :disabled="checkedRowKeys.length !== 1" @click="downloadFile">
-              <template #icon>
-                <material-symbol>download</material-symbol>
-              </template>
-              {{ t('github-files.btn-download') }}
-            </n-button>
-            <!-- rename -->
-            <n-button disabled quaternary>
-              <template #icon>
-                <material-symbol>edit</material-symbol>
-              </template>
-              {{ t('github-files.btn-rename') }}
-            </n-button>
-          </n-flex>
-        </n-scrollbar>
-        <n-input-group class="flex-1" v-else>
-          <n-input
-            round
-            v-model:value="searchText"
-            clearable
-            ref="searchBar"
-            @keyup.enter="searchClick(searchText)"
-          >
-            <template #prefix>
-              <n-button circle quaternary size="tiny" @click="cancelSearch">
-                <template #icon>
-                  <materialSymbol :size="24">
-                    {{ searchText ? ' arrow_back ' : 'search' }}
-                  </materialSymbol>
-                </template>
-              </n-button>
-            </template>
-          </n-input>
-          <n-button @click="searchClick(searchText)" round secondary>
-            {{ t('github-files.btn-search') }}
-          </n-button>
-        </n-input-group>
-        <n-flex :wrap="false">
-          <n-dropdown trigger="click" :options="sortOptions" @select="sortHandler">
-            <n-button quaternary>
-              {{ t('github-files.btn-sort') }}
-              <template #icon>
-                <MaterialSymbol>sort</MaterialSymbol>
-              </template>
-            </n-button>
-          </n-dropdown>
-          <n-dropdown trigger="click" :options="viewerOptions" @select="viewrHandler">
-            <n-button quaternary>
-              <template #icon>
-                <MaterialSymbol>
-                  {{
-                    viewerMode === 'detailsList'
-                      ? 'menu'
-                      : viewerMode === 'compactDetailsList'
-                        ? 'reorder'
-                        : 'grid_view'
-                  }}
-                </MaterialSymbol>
-              </template>
-            </n-button>
-          </n-dropdown>
-          <n-button quaternary @click="showDetailsDrawer = !showDetailsDrawer">
-            {{ t('github-files.btn-details') }}
-            <template #icon>
-              <MaterialSymbol>
-                {{ showDetailsDrawer ? 'arrow_menu_open' : 'arrow_menu_close' }}
-              </MaterialSymbol>
-            </template>
-          </n-button>
-        </n-flex>
-      </n-flex>
-    </n-card>
+    <file-search-bar v-model:filters="filters" />
+    <file-operations-bar
+      v-model:checked-row-keys="checkedRowKeys"
+      v-model:showDetailsPane="showDetailsPane"
+      v-model:viewMode="viewMode"
+      v-model:sorterKey="sorterKey"
+      v-model:sorterOrder="sorterOrder"
+      @file-preview="preview = checkedItems[0]"
+      @link-copy="linkCopy"
+      @file-download="fileDownload"
+      @file-delete=""
+      @file-rename=""
+      @file-share="fileShare"
+    />
     <n-split
       direction="horizontal"
       v-model:size="detailsDrawerSize"
       :min="0.6"
       :max="0.8"
-      :pane1-class="showDetailsDrawer ? 'pr-1' : ''"
+      :pane1-class="showDetailsPane ? 'pr-1' : ''"
       pane2-class="pl-1"
-      :resize-trigger-size="showDetailsDrawer ? 3 : 0"
+      :resize-trigger-size="showDetailsPane ? 3 : 0"
       class="flex-1 shrink-0 h-0"
     >
       <template #1>
         <file-preview v-model="preview" v-if="preview" />
         <template v-else>
           <file-list-table
-            v-if="viewerMode === 'detailsList' || viewerMode === 'compactDetailsList'"
+            v-if="viewMode === 'details' || viewMode === 'list'"
             v-model:checked-row-keys="checkedRowKeys"
             :checked-items="checkedItems"
             v-model:sorterKey="sorterKey"
@@ -130,9 +36,13 @@
             v-model:filters="filters"
             :data="data"
             :loading="loading"
-            :viewerMode="viewerMode"
+            :viewMode="viewMode"
             @preview="preview = checkedItems[0]"
-            @detail="showDetailsDrawer = true"
+            @detail="showDetailsPane = true"
+            @link-copy="linkCopy"
+            @download="fileDownload"
+            @delete=""
+            @rename=""
           />
           <file-list-grid
             v-else
@@ -143,162 +53,84 @@
             v-model:sorterOrder="sorterOrder"
             v-model:filters="filters"
             @preview="preview = checkedItems[0]"
-            @detail="showDetailsDrawer = true"
+            @detail="showDetailsPane = true"
+            @link-copy="linkCopy"
+            @download="fileDownload"
+            @delete=""
+            @rename=""
           />
         </template>
       </template>
-      <template #2 v-if="showDetailsDrawer">
-        <file-details :fileDetails="checkedItems" @close="showDetailsDrawer = false" />
+      <template #2 v-if="showDetailsPane">
+        <file-details :fileDetails="checkedItems" @close="showDetailsPane = false" />
       </template>
     </n-split>
   </n-flex>
 </template>
 
 <script setup lang="ts">
-import { computed, h, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import type { Ref } from 'vue'
-import { NFlex, NButton } from 'naive-ui'
+import { NFlex } from 'naive-ui'
 import type { DataTableRowKey, DataTableFilterState } from 'naive-ui'
 import mime from 'mime/lite'
-import MaterialSymbol from '@/components/material-symbol.vue'
 import { useI18n } from 'vue-i18n'
 import dayjs from 'dayjs'
 import { dayjsLocales } from '@/stores/locales'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import fileListTable from '@/components/file-list-table.vue'
+import FileOperationsBar from '@/components/file-operations-bar.vue'
 
 const { t } = useI18n()
 dayjs.extend(localizedFormat)
 dayjs.locale(dayjsLocales.value || 'en')
-const searchBar = ref()
-let downloadFile = () => {
-  window.open(checkedItems.value[0].download_url)
+
+let fileDownload = () => {
+  checkedItems.value.forEach(({ name, download_url }) => {
+    download_url
+      ? window.open(download_url)
+      : $notification.error({
+          title: t('github-files.msg-download-failed'),
+          content: t('github-files.msg-download-failed-desc', [name]),
+        })
+  })
 }
 
 let linkCopy = () => {
   navigator.clipboard.writeText(checkedItems.value.map((item) => item.html_url).join('\n'))
   $message.success(t('github-files.msg-link-copied'))
 }
+let fileShare = () => {
+  if (checkedItems.value.length === 1) {
+    navigator.share({
+      title: checkedItems.value[0].name,
+      text: checkedItems.value[0].desc,
+      url: checkedItems.value[0].html_url,
+    })
+  } else {
+    navigator.share({
+      text: checkedItems.value.map((item) => item.html_url).join('\n'),
+    })
+  }
+}
 
 // preview
 let preview: Ref<FileDetail | undefined> = ref(undefined)
 
-/*
- *
- * Sorter
- *
- */
-let sortOptions = computed(() => [
-  {
-    label: t('github-files.btn-sort-type'),
-    key: 'type',
-    icon: sorterKey.value === 'type' && (() => h(MaterialSymbol, 'check')),
-  },
-  {
-    label: t('github-files.btn-sort-name'),
-    key: 'name',
-    icon: sorterKey.value === 'name' && (() => h(MaterialSymbol, 'check')),
-  },
-  {
-    label: t('github-files.btn-sort-updated-at'),
-    key: 'updated_at',
-    icon: sorterKey.value === 'updated_at' && (() => h(MaterialSymbol, 'check')),
-  },
-  {
-    label: t('github-files.btn-sort-uploader'),
-    key: 'uploader',
-    icon: sorterKey.value === 'uploader' && (() => h(MaterialSymbol, 'check')),
-  },
-  {
-    label: t('github-files.btn-sort-size'),
-    key: 'size',
-    icon: sorterKey.value === 'size' && (() => h(MaterialSymbol, 'check')),
-  },
-  {
-    type: 'divider',
-    key: 'divider',
-  },
-  {
-    label: t('github-files.btn-sort-asc'),
-    key: 'ascend',
-    icon: sorterOrder.value === 'ascend' && (() => h(MaterialSymbol, 'check')),
-  },
-  {
-    label: t('github-files.btn-sort-desc'),
-    key: 'descend',
-    icon: sorterOrder.value === 'descend' && (() => h(MaterialSymbol, 'check')),
-  },
-])
-type SorterKey = 'type' | 'name' | 'updated_at' | 'uploader' | 'size'
-type SorterOrder = 'ascend' | 'descend'
 let sorterKey: Ref<SorterKey> = ref('name')
 let sorterOrder: Ref<SorterOrder> = ref('ascend')
-let sortHandler = (key: SorterKey | SorterOrder) => {
-  ;['ascend', 'descend'].includes(key)
-    ? (sorterOrder.value = key as SorterOrder)
-    : (sorterKey.value = key as SorterKey)
-}
 
-/*
- *
- * Search Bar
- *
- */
 let filters = ref<DataTableFilterState>({})
-let searchText = ref('')
-function searchClick(input: string) {
-  if (input) filters.value.name = input
-}
-function cancelSearch() {
-  searchText.value = ``
-  filters.value.name = undefined
-  // cancel focus on search bar
-  searchBar.value.blur()
-}
 
 let loading: Ref<boolean> = ref(true)
 let data: Ref<FileDetail[]> = ref([])
 let checkedRowKeys = ref<DataTableRowKey[]>([])
 
-/*
- *
- * Viewer
- *
- */
-let viewerMode: Ref<'detailsList' | 'compactDetailsList' | 'tilesList'> = ref('detailsList')
-let viewerOptions = computed(() => [
-  {
-    label: () => [
-      h(MaterialSymbol, { verticalAlign: 'middle', size: 20, class: 'mr-1' }, 'menu'),
-      h('span', undefined, 'detailsList'),
-    ],
-    key: 'detailsList',
-    icon: viewerMode.value === 'detailsList' && (() => h(MaterialSymbol, 'check')),
-  },
-  {
-    label: () => [
-      h(MaterialSymbol, { verticalAlign: 'middle', size: 20, class: 'mr-1' }, 'reorder'),
-      h('span', undefined, 'compactDetailsList'),
-    ],
-    key: 'compactDetailsList',
-    icon: viewerMode.value === 'compactDetailsList' && (() => h(MaterialSymbol, 'check')),
-  },
-  {
-    label: () => [
-      h(MaterialSymbol, { verticalAlign: 'middle', size: 20, class: 'mr-1' }, 'grid_view'),
-      h('span', undefined, 'tilesList'),
-    ],
-    key: 'tilesList',
-    icon: viewerMode.value === 'tilesList' && (() => h(MaterialSymbol, 'check')),
-  },
-])
-let viewrHandler = (key: 'detailsList' | 'compactDetailsList' | 'tilesList') => {
-  viewerMode.value = key
-}
+let viewMode: Ref<ViewMode> = ref('list')
 
 /*
  *
- * Details Drawer
+ * Details Pane
  *
  */
 let checkedItems: Ref<FileDetail[]> = computed(() => {
@@ -308,10 +140,10 @@ let checkedItems: Ref<FileDetail[]> = computed(() => {
     return data.value.filter((item) => checkedRowKeys.value.includes(item.name))
   }
 })
-let showDetailsDrawer = ref(false)
+let showDetailsPane = ref(false)
 let detailsDrawerSizeTemp = ref(0.7)
 let detailsDrawerSize = ref(1)
-watch(showDetailsDrawer, (value) => {
+watch(showDetailsPane, (value) => {
   if (value) {
     detailsDrawerSize.value = detailsDrawerSizeTemp.value
   } else {
@@ -397,7 +229,7 @@ onMounted(async () => {
           // remove it from filesInUse
           filesInUse.splice(filesInUse.indexOf(element.tag_name), 1)
         } else {
-          warnings.push('not used')
+          warnings.push('unused')
         }
         if (element.body.match(/^- 文件来源：.+$/m) === null) {
           warnings.push('no source')

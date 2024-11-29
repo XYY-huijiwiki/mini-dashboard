@@ -7,12 +7,8 @@
   >
     <template #header>
       <n-ellipsis>
-        <n-flex>
-          <n-icon>
-            <file-icon :file-type="fileDetail?.type" />
-          </n-icon>
-          <n-text>{{ fileDetail?.name }}</n-text>
-        </n-flex>
+        <file-icon :file-type="fileDetail?.type" />
+        {{ fileDetail?.name }}
       </n-ellipsis>
     </template>
     <template #default>

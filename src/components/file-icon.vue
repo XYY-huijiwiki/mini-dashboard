@@ -1,35 +1,25 @@
 <template>
-  <material-symbol :size="size">
-    {{ getIconName(fileType) }}
-  </material-symbol>
+  <img
+    :src="`https://ik.imagekit.io/gwa1ycz7gc/file-icons/${getIconName(fileType)}.ico`"
+    :alt="fileType || 'file'"
+    :width="size || 24"
+    :height="size || 24"
+    style="vertical-align: text-bottom; display: inline-block"
+  />
 </template>
 
 <script setup lang="ts">
-import materialSymbol from './material-symbol.vue'
-
 defineProps<{
   fileType?: string | null
   size?: number
 }>()
 
-const type2iconMapping = {
-  image: '',
-  audio: 'audio_file',
-  video: 'video_file',
-  text: 'docs',
-  application: 'apk_document',
-  pdf: '',
-  zip: '',
-  code: '',
-}
-
 function getIconName(type: string | undefined | null): string {
-  type = type?.toString().split('/')[0]
-  const supportedFileTypes = Object.keys(type2iconMapping)
-  return supportedFileTypes.includes(type || '')
-    ? type2iconMapping[type as keyof typeof type2iconMapping]
-    : 'unknown_document'
+  if (type === 'application/pdf') return 'doc'
+  if (type?.startsWith('image')) return 'image'
+  if (type?.startsWith('audio')) return 'audio'
+  if (type?.startsWith('video')) return 'video'
+  if (type?.startsWith('text')) return 'text'
+  return 'file'
 }
 </script>
-
-<style scoped></style>

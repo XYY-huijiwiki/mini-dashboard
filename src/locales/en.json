@@ -73,12 +73,10 @@
     "msg-download-failed": "Download failed",
     "msg-download-failed-desc": "The file you are trying to download ({0}) is not available.",
     "btn-rename": "Rename",
-
     "btn-cut": "Cut",
     "btn-copy": "Copy",
     "btn-paste": "Paste",
     "btn-share": "Share",
-
     "msg-number-files-selected": "{0} files selected",
     "btn-view-in-github": "View in GitHub",
     "msg-no-preview": "Hmm… looks like this file doesn't have a preview we can show you.",
@@ -86,6 +84,10 @@
     "label-file-desc": "File Description",
     "label-file-usage": "File Usage",
     "msg-file-no-usage": "No pages link to this file.",
+    "label-code-snippet": "Code Snippet",
+    "code-snippet-image": "Image:",
+    "code-snippet-link": "Link:",
+    "code-snippet-gallery": "Gallery:",
     "sort": {
       "btn-sort": "Sort",
       "btn-type": "Type",

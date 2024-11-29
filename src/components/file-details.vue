@@ -55,6 +55,26 @@
             </n-li>
           </n-ul>
         </div>
+        <!-- code snippet -->
+        <n-divider>{{ t('github-files.label-code-snippet') }}</n-divider>
+        <p>{{ t('github-files.code-snippet-image') }}</p>
+        <n-card size="small" content-class="font-mono flex text-nowrap overflow-auto !pb-1">
+          <n-scrollbar x-scrollable class="pb-2">
+            [[File:GitHub:{{ fileDetails[0].name }}]]
+          </n-scrollbar>
+        </n-card>
+        <p>{{ t('github-files.code-snippet-link') }}</p>
+        <n-card size="small" content-class="font-mono flex text-nowrap overflow-auto !pb-1">
+          <n-scrollbar x-scrollable class="pb-2">
+            [[:File:GitHub:{{ fileDetails[0].name }}]]
+          </n-scrollbar>
+        </n-card>
+        <p>{{ t('github-files.code-snippet-gallery') }}</p>
+        <n-card size="small" content-class="font-mono flex text-nowrap overflow-auto !pb-1">
+          <n-scrollbar x-scrollable class="pb-2">
+            {{ `<gallery>`}}<br />{{ `GitHub:${fileDetails[0].name}` }}<br />{{`</gallery>` }}
+          </n-scrollbar>
+        </n-card>
       </n-scrollbar>
     </template>
     <!-- action btns -->

@@ -73,6 +73,10 @@
     "label-file-desc": "文件描述",
     "label-file-usage": "文件用途",
     "msg-file-no-usage": "没有页面链接至此文件。",
+    "label-code-snippet": "代码片段",
+    "code-snippet-image": "图片：",
+    "code-snippet-link": "链接：",
+    "code-snippet-gallery": "图库：",
     "sort": {
       "btn-sort": "排序",
       "btn-type": "类型",

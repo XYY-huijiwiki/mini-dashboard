@@ -7,6 +7,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    CodeBlock: typeof import('./src/components/code-block.vue')['default']
     FileDetails: typeof import('./src/components/file-details.vue')['default']
     FileIcon: typeof import('./src/components/file-icon.vue')['default']
     FileListGrid: typeof import('./src/components/file-list-grid.vue')['default']

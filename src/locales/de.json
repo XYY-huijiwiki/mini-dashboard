@@ -74,6 +74,10 @@
     "label-file-desc": "Dateibeschreibung",
     "label-file-usage": "Dateiverwendung",
     "msg-file-no-usage": "Keine Seiten verlinkt auf diese Datei.",
+    "label-code-snippet": "Code-Schnipsel",
+    "code-snippet-image": "Bild:",
+    "code-snippet-link": "Link:",
+    "code-snippet-gallery": "Galerie:",
     "sort": {
       "btn-sort": "Sortieren",
       "btn-type": "Typ",

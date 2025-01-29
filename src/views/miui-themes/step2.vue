@@ -85,103 +85,111 @@ function getDownloadLink() {
 }
 
 async function clickNext() {
-  loading.value = true
+  try {
+    loading.value = true
 
-  /* ==================
+    /* ==================
     process input text
    ================== */
-  async function getTitleAndSquareImgLink(link: string): Promise<{
-    title: string
-    squareImgLink: string
-  }> {
-    let packID = new URL(link).searchParams.get('packId')
-    if (!packID) {
-      throw new Error('主题链接格式错误')
+    async function getTitleAndSquareImgLink(link: string): Promise<{
+      title: string
+      squareImgLink: string
+    }> {
+      let packID = new URL(link).searchParams.get('packId')
+      if (!packID) {
+        throw new Error('主题链接格式错误')
+      }
+      let res = (await (
+        await fetch(`${corsProxy}https://zhuti.xiaomi.com/thm/share/picture/${packID}`)
+      ).json()) as {
+        downloadUrl: string
+        name: string
+      }
+      return {
+        title: res.name,
+        squareImgLink: res.downloadUrl,
+      }
     }
-    let res = (await (
-      await fetch(`${corsProxy}https://zhuti.xiaomi.com/thm/share/picture/${packID}`)
-    ).json()) as {
-      downloadUrl: string
-      name: string
-    }
-    return {
-      title: res.name,
-      squareImgLink: res.downloadUrl,
-    }
-  }
-  let corsProxy = 'https://jolly-shape-d597.karsten-zhou.workers.dev/'
-  let link = cleanURL(themeInput.value.link || '')
-  let url = new URL(link)
-  url.searchParams.delete('miref')
-  let 主题链接 = url.href
-  let { title, squareImgLink } = await getTitleAndSquareImgLink(link)
-  let 主题名称 = title
-  let squareImg = new File(
-    [await (await fetch(corsProxy + squareImgLink)).blob()],
-    `小米主题 ${title}.png`,
-  )
-  if (!themeInput.value.date) throw new Error('Invalid date')
-  let 发布日期 = dayjs(themeInput.value.date).format('YYYY-MM-DD')
-  let 你知道咩 = themeInput.value.trivia || ''
+    let corsProxy = 'https://jolly-shape-d597.karsten-zhou.workers.dev/'
+    let link = cleanURL(themeInput.value.link || '')
+    let url = new URL(link)
+    url.searchParams.delete('miref')
+    let 主题链接 = url.href
+    let { title, squareImgLink } = await getTitleAndSquareImgLink(link)
+    let 主题名称 = title
+    let squareImg = new File(
+      [await (await fetch(corsProxy + squareImgLink)).blob()],
+      `小米主题 ${title}.png`,
+    )
+    if (!themeInput.value.date) throw new Error('Invalid date')
+    let 发布日期 = dayjs(themeInput.value.date).format('YYYY-MM-DD')
+    let 你知道咩 = themeInput.value.trivia || ''
 
-  /* ==================
+    /* ==================
     process .mtz file
    ================== */
-  let downloadLink = cleanURL(themeInput.value.downloadLink || '')
-  let mtz = await getMTZFile(downloadLink, title)
-  // read zip file
-  let zipObj = await jszip.loadAsync(mtz)
-  // get info
-  let description_xml = await zipObj.file('description.xml')?.async('string')
-  if (!description_xml) throw new Error('description.xml不存在')
-  let description_json = JSON.parse(xml2json(description_xml, { compact: true }))
-  let 主题作者 = description_json.theme.designer._cdata.trim()
-  let 主题介绍 = description_json.theme.description._cdata.trim().replace(/[\r\n]{1,2}/g, '<br/>')
-  // get imgs
-  let allFiles = Object.keys(zipObj.files)
-  let imgs_list = allFiles.filter((file) => file.startsWith('preview/'))
-  imgs_list.forEach((element, index) => {
-    imgs_list[index] = element.slice(8)
-  })
-  imgs_list = imgs_list.filter((img) => img !== '')
-  let 主题预览 = imgs_list.sort()
-  let previews = await Promise.all(
-    imgs_list.map(async (img) => {
-      let blob = await zipObj.file(`preview/${img}`)?.async('blob')
-      return blob ? new File([blob], `小米主题 ${主题名称} ${img}`) : undefined
-    }),
-  ).then((files) => files.filter((file) => file !== undefined))
+    let downloadLink = cleanURL(themeInput.value.downloadLink || '')
+    let mtz = await getMTZFile(downloadLink, title)
+    // read zip file
+    let zipObj = await jszip.loadAsync(mtz)
+    // get info
+    let description_xml = await zipObj.file('description.xml')?.async('string')
+    if (!description_xml) throw new Error('description.xml不存在')
+    let description_json = JSON.parse(xml2json(description_xml, { compact: true }))
+    let 主题作者 = description_json.theme.designer._cdata.trim()
+    let 主题介绍 = description_json.theme.description._cdata.trim().replace(/[\r\n]{1,2}/g, '<br/>')
+    // get imgs
+    let allFiles = Object.keys(zipObj.files)
+    let imgs_list = allFiles.filter((file) => file.startsWith('preview/'))
+    imgs_list.forEach((element, index) => {
+      imgs_list[index] = element.slice(8)
+    })
+    imgs_list = imgs_list.filter((img) => img !== '')
+    let 主题预览 = imgs_list.sort()
+    let previews = await Promise.all(
+      imgs_list.map(async (img) => {
+        let blob = await zipObj.file(`preview/${img}`)?.async('blob')
+        return blob ? new File([blob], `小米主题 ${主题名称} ${img}`) : undefined
+      }),
+    ).then((files) => files.filter((file) => file !== undefined))
 
-  /* ==================
+    /* ==================
     process date image
    ================== */
-  if (!themeInput.value.dateImg) throw new Error('Invalid date image')
-  let dateImg = new File([themeInput.value.dateImg], `小米主题 ${主题名称} 发布日期截图.jpg`)
+    if (!themeInput.value.dateImg) throw new Error('Invalid date image')
+    let dateImg = new File([themeInput.value.dateImg], `小米主题 ${主题名称} 发布日期截图.jpg`)
 
-  /* ==================
+    /* ==================
     result
    ================== */
-  emits('update-result', {
-    themeJson: {
-      _hjschema: '小米主题',
-      主题名称,
-      发布日期,
-      主题作者,
-      主题链接,
-      主题介绍,
-      主题预览,
-      你知道咩,
-    },
-    files: {
-      mtz,
-      dateImg,
-      squareImg,
-      previews,
-    },
-  })
+    emits('update-result', {
+      themeJson: {
+        _hjschema: '小米主题',
+        主题名称,
+        发布日期,
+        主题作者,
+        主题链接,
+        主题介绍,
+        主题预览,
+        你知道咩,
+      },
+      files: {
+        mtz,
+        dateImg,
+        squareImg,
+        previews,
+      },
+    })
 
-  loading.value = false
-  emits('next')
+    loading.value = false
+    emits('next')
+  } catch (error) {
+    loading.value = false
+    $notification.error({
+      title: 'Error',
+      content: `${error}`,
+    })
+  }
 }
 </script>
 

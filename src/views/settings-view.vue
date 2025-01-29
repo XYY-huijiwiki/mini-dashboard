@@ -78,6 +78,14 @@ function clearData() {
         {{ t('settings.text-export-backup') }}
       </n-checkbox>
     </n-form-item>
+    <!-- github token -->
+    <n-form-item>
+      <template #label>
+        {{ t('settings.label-github-token') }}
+        <info-label :content="t('settings.github-token-info')" />
+      </template>
+      <n-input v-model:value="settings.ghToken" />
+    </n-form-item>
     <!-- restore defaults -->
     <n-form-item :label="t('settings.label-restore-defaults')">
       <n-button @click="clearData()">

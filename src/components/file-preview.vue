@@ -17,9 +17,14 @@
         v-if="fileDetail?.type?.startsWith('video')"
         controls
         class="w-full h-0 flex-1 object-contain bg-black"
-        :poster="'https://ik.imagekit.io/gwa1ycz7gc/' + fileDetail?.thumb_url"
+        :poster="
+          'https://ik.imagekit.io/gwa1ycz7gc/' + fileDetail?.download_url + '/ik-thumbnail.jpg'
+        "
       >
-        <source :src="fileDetail?.download_url" :type="fileDetail?.type" />
+        <source
+          :src="'https://ik.imagekit.io/gwa1ycz7gc/' + fileDetail?.download_url"
+          :type="fileDetail?.type"
+        />
       </video>
       <!-- image -->
       <img

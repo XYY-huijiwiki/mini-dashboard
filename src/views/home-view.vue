@@ -96,12 +96,15 @@
     <router-link to="/github-files">
       <n-button>github-files</n-button>
     </router-link>
+    <router-link to="/miui-themes">
+      <n-button>miui-themes</n-button>
+    </router-link>
   </n-space>
 </template>
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import { Github } from '@vicons/fa'
-import { ref } from 'vue'
+
 const { t } = useI18n()
 </script>

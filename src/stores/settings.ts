@@ -7,6 +7,7 @@ interface Settings {
   language: 'auto' | string
   dataType: 'xlsx' | 'json'
   exportBackup: boolean
+  ghToken: string
 }
 
 export const useSettingsStore = defineStore('settings', () => {
@@ -15,6 +16,7 @@ export const useSettingsStore = defineStore('settings', () => {
     language: 'auto',
     dataType: 'xlsx',
     exportBackup: false,
+    ghToken: '',
   }
   // init settings from localStorage or use default settings
   const settings: Ref<Settings> = useLocalStorage('miniDashboardSettings', defaultSettings, {

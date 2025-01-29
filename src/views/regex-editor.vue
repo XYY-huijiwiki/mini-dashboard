@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <n-scrollbar class="">
     <n-divider title-placement="left">select-pages</n-divider>
     <n-space :wrap="false">
       <n-button-group vertical>
@@ -89,7 +89,7 @@
         <div v-show="checkTab === undefined">no-diff/preview</div>
       </n-card>
     </n-space>
-  </div>
+  </n-scrollbar>
 </template>
 
 <script setup lang="ts">

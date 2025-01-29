@@ -1,6 +1,6 @@
 import { createRouter, createWebHashHistory, type RouteRecordRaw } from 'vue-router'
 
-const views = import.meta.glob('@/views/*.vue')
+const views = import.meta.glob('@/views/**/*.vue')
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -57,6 +57,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/github-files',
     name: 'github-files',
     component: views['/src/views/github-files.vue'],
+  },
+  {
+    path: '/miui-themes',
+    name: 'miui-themes',
+    component: views['/src/views/miui-themes/index.vue'],
   },
 ]
 

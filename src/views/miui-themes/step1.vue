@@ -5,14 +5,9 @@
         <n-spin :show="loading"><github /></n-spin>
       </template>
       <template #extra>
-        <n-button :disabled="loading || isLoggedIn" @click="login">
-          {{ isLoggedIn ? 'Logged In' : 'Login' }}
-        </n-button>
+        <n-button :disabled="loading" @click="login">Login</n-button>
       </template>
     </n-empty>
-    <n-flex justify="end">
-      <n-button :disabled="!isLoggedIn" type="primary" @click="$emit('next')">下一步</n-button>
-    </n-flex>
   </n-flex>
 </template>
 
@@ -22,11 +17,10 @@ import { onMounted, ref } from 'vue'
 import { useSettingsStore } from '@/stores/settings'
 import { storeToRefs } from 'pinia'
 
-defineEmits(['next'])
+let emits = defineEmits(['next'])
 let serverlessURL = 'https://github-auth-pine-1dfd.karsten-zhou.workers.dev/'
 let { settings } = storeToRefs(useSettingsStore())
 let loading = ref(true)
-let isLoggedIn = ref(false)
 
 async function login() {
   let url = new URL(serverlessURL + 'login')
@@ -69,8 +63,8 @@ onMounted(async () => {
         // bad credentials
         settings.value.ghToken = ''
       } else if (res.permissions?.admin) {
-        isLoggedIn.value = true
         loading.value = false
+        emits('next')
         return
       } else {
         $dialog.warning({

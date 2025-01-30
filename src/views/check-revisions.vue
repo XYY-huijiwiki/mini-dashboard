@@ -1,120 +1,140 @@
 <template>
-  <n-space verticle>
-    <n-timeline :icon-size="24">
-      <n-timeline-item v-for="(revision, index) in arvData" :key="index">
-        <template #icon>
-          <material-symbol :size="16">difference</material-symbol>
-        </template>
-        <template #header>
-          <n-a @click="openDiff(revision.revid)"> #{{ revision.revid }} </n-a>
-          |
-          <n-a :href="`/p/${revision.pageid}`" target="_blank">
-            {{ revision.title }}
-          </n-a>
-        </template>
-        <template #default>
-          <n-space>
-            <n-tag v-for="tag in revision.tags" :key="tag" size="small">
-              {{ tag }}
-            </n-tag>
-          </n-space>
-          {{ revision.comment }}
-        </template>
-        <template #footer>
-          {{ dayjs(revision.timestamp).format('YYYY-MM-DD HH:mm:ss') }} by
-          {{ revision.user }}
-        </template>
-      </n-timeline-item>
-    </n-timeline>
-    <n-button @click="loadRevisions()">Load Revisions</n-button>
-  </n-space>
+  <n-scrollbar>
+    <n-radio-group v-model:value="rcDir" name="radiogroup">
+      <n-flex>
+        <n-radio v-for="item in rcDirOptions" :key="item.value" :value="item.value">
+          {{ item.label }}
+        </n-radio>
+      </n-flex>
+    </n-radio-group>
+    <n-flex verticle>
+      <n-divider />
+      <n-timeline :icon-size="24">
+        <n-timeline-item v-for="(revision, index) in rcData" :key="index">
+          <template #icon>
+            <material-symbol :size="16">
+              {{
+                revision.type === 'new'
+                  ? 'add_circle'
+                  : revision.type === 'log' && revision.logtype === 'upload'
+                    ? 'upload_file'
+                    : 'difference'
+              }}
+            </material-symbol>
+          </template>
+          <template #header>
+            <n-a @click="openDiff(revision.revid)"> #{{ revision.revid }} </n-a>
+            |
+            <n-a :href="`/p/${revision.pageid}`" target="_blank">
+              {{ revision.title }}
+            </n-a>
+          </template>
+          <template #default>
+            <n-flex vertical>
+              <n-flex>
+                <n-tag v-for="tag in revision.tags" :key="tag" size="small">
+                  {{ tag }}
+                </n-tag>
+              </n-flex>
+              <div v-html="revision.parsedcomment"></div>
+            </n-flex>
+          </template>
+          <template #footer>
+            {{ dayjs(revision.timestamp).format('YYYY-MM-DD HH:mm:ss') }} by
+            {{ revision.user }}
+          </template>
+        </n-timeline-item>
+      </n-timeline>
+      <n-button @click="loadRevisions()" :loading="loading">Load More</n-button>
+    </n-flex>
+  </n-scrollbar>
 </template>
 
 <script setup lang="ts">
 /*
  * In this file, "arv-" stands for "all revisions"
  */
-import { ref, onBeforeMount, type Ref } from 'vue'
+import { ref, onBeforeMount, type Ref, watch } from 'vue'
 import dayjs from 'dayjs'
 import { useI18n } from 'vue-i18n'
+
+let loading = ref(false)
 
 // configure i18n
 const { t } = useI18n()
 
-type ArvResponse = {
+// configure the radio group
+let rcDirOptions: Ref<{ label: string; value: string }[]> = ref([
+  { label: t('arv-oldest'), value: 'older' },
+  { label: t('arv-newest'), value: 'newer' },
+])
+let rcDir: Ref<string> = ref('older')
+watch(rcDir, () => {
+  rcData.value = []
+  rcContinue.value = ''
+  loadRevisions()
+})
+
+// define the data types
+type RcResponse = {
   batchcomplete: string
   continue: {
-    arvcontinue: string
+    rccontinue: string
     continue: string
   }
   query: {
-    allrevisions: {
-      ns: number
-      pageid: number
-      title: string
-      revisions: {
-        revid: number
-        parentid: number
-        user: string
-        timestamp: string
-        comment: string
-        tags?: string[]
-      }[]
-    }[]
+    recentchanges: RcData
   }
 }
-type ArvData = {
+type RcData = {
+  type: 'categorize' | 'edit' | 'external' | 'log' | 'new'
+  logtype: undefined | string
   ns: number
-  pageid: number
   title: string
+  pageid: number
   revid: number
-  parentid: number
+  old_revid: number
+  rcid: number
   user: string
+  userid: number
+  minor: string
+  oldlen: number
+  newlen: number
   timestamp: string
   comment: string
-  tags?: string[]
+  parsedcomment: string
+  patrolled: string
+  autopatrolled: string
+  tags: string[]
+  sha1: string
+  useravatartime: number
 }[]
 
-let arvData: Ref<undefined | ArvData> = ref()
-let arvContinue: Ref<string> = ref('')
+let rcData: Ref<RcData> = ref([])
+let rcContinue: Ref<string> = ref('')
 async function loadRevisions() {
+  loading.value = true
+
   // fetch the data
-  let fetchParams = {
-    action: 'query',
-    list: 'allrevisions',
-    arvlimit: '500',
-    format: 'json',
-    arvprop: 'ids|timestamp|flags|comment|user|tags',
-    arvcontinue: '',
-  }
-  arvContinue.value && (fetchParams = { ...fetchParams, arvcontinue: arvContinue.value })
-  let response = await fetch(`/api.php?${new URLSearchParams(fetchParams).toString()}`)
-  let data: ArvResponse = await response.json()
+  let url = new URL('/api.php', location.origin)
+  url.searchParams.set('action', 'query')
+  url.searchParams.set('list', 'recentchanges')
+  url.searchParams.set('rclimit', '500')
+  url.searchParams.set('format', 'json')
+  url.searchParams.set('rcdir', rcDir.value)
+  url.searchParams.set(
+    'rcprop',
+    'user|userid|comment|parsedcomment|flags|timestamp|title|ids|sizes|redirect|patrolled|loginfo|tags|sha1',
+  )
+  rcContinue.value && url.searchParams.set('rccontinue', rcContinue.value)
+  let response = await fetch(url)
+  let data: RcResponse = await response.json()
   console.log(data)
-  // process the data
-  let processedData = []
-  for (let page of data.query.allrevisions) {
-    for (let rev of page.revisions) {
-      processedData.push({
-        ns: page.ns,
-        pageid: page.pageid,
-        title: page.title,
-        revid: rev.revid,
-        parentid: rev.parentid,
-        user: rev.user,
-        timestamp: rev.timestamp,
-        comment: rev.comment,
-        tags: rev.tags,
-      })
-    }
-  }
-  arvData.value && (processedData = arvData.value.concat(processedData))
-  processedData.sort((a, b) => (a.revid > b.revid ? -1 : 1))
   // update the refs
-  arvData.value = processedData
-  arvContinue.value = data.continue?.arvcontinue
-  // log (dev only)
-  import.meta.env.DEV && console.log('arvData', arvData.value)
+  rcData.value.push(...data.query.recentchanges)
+  rcContinue.value = data.continue?.rccontinue
+
+  loading.value = false
 }
 onBeforeMount(async () => {
   await loadRevisions()

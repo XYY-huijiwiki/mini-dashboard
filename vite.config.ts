@@ -7,12 +7,16 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 import Components from 'unplugin-vue-components/vite'
 import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
 import monacoEditorPlugin from 'vite-plugin-monaco-editor-esm'
+import { nodePolyfills } from 'vite-plugin-node-polyfills'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
     vueDevTools(),
+    nodePolyfills({
+      include: ['process'],
+    }),
     monacoEditorPlugin(),
     Components({
       resolvers: [NaiveUiResolver()],
@@ -26,6 +30,9 @@ export default defineConfig({
   build: {
     manifest: true,
     minify: 'terser',
+  },
+  server: {
+    cors: true,
   },
   base: 'https://xyy-huijiwiki.github.io/mini-dashboard/',
 })

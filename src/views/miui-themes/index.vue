@@ -1,42 +1,42 @@
 <template>
   <n-scrollbar>
     <n-flex vertical>
-      <n-steps :current="steps.current" :status="steps.status" class="m-4">
+      <n-steps :current="currentStep" class="m-4">
         <n-step title="登录" />
         <n-step title="填写" />
         <n-step title="预览" />
         <n-step title="提交" />
       </n-steps>
-      <step-one v-if="steps.current === 1" @next="steps.current++" />
+      <step-one v-if="currentStep === 1" @next="currentStep++" />
       <step-two
-        v-if="steps.current === 2"
-        @next="steps.current++"
-        @prev="steps.current--"
+        v-if="currentStep === 2"
+        @next="currentStep++"
+        @prev="currentStep--"
         @update-result="
-          (res) => {
+          (res: Result) => {
             result = res
           }
         "
       />
       <step-three
-        v-if="steps.current === 3 && result !== null"
-        @next="steps.current++"
-        @prev="steps.current--"
+        v-if="currentStep === 3 && result !== null"
+        @next="currentStep++"
+        @prev="currentStep--"
         :result="result"
       />
       <step-four
-        v-if="steps.current === 4 && result !== null"
+        v-if="currentStep === 4 && result !== null"
         :result="result"
-        @prev="steps.current--"
+        @prev="currentStep--"
       />
-      <error-view v-if="steps.current >= 3 && result === null" />
+      <error-view v-if="currentStep >= 3 && result === null" />
     </n-flex>
   </n-scrollbar>
 </template>
 
 <script setup lang="ts">
 // Third-party library imports
-import { onMounted, ref } from 'vue'
+import { ref, watch } from 'vue'
 import type { Ref } from 'vue'
 
 // Local imports
@@ -47,9 +47,20 @@ import StepFour from './step4.vue'
 import type { Result } from './index'
 import errorView from '../error-view.vue'
 
-let steps = ref({
-  current: 1,
-  status: 'process',
+let currentStep = ref(1)
+watch(currentStep, () => {
+  // scroll to top smoothly with offset
+  let element = document.getElementById('mini-dashboard')
+  if (element) {
+    const offset = 100
+    const elementPosition = element.getBoundingClientRect().top + window.scrollY
+    const offsetPosition = elementPosition - offset
+
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: 'smooth',
+    })
+  }
 })
 
 let result: Ref<Result | null> = ref(null)

@@ -4,6 +4,7 @@ import editPage from '@/utils/mwApi/editPage'
 import uploadFile from '@/utils/mwApi/uploadFile'
 import deletePage from '@/utils/mwApi/deletePage'
 import undeletePage from '@/utils/mwApi/undeletePage'
+import type { ArvResponse, ProcessedArvData } from '@/utils/mwApi/types'
 
 /**
  * wiki api base url.
@@ -13,3 +14,4 @@ import undeletePage from '@/utils/mwApi/undeletePage'
 const url = `${location.origin}/w/api.php`
 
 export { url, editPage, getPage, renamePage, uploadFile, deletePage, undeletePage }
+export type { ArvResponse, ProcessedArvData }

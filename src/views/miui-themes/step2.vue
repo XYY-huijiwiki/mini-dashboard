@@ -3,17 +3,17 @@
     <n-form label-placement="left">
       <n-form-item label="主题链接" show-require-mark>
         <n-input v-model:value="themeInput.link" :disabled="loading" />
-        <n-button @click="getDownloadLink" :disabled="loading || !themeInput.link"
-          >获取下载链接</n-button
-        >
+        <n-button @click="getDownloadLink" :disabled="loading || !themeInput.link">
+          获取下载链接
+        </n-button>
       </n-form-item>
       <n-form-item label="下载链接" show-require-mark>
         <n-input v-model:value="themeInput.downloadLink" :disabled="loading" />
       </n-form-item>
-      <n-form-item label="发布日期" show-require-mark>
+      <n-form-item label="发布日期">
         <n-date-picker v-model:value="themeInput.date" type="date" :disabled="loading" />
       </n-form-item>
-      <n-form-item label="日期截图" show-require-mark>
+      <n-form-item label="日期截图">
         <n-flex :align="`center`">
           <n-button @click="openFile" :disabled="loading">选择文件</n-button>
           <div>
@@ -31,7 +31,7 @@
         type="primary"
         @click="clickNext"
         :loading="loading"
-        :disabled="!themeInput.link || !themeInput.date || !themeInput.dateImg"
+        :disabled="!themeInput.link || !themeInput.downloadLink"
       >
         下一步
       </n-button>
@@ -42,6 +42,7 @@
 <script setup lang="ts">
 // Third-party library imports
 import dayjs from 'dayjs'
+import dayjsUTC from 'dayjs/plugin/utc'
 import jszip from 'jszip'
 import { xml2json } from 'xml-js'
 import { useFileDialog } from '@vueuse/core'
@@ -51,6 +52,8 @@ import type { Ref } from 'vue'
 // Local imports
 import { getMTZFile, cleanURL } from './index'
 import type { Result } from './index'
+
+dayjs.extend(dayjsUTC)
 
 let emits = defineEmits<{
   next: []
@@ -121,8 +124,6 @@ async function clickNext() {
       [await (await fetch(corsProxy + squareImgLink)).blob()],
       `小米主题 ${title}.png`,
     )
-    if (!themeInput.value.date) throw new Error('Invalid date')
-    let 发布日期 = dayjs(themeInput.value.date).format('YYYY-MM-DD')
     let 你知道咩 = themeInput.value.trivia || ''
 
     /* ==================
@@ -133,8 +134,12 @@ async function clickNext() {
     // read zip file
     let zipObj = await jszip.loadAsync(mtz)
     // get info
-    let description_xml = await zipObj.file('description.xml')?.async('string')
-    if (!description_xml) throw new Error('description.xml不存在')
+    let xmlFile = zipObj.file('description.xml')
+    if (!xmlFile) throw new Error('description.xml不存在')
+    let 发布日期 = themeInput.value.date
+      ? dayjs(themeInput.value.date).format('YYYY-MM-DD')
+      : dayjs(xmlFile.date).utc().format('YYYY-MM-DD')
+    let description_xml = await xmlFile.async('string')
     let description_json = JSON.parse(xml2json(description_xml, { compact: true }))
     let 主题作者 = description_json.theme.designer._cdata.trim()
     let 主题介绍 = description_json.theme.description._cdata.trim().replace(/[\r\n]{1,2}/g, '<br/>')
@@ -156,8 +161,13 @@ async function clickNext() {
     /* ==================
     process date image
    ================== */
-    if (!themeInput.value.dateImg) throw new Error('Invalid date image')
-    let dateImg = new File([themeInput.value.dateImg], `小米主题 ${主题名称} 发布日期截图.jpg`)
+    let dateImg: File | undefined
+    if (themeInput.value.date) {
+      if (!themeInput.value.dateImg) {
+        throw new Error('手动输入日期时，需要提供日期截图')
+      }
+      dateImg = new File([themeInput.value.dateImg], `小米主题 ${主题名称} 发布日期截图.jpg`)
+    }
 
     /* ==================
     result

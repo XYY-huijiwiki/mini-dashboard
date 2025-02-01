@@ -16,7 +16,7 @@
           result.files.dateImg,
           result.files.squareImg,
           ...(result?.files.previews || []),
-        ]"
+        ].filter(Boolean)"
       >
         <n-image
           class="w-32 h-32 rounded bg-gray-200"

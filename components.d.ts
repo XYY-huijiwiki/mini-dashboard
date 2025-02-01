@@ -7,7 +7,6 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    CodeBlock: typeof import('./src/components/code-block.vue')['default']
     FileDetails: typeof import('./src/components/file-details.vue')['default']
     FileIcon: typeof import('./src/components/file-icon.vue')['default']
     FileListGrid: typeof import('./src/components/file-list-grid.vue')['default']
@@ -18,10 +17,8 @@ declare module 'vue' {
     FileSearchBar: typeof import('./src/components/file-search-bar.vue')['default']
     HelpBtn: typeof import('./src/components/help-btn.vue')['default']
     InfoLabel: typeof import('./src/components/info-label.vue')['default']
-    ItemView: typeof import('./src/components/RecycleScroller/ItemView.vue')['default']
     MaterialSymbol: typeof import('./src/components/material-symbol.vue')['default']
     NA: typeof import('naive-ui')['NA']
-    NAlert: typeof import('naive-ui')['NAlert']
     NAvatar: typeof import('naive-ui')['NAvatar']
     NButton: typeof import('naive-ui')['NButton']
     NButtonGroup: typeof import('naive-ui')['NButtonGroup']
@@ -44,7 +41,6 @@ declare module 'vue' {
     NGridItem: typeof import('naive-ui')['NGridItem']
     NIcon: typeof import('naive-ui')['NIcon']
     NImage: typeof import('naive-ui')['NImage']
-    NImg: typeof import('naive-ui')['NImg']
     NInfiniteScroll: typeof import('naive-ui')['NInfiniteScroll']
     NInput: typeof import('naive-ui')['NInput']
     NInputGroup: typeof import('naive-ui')['NInputGroup']
@@ -72,12 +68,8 @@ declare module 'vue' {
     NUl: typeof import('naive-ui')['NUl']
     NUpload: typeof import('naive-ui')['NUpload']
     NUploadTrigger: typeof import('naive-ui')['NUploadTrigger']
-    NVirtualList: typeof import('naive-ui')['NVirtualList']
-    RecycleScroller: typeof import('./src/components/RecycleScroller.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    ToolbaredIconBtn: typeof import('./src/components/toolbared-icon-btn.vue')['default']
-    TooltippedIconBtn: typeof import('./src/components/tooltipped-icon-btn.vue')['default']
     TooltippedIconButton: typeof import('./src/components/tooltipped-icon-button.vue')['default']
   }
 }

@@ -29,7 +29,7 @@ type Result = {
   themeJson: ThemeJson
   files: {
     mtz: File
-    dateImg: File
+    dateImg: File | undefined
     squareImg: File
     previews: File[]
   }

@@ -86,6 +86,14 @@ function clearData() {
       </template>
       <n-input v-model:value="settings.ghToken" />
     </n-form-item>
+    <!-- cloudflare token -->
+    <n-form-item>
+      <template #label>
+        {{ t('settings.label-cloudflare-token') }}
+        <info-label :content="t('settings.cloudflare-token-info')" />
+      </template>
+      <n-input v-model:value="settings.cfToken" />
+    </n-form-item>
     <!-- restore defaults -->
     <n-form-item :label="t('settings.label-restore-defaults')">
       <n-button @click="clearData()">

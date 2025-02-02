@@ -1,5 +1,7 @@
 <template>
   <n-scrollbar>
+    <n-button @click="getAllRevisons()">Get All Revisions</n-button>
+    <n-button @click="updateArv()">Update Arv</n-button>
     <n-radio-group v-model:value="rcDir" name="radiogroup">
       <n-flex>
         <n-radio v-for="item in rcDirOptions" :key="item.value" :value="item.value">
@@ -51,17 +53,23 @@
 </template>
 
 <script setup lang="ts">
-/*
- * In this file, "arv-" stands for "all revisions"
- */
 import { ref, onBeforeMount, type Ref, watch } from 'vue'
 import dayjs from 'dayjs'
 import { useI18n } from 'vue-i18n'
+import sleep from '@anmiles/sleep'
+import knex from 'knex'
+import { querySQL } from '@/utils/cfApi'
+import type { ProcessedArvData, ArvResponse } from '@/utils/mwApi'
+import { storeToRefs } from 'pinia'
+import { useSettingsStore } from '@/stores/settings'
+
+// config i18n
+let { t } = useI18n()
+
+// config stores
+let { settings } = storeToRefs(useSettingsStore())
 
 let loading = ref(false)
-
-// configure i18n
-const { t } = useI18n()
 
 // configure the radio group
 let rcDirOptions: Ref<{ label: string; value: string }[]> = ref([
@@ -150,6 +158,147 @@ function openDiff(revid: number) {
   } else {
     // otherwise, open the diff in a new tab
     window.open(`/index.php?diff=${revid}`)
+  }
+}
+
+let arvContinue: Ref<string> = ref('')
+let content: Ref<ProcessedArvData[]> = ref([])
+async function getAllRevisons() {
+  async function query() {
+    let url = new URL('/api.php', location.origin)
+    url.searchParams.set('action', 'query')
+    url.searchParams.set('list', 'allrevisions')
+    url.searchParams.set('arvlimit', '500')
+    url.searchParams.set('format', 'json')
+    url.searchParams.set('arvdir', 'newer')
+    url.searchParams.set('arvstart', new Date('2025-01-30T18:52:13Z').toISOString())
+    url.searchParams.set(
+      'arvprop',
+      'ids|timestamp|flags|comment|user|contentmodel|parsedcomment|roles|sha1|size|slotsha1|slotsize|tags|userid',
+    )
+    arvContinue.value && url.searchParams.set('arvcontinue', arvContinue.value)
+    let response = await fetch(url)
+    let data = (await response.json()) as ArvResponse
+    console.log(data)
+    return data
+  }
+
+  let stopLoop = false
+  while (stopLoop === false) {
+    let data = await query()
+    let allRevisions = data.query.allrevisions
+    allRevisions.forEach((arv) => {
+      arv.revisions.forEach((rv) => {
+        content.value.push({
+          pageid: arv.pageid,
+          ns: arv.ns,
+          title: arv.title,
+          ...rv,
+        })
+      })
+    })
+    // if (data.continue) {
+    //   arvContinue.value = data.continue.arvcontinue
+    // } else {
+    //   stopLoop = true
+    // }
+    stopLoop = true
+    await sleep(100)
+    console.log(content.value.length)
+  }
+}
+
+async function updateArv() {
+  // func
+  function genURL(arvContinue: string): URL {
+    let url = new URL('/api.php', location.origin)
+    url.searchParams.set('action', 'query')
+    url.searchParams.set('list', 'allrevisions')
+    url.searchParams.set('arvlimit', '500')
+    url.searchParams.set('format', 'json')
+    url.searchParams.set('arvdir', 'newer')
+    url.searchParams.set('arvstart', startFrom)
+    url.searchParams.set(
+      'arvprop',
+      'ids|timestamp|flags|comment|user|contentmodel|parsedcomment|roles|sha1|size|slotsha1|slotsize|tags|userid',
+    )
+    arvContinue && url.searchParams.set('arvcontinue', arvContinue)
+    return url
+  }
+  async function getData(url: URL): Promise<ArvResponse> {
+    let response = await fetch(url)
+    let data = (await response.json()) as ArvResponse
+    console.log(data)
+    return data
+  }
+  function processData(data: ArvResponse): ProcessedArvData[] {
+    let result: ProcessedArvData[] = []
+    let allRevisions = data.query.allrevisions
+    allRevisions.forEach((arv) => {
+      arv.revisions.forEach((rv) => {
+        result.push({
+          pageid: arv.pageid,
+          ns: arv.ns,
+          title: arv.title,
+          ...rv,
+        })
+      })
+    })
+    return result
+  }
+
+  // fetch data
+  let startFrom = (await querySQL('SELECT * FROM Arv ORDER BY `timestamp` DESC LIMIT 1;'))[0]
+    .timestamp
+  let res: ProcessedArvData[] = []
+  let arvContinue = ''
+  while (true) {
+    let url = genURL(arvContinue)
+    console.log('url', url)
+    let data = await getData(url)
+    console.log('data', data)
+    let processedData = processData(data)
+    res.push(...processedData)
+    if (data.continue) {
+      arvContinue = data.continue.arvcontinue
+    } else {
+      break
+    }
+  }
+  res = res.sort((a, b) => {
+    return a.revid - b.revid
+  })
+  res.shift() // remove res[0] for it's duplicated
+  console.log('res', res)
+
+  // upload data
+  let db = knex({
+    client: 'mssql',
+    useNullAsDefault: true,
+  })
+  let batchSize = 32
+  for (let i = 0; i < res.length; i += batchSize) {
+    let batch = res.slice(i, i + batchSize)
+    let batchWithoutObj: Record<string, string | number>[] = []
+    // convert objects to stringified json
+    for (let j = 0; j < batch.length; j++) {
+      let keys: (keyof ProcessedArvData)[] = Object.keys(batch[j]) as (keyof ProcessedArvData)[]
+      batchWithoutObj[j] = {}
+      for (let key of keys) {
+        if (typeof batch[j][key] === 'object') {
+          batchWithoutObj[j][key] = JSON.stringify(batch[j][key])
+        } else {
+          // @ts-ignore
+          batchWithoutObj[j][key] = batch[j][key]
+        }
+      }
+    }
+    console.log('batch', batch)
+    console.log('batchWithoutObj', batchWithoutObj)
+    let query = db('Arv').insert(batchWithoutObj).toString()
+    console.log('sql', query)
+    let a = await querySQL(query, settings.value.cfToken)
+    console.log(a)
   }
 }
 </script>

@@ -38,5 +38,4 @@ export default defineConfig({
     cors: true,
   },
   base: '//xyy-huijiwiki.github.io/mini-dashboard/',
-  // base: '/mini-das:hboard/',
 })

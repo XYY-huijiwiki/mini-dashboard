@@ -117,7 +117,8 @@
     <router-link to="/check-revisions">
       <n-button>check-revisions</n-button>
     </router-link>
-    <img src="../assets/mi-logo.svg" />
+    <!-- test -->
+    <img src="../locales/docs/img/IMG_20250202_125125.png" />
   </n-space>
 </template>
 

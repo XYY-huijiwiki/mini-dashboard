@@ -1,6 +1,30 @@
 <template>
   <n-thing content-indented>
     <template #header-extra>
+      <help-btn link="miui-themes" />
+    </template>
+    <template #avatar>
+      <n-avatar>
+        <n-icon><img :src="MiLogoSvg" alt="MIUI" /> </n-icon>
+      </n-avatar>
+    </template>
+    <template #header> {{ t('miui-themes.title') }} </template>
+    <template #description>
+      {{ t('miui-themes.description') }}
+    </template>
+    <template #action>
+      <n-space>
+        <router-link :to="{ name: 'miui-themes' }">
+          <n-button size="small">
+            {{ t('miui-themes.title') }}
+          </n-button>
+        </router-link>
+      </n-space>
+    </template>
+  </n-thing>
+  <n-divider></n-divider>
+  <n-thing content-indented>
+    <template #header-extra>
       <help-btn link="github-files" />
     </template>
     <template #avatar>
@@ -93,18 +117,14 @@
     <router-link to="/check-revisions">
       <n-button>check-revisions</n-button>
     </router-link>
-    <router-link to="/github-files">
-      <n-button>github-files</n-button>
-    </router-link>
-    <router-link to="/miui-themes">
-      <n-button>miui-themes</n-button>
-    </router-link>
+    <img src="../assets/mi-logo.svg" />
   </n-space>
 </template>
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import { Github } from '@vicons/fa'
+import MiLogoSvg from '@/assets/mi-logo.svg'
 
 const { t } = useI18n()
 </script>

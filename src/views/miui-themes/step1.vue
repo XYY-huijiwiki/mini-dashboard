@@ -1,11 +1,13 @@
 <template>
   <n-flex vertical>
-    <n-empty description="Login Your GitHub Account and GRANT ORGANIZATION ACCESS of XYY-huijiwiki">
+    <n-empty :description="t(`miui-themes.step1-login-desc`)">
       <template #icon>
         <n-spin :show="loading"><github /></n-spin>
       </template>
       <template #extra>
-        <n-button :disabled="loading" @click="login">Login</n-button>
+        <n-button :disabled="loading" @click="login">{{
+          t('miui-themes.step1-btn-login')
+        }}</n-button>
       </template>
     </n-empty>
   </n-flex>
@@ -16,6 +18,9 @@ import { Github } from '@vicons/fa'
 import { onMounted, ref } from 'vue'
 import { useSettingsStore } from '@/stores/settings'
 import { storeToRefs } from 'pinia'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 let emits = defineEmits(['next'])
 let serverlessURL = 'https://github-auth-pine-1dfd.karsten-zhou.workers.dev/'
@@ -69,8 +74,8 @@ onMounted(async () => {
       } else {
         $dialog.warning({
           autoFocus: false,
-          title: 'Permission Denied',
-          content: 'You don’t have the permission to access the organization XYY-huijiwiki.',
+          title: t('miui-themes.step1-permission-denied-title'),
+          content: t('miui-themes.step1-permission-denied-content'),
         })
       }
 
@@ -82,7 +87,7 @@ onMounted(async () => {
     loading.value = false
   } catch (error) {
     $notification.error({
-      title: 'Error',
+      title: t('general.error'),
       content: `${error}`,
       meta: new Date().toLocaleString(),
     })

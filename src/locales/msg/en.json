@@ -10,7 +10,13 @@
     "btn-cancel": "Cancel",
     "btn-confirm": "Confirm",
     "text-leave-warning-title": "Attention",
-    "text-leave-warning-content": "We are still working on it. Please do not leave this page."
+    "text-leave-warning-content": "We are still working on it. Please do not leave this page.",
+    "msg-page-deleted": "Page Deleted ({0})",
+    "msg-delete-failed": "Delete Failed ({0})",
+    "msg-page-edited": "Page Edited ({0})",
+    "msg-edit-failed": "Edit Failed ({0})",
+    "msg-page-renamed": "Page Renamed ({0})",
+    "msg-rename-failed": "Rename Failed ({0})"
   },
   "settings": {
     "title": "Settings",
@@ -164,5 +170,28 @@
     "text-reason": "Rescue Reason",
     "btn-rescue": "Rescue",
     "error-no-rescue-reason": "Please fill in the rescue reason"
+  },
+  "miui-themes": {
+    "title": "MIUI Themes Collector",
+    "description": "A tool to collect MIUI theme files, images, and other resources.",
+    "label-login": "Login",
+    "label-fill-in": "Fill in",
+    "label-preview": "Preview",
+    "label-submit": "Submit",
+    "btn-prev-step": "Previous Step",
+    "btn-next-step": "Next Step",
+    "step1-btn-login": "Login",
+    "step1-login-desc": "Login Your GitHub Account and GRANT ORGANIZATION ACCESS of XYY-huijiwiki",
+    "step1-permission-denied-title": "Permission Denied",
+    "step1-permission-denied-content": "You don’t have the permission to access the organization XYY-huijiwiki.",
+    "step2-label-theme-link": "Theme Link",
+    "step2-btn-get-download-link": "Get Download Link",
+    "step2-label-download-link": "Download Link",
+    "step2-label-release-date": "Release Date",
+    "step2-label-date-screenshot": "Date Screenshot",
+    "step2-btn-upload-date-screenshot": "Upload Date Screenshot",
+    "step2-selected-file": "Selected File: {0}",
+    "step2-no-file-selected": "No file selected",
+    "step2-label-trivia": "Trivia"
   }
 }

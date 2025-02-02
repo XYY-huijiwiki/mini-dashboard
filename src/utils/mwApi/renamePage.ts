@@ -1,3 +1,7 @@
+import { i18n } from '@/main'
+
+let { t } = i18n.global
+
 /**
  * Parameters for the move operation.
  * @see {@link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Move}
@@ -78,10 +82,16 @@ async function renamePage(renameParams: RenameParams): Promise<
         ...renameParams,
       })
       .done((data: RenameResponse) => {
+        $message.success(t('general.msg-page-renamed', [data.move.from + '➡️' + data.move.to]))
         isDev ? console.log(data) : null
         resolve({ ok: true, body: data })
       })
       .fail((data: string) => {
+        $notification.error({
+          title: t('general.error'),
+          content: t('general.msg-page-rename-failed', [data]),
+          meta: new Date().toLocaleString(),
+        })
         isDev ? console.log(data) : null
         resolve({ ok: false, body: data })
       })

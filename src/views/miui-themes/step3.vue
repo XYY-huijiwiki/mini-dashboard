@@ -27,8 +27,12 @@
       </n-flex>
     </n-flex>
     <n-flex justify="end">
-      <n-button @click="emits('prev')">上一步</n-button>
-      <n-button type="primary" @click="emits('next')"> 下一步 </n-button>
+      <n-button @click="emits('prev')">
+        {{ t('miui-themes.btn-prev-step') }}
+      </n-button>
+      <n-button type="primary" @click="emits('next')">
+        {{ t('miui-themes.btn-next-step') }}
+      </n-button>
     </n-flex>
   </n-flex>
 </template>
@@ -37,6 +41,9 @@
 import hljs from 'highlight.js/lib/core'
 import json from 'highlight.js/lib/languages/json'
 import type { Result } from './index'
+import { useI18n } from 'vue-i18n'
+
+let { t } = useI18n()
 
 hljs.registerLanguage('json', json)
 let createObjectURL = window.URL.createObjectURL

@@ -10,7 +10,13 @@
     "btn-cancel": "取消",
     "btn-confirm": "确认",
     "text-leave-warning-title": "注意",
-    "text-leave-warning-content": "我们仍在处理。请不要离开本页面。"
+    "text-leave-warning-content": "我们仍在处理。请不要离开本页面。",
+    "msg-page-deleted": "页面已删除（{0}）",
+    "msg-delete-failed": "删除失败（{0}）",
+    "msg-page-edited": "页面已编辑（{0}）",
+    "msg-edit-failed": "编辑失败（{0}）",
+    "msg-page-renamed": "页面已重命名（{0}）",
+    "msg-rename-failed": "重命名失败（{0}）"
   },
   "settings": {
     "title": "设置",
@@ -153,5 +159,28 @@
     "text-reason": "救援原因",
     "btn-rescue": "救援",
     "error-no-rescue-reason": "请填写救援原因"
+  },
+  "miui-themes": {
+    "title": "MIUI主题收集器",
+    "description": "一个用于收集MIUI主题文件、图片和其他资源的工具。",
+    "label-login": "登录",
+    "label-fill-in": "填写",
+    "label-preview": "预览",
+    "label-submit": "提交",
+    "btn-prev-step": "上一步",
+    "btn-next-step": "下一步",
+    "step1-btn-login": "登录",
+    "step1-login-desc": "登录您的GitHub账户并授予XYY-huijiwiki组织访问权限",
+    "step1-permission-denied-title": "权限被拒绝",
+    "step1-permission-denied-content": "您没有访问XYY-huijiwiki组织的权限。",
+    "step2-label-theme-link": "主题链接",
+    "step2-btn-get-download-link": "获取下载链接",
+    "step2-label-download-link": "下载链接",
+    "step2-label-release-date": "发布日期",
+    "step2-label-date-screenshot": "日期截图",
+    "step2-btn-upload-date-screenshot": "上传日期截图",
+    "step2-selected-file": "已选择文件：{0}",
+    "step2-no-file-selected": "未选择文件",
+    "step2-label-trivia": "你知道咩"
   }
 }

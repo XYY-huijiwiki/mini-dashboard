@@ -11,7 +11,13 @@
     "btn-cancel": "Abbrechen",
     "btn-confirm": "Bestätigen",
     "text-leave-warning-title": "Achtung",
-    "text-leave-warning-content": "Wir arbeiten noch daran. Bitte verlassen Sie diese Seite nicht."
+    "text-leave-warning-content": "Wir arbeiten noch daran. Bitte verlassen Sie diese Seite nicht.",
+    "msg-page-deleted": "Seite gelöscht ({0})",
+    "msg-delete-failed": "Löschen fehlgeschlagen ({0})",
+    "msg-page-edited": "Seite bearbeitet ({0})",
+    "msg-edit-failed": "Bearbeiten fehlgeschlagen ({0})",
+    "msg-page-renamed": "Seite umbenannt ({0})",
+    "msg-rename-failed": "Umbenennen fehlgeschlagen ({0})"
   },
   "settings": {
     "title": "Einstellungen",
@@ -154,5 +160,28 @@
     "text-reason": "Retten Grund",
     "btn-rescue": "Retten",
     "error-no-rescue-reason": "Bitte geben Sie den Retten Grund ein"
+  },
+  "miui-themes": {
+    "title": "MIUI Themes Collector",
+    "description": "Ein Tool zum Sammeln von MIUI-Themendateien, Bildern und anderen Ressourcen.",
+    "label-login": "Anmelden",
+    "label-fill-in": "Eingeben",
+    "label-preview": "überprüfen",
+    "label-submit": "Einreichen",
+    "btn-prev-step": "Vorheriger Schritt",
+    "btn-next-step": "Nächster Schritt",
+    "step1-btn-login": "Anmelden",
+    "step1-login-desc": "Melden Sie sich bei Ihrem GitHub-Konto an und ERTEILEN SIE DER ORGANISATION XYY-huijiwiki ZUGRIFF",
+    "step1-permission-denied-title": "Zugriff verweigert",
+    "step1-permission-denied-content": "Sie haben keine Berechtigung, auf die Organisation XYY-huijiwiki zuzugreifen.",
+    "step2-label-theme-link": "Themenlink",
+    "step2-btn-get-download-link": "Download-Link abrufen",
+    "step2-label-download-link": "Download-Link",
+    "step2-label-release-date": "Veröffentlichungsdatum",
+    "step2-label-date-screenshot": "Datum Screenshot",
+    "step2-btn-upload-date-screenshot": "Datum Screenshot hochladen",
+    "step2-selected-file": "Ausgewählte Datei: {0}",
+    "step2-no-file-selected": "Keine Datei ausgewählt",
+    "step2-label-trivia": "Trivia"
   }
 }

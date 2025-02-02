@@ -1,39 +1,46 @@
 <template>
   <n-flex vertical>
-    <n-form label-placement="left">
-      <n-form-item label="主题链接" show-require-mark>
-        <n-input v-model:value="themeInput.link" :disabled="loading" />
-        <n-button @click="getDownloadLink" :disabled="loading || !themeInput.link">
-          获取下载链接
-        </n-button>
+    <n-form>
+      <n-form-item :label="t('miui-themes.step2-label-theme-link')" show-require-mark>
+        <n-input-group>
+          <n-input v-model:value="themeInput.link" :disabled="loading" />
+          <n-button @click="getDownloadLink" :disabled="loading || !themeInput.link">
+            {{ t('miui-themes.step2-btn-get-download-link') }}
+          </n-button>
+        </n-input-group>
       </n-form-item>
-      <n-form-item label="下载链接" show-require-mark>
+      <n-form-item :label="t('miui-themes.step2-label-download-link')" show-require-mark>
         <n-input v-model:value="themeInput.downloadLink" :disabled="loading" />
       </n-form-item>
-      <n-form-item label="发布日期">
+      <n-form-item :label="t('miui-themes.step2-label-release-date')">
         <n-date-picker v-model:value="themeInput.date" type="date" :disabled="loading" />
       </n-form-item>
-      <n-form-item label="日期截图">
+      <n-form-item :label="t('miui-themes.step2-label-date-screenshot')">
         <n-flex :align="`center`">
-          <n-button @click="openFile" :disabled="loading">选择文件</n-button>
+          <n-button @click="openFile" :disabled="loading">
+            {{ t('miui-themes.step2-btn-upload-date-screenshot') }}
+          </n-button>
           <div>
-            {{ themeInput.dateImg ? `已选择文件：${themeInput.dateImg.name}` : `未选择文件` }}
+            {{
+              themeInput.dateImg
+                ? t('miui-themes.step2-selected-file', [themeInput.dateImg.name])
+                : t('miui-themes.step2-no-file-selected')
+            }}
           </div>
         </n-flex>
       </n-form-item>
-      <n-form-item label="你知道咩">
+      <n-form-item :label="t('miui-themes.step2-label-trivia')">
         <n-input v-model:value="themeInput.trivia" :disabled="loading" />
       </n-form-item>
     </n-form>
     <n-flex justify="end">
-      <n-button @click="$emit('prev')">上一步</n-button>
       <n-button
         type="primary"
         @click="clickNext"
         :loading="loading"
         :disabled="!themeInput.link || !themeInput.downloadLink"
       >
-        下一步
+        {{ t('miui-themes.btn-next-step') }}
       </n-button>
     </n-flex>
   </n-flex>
@@ -48,10 +55,13 @@ import { xml2json } from 'xml-js'
 import { useFileDialog } from '@vueuse/core'
 import { ref } from 'vue'
 import type { Ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 // Local imports
 import { getMTZFile, cleanURL } from './index'
 import type { Result } from './index'
+
+const { t } = useI18n()
 
 dayjs.extend(dayjsUTC)
 
@@ -196,7 +206,7 @@ async function clickNext() {
   } catch (error) {
     loading.value = false
     $notification.error({
-      title: 'Error',
+      title: t('general.error'),
       content: `${error}`,
     })
   }

@@ -2,10 +2,10 @@
   <n-scrollbar>
     <n-flex vertical>
       <n-steps :current="currentStep" class="m-4">
-        <n-step title="登录" />
-        <n-step title="填写" />
-        <n-step title="预览" />
-        <n-step title="提交" />
+        <n-step :title="t('miui-themes.label-login')" />
+        <n-step :title="t('miui-themes.label-fill-in')" />
+        <n-step :title="t('miui-themes.label-preview')" />
+        <n-step :title="t('miui-themes.label-submit')" />
       </n-steps>
       <step-one v-if="currentStep === 1" @next="currentStep++" />
       <step-two
@@ -38,6 +38,7 @@
 // Third-party library imports
 import { ref, watch } from 'vue'
 import type { Ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 // Local imports
 import StepOne from './step1.vue'
@@ -46,6 +47,9 @@ import StepThree from './step3.vue'
 import StepFour from './step4.vue'
 import type { Result } from './index'
 import errorView from '../error-view.vue'
+
+// configure i18n
+const { t } = useI18n()
 
 let currentStep = ref(1)
 watch(currentStep, () => {

@@ -4,6 +4,20 @@ import router from '@/router/index'
 import { createI18n } from 'vue-i18n'
 import { createPinia } from 'pinia'
 import { userLang, langPacks } from '@/stores/locales'
+
+// ===== i18n =====
+const language = JSON.parse(
+  localStorage.getItem('miniDashboardSettings') || `{"language":"auto"}`,
+).language
+const locale = language === 'auto' ? userLang : language
+const i18n = createI18n({
+  legacy: false,
+  locale,
+  messages: {
+    [locale]: await langPacks[locale](),
+  },
+})
+
 ;(async () => {
   // ===== dev mode =====
   let dev = import.meta.env.DEV
@@ -29,19 +43,6 @@ import { userLang, langPacks } from '@/stores/locales'
     .querySelector('.mw-parser-output:has(> #mini-dashboard)')
     ?.classList.remove('mw-parser-output')
 
-  // ===== i18n =====
-  const language = JSON.parse(
-    localStorage.getItem('miniDashboardSettings') || `{"language":"auto"}`,
-  ).language
-  const locale = language === 'auto' ? userLang : language
-  const i18n = createI18n({
-    legacy: false,
-    locale,
-    messages: {
-      [locale]: await langPacks[locale](),
-    },
-  })
-
   // ===== init vue app =====
   // pinia
   const pinia = createPinia()
@@ -52,3 +53,5 @@ import { userLang, langPacks } from '@/stores/locales'
   app.use(pinia)
   app.mount('#mini-dashboard')
 })()
+
+export { i18n }

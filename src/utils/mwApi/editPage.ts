@@ -1,3 +1,7 @@
+import { i18n } from '@/main'
+
+let { t } = i18n.global
+
 interface EditResponse {
   edit: {
     result: string
@@ -51,12 +55,16 @@ async function editPage(editParams: {
         ...editParams,
       })
       .done((data: EditResponse) => {
-        $message.success('编辑成功')
+        $message.success(t('general.msg-page-edited', [data.edit.title]))
         console.log(data)
         resolve(true)
       })
       .fail((data: string) => {
-        $message.error(`编辑失败（${data}）`)
+        $notification.error({
+          title: t('general.error'),
+          content: t('general.msg-page-edit-failed', [data]),
+          meta: new Date().toLocaleString(),
+        })
         console.log(data)
         resolve(false)
       })

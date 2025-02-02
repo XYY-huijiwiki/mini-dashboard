@@ -1,8 +1,17 @@
 <template>
-  <n-spin :show="loading">
-    <error-view v-if="error" />
-    <n-scrollbar v-html="docHTML" v-else></n-scrollbar>
-  </n-spin>
+  <n-scrollbar>
+    <n-spin :show="loading">
+      <error-view v-if="error" />
+      <shadow-root abstract v-else>
+        <shadow-style>{{ GuthubMarkdownCss }}</shadow-style>
+        <shadow-style>
+          .markdown-body { box-sizing: border-box; min-width: 200px; max-width: 980px; margin: 0
+          auto; padding: 45px; } @media (max-width: 767px) { .markdown-body { padding: 15px; } }
+        </shadow-style>
+        <div v-html="docHTML" class="markdown-body"></div>
+      </shadow-root>
+    </n-spin>
+  </n-scrollbar>
 </template>
 
 <script setup lang="ts">
@@ -12,24 +21,56 @@ import { useRoute } from 'vue-router'
 import errorView from './error-view.vue'
 import { useLocalesStore } from '@/stores/locales'
 import { storeToRefs } from 'pinia'
+import GuthubMarkdownCss from 'github-markdown-css?raw'
+import { ShadowRoot, ShadowStyle } from 'vue-shadow-dom'
+import MarkdownItGitHubAlerts from 'markdown-it-github-alerts'
 
 const { langCode } = storeToRefs(useLocalesStore())
 const route = useRoute()
 let loading = ref(true)
 let error = ref(false)
 let docHTML = ref('')
-let docs = import.meta.glob(`@/locales/*/docs/*.md`, {
+let docs = import.meta.glob(`@/locales/docs/*/*.md`, {
   import: 'default',
   as: 'raw',
 })
+let imgs = import.meta.glob(`@/locales/docs/img/*`, {
+  import: 'default',
+  as: 'url',
+  eager: true,
+})
 if (import.meta.env.DEV) console.log(docs)
+console.log(import.meta.env.BASE_URL)
 
 onMounted(async () => {
   try {
-    let docStr = await docs[`/src/locales/${langCode.value}/docs/${route.params.title}.md`]()
+    let docStr = await docs[`/src/locales/docs/${langCode.value}/${route.params.title}.md`]()
     docHTML.value = new MarkdownIt({
       html: true,
-    }).render(docStr)
+      typographer: true,
+    })
+      .use((md) => {
+        md.core.ruler.push('replace_img_links', function (state) {
+          const tokens = state.tokens
+          tokens.forEach((token) => {
+            if (token.type === 'inline' && token.children) {
+              token.children.forEach((child) => {
+                if (child.type === 'image') {
+                  const orgSrc = child.attrGet('src')
+                  let newOrigin = new URL(import.meta.url).origin
+                  let newPath =
+                    imgs[new URL(`http://localhost/src/locales/docs/img/${orgSrc}`).pathname]
+                  if (newPath) {
+                    child.attrSet('src', newOrigin + newPath)
+                  }
+                }
+              })
+            }
+          })
+        })
+      })
+      .use(MarkdownItGitHubAlerts)
+      .render(docStr)
   } catch (e) {
     console.log(e)
     error.value = true
@@ -38,5 +79,3 @@ onMounted(async () => {
   }
 })
 </script>
-
-<style scoped></style>

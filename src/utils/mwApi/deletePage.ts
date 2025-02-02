@@ -1,3 +1,7 @@
+import { i18n } from '@/main'
+
+let { t } = i18n.global
+
 interface DeleteResponse {
   delete: {
     title: string
@@ -22,12 +26,16 @@ async function deletePage(editParams: { title: string; reason: string }): Promis
         ...editParams,
       })
       .done((data: DeleteResponse) => {
-        $message.success('删除成功')
+        $message.success(t('general.msg-page-deleted', [data.delete.title]))
         console.log(data)
         resolve(true)
       })
       .fail((data: string) => {
-        $message.error(`删除失败（${data}）`)
+        $notification.error({
+          title: t('general.error'),
+          content: t('general.msg-page-delete-failed', [data]),
+          meta: new Date().toLocaleString(),
+        })
         console.log(data)
         resolve(false)
       })

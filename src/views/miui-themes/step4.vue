@@ -6,9 +6,6 @@
       :status="submitStatus"
       class="mx-auto"
     />
-    <n-flex justify="end">
-      <n-button @click="emits('prev')" :disabled="loading">上一步</n-button>
-    </n-flex>
   </n-flex>
 </template>
 
@@ -22,7 +19,9 @@ import jsSHA from 'jssha'
 import { useSettingsStore } from '@/stores/settings'
 import type { Result } from './index'
 import { uploadFile, editPage } from '@/utils/mwApi'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 let { settings } = storeToRefs(useSettingsStore())
 let { result } = defineProps<{ result: Result }>()
 let loading = ref(true)
@@ -99,7 +98,7 @@ async function submitInfo() {
     submitStatus.value = 'success'
   } catch (error) {
     $notification.error({
-      title: 'Error',
+      title: t('general.error'),
       content: `${error}`,
     })
     console.error(error)

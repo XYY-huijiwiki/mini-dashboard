@@ -14,10 +14,12 @@ export default defineConfig({
   plugins: [
     vue(),
     vueDevTools(),
+    monacoEditorPlugin({
+      languageWorkers: ['editorWorkerService', 'json'],
+    }),
     nodePolyfills({
       include: ['process'],
     }),
-    monacoEditorPlugin(),
     Components({
       resolvers: [NaiveUiResolver()],
     }),
@@ -30,9 +32,11 @@ export default defineConfig({
   build: {
     manifest: true,
     minify: 'terser',
+    target: 'esnext',
   },
   server: {
     cors: true,
   },
-  base: 'https://xyy-huijiwiki.github.io/mini-dashboard/',
+  base: '//xyy-huijiwiki.github.io/mini-dashboard/',
+  // base: '/mini-das:hboard/',
 })

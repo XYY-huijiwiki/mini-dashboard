@@ -10,7 +10,7 @@ import { useI18n } from 'vue-i18n'
  */
 const langPacks = Object.fromEntries(
   Object.entries(
-    import.meta.glob('@/locales/*.json', {
+    import.meta.glob('@/locales/msg/*.json', {
       import: 'default',
     }),
   ).map(([path, langPack]) => {
@@ -19,7 +19,7 @@ const langPacks = Object.fromEntries(
     return [langCode, langPack]
   }),
 ) as {
-  [k: string]: () => Promise<typeof import('@/locales/en.json')>
+  [k: string]: () => Promise<typeof import('@/locales/msg/en.json')>
 }
 
 /**

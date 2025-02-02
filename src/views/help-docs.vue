@@ -5,8 +5,9 @@
       <shadow-root abstract v-else>
         <shadow-style>{{ GuthubMarkdownCss }}</shadow-style>
         <shadow-style>
-          .markdown-body { box-sizing: border-box; min-width: 200px; max-width: 980px; margin: 0
-          auto; padding: 45px; } @media (max-width: 767px) { .markdown-body { padding: 15px; } }
+          .markdown-body { border-radius: 6px; border: 1px solid var(--borderColor-default);
+          box-sizing: border-box; min-width: 200px; max-width: 980px; margin: 0 auto; padding: 45px;
+          } @media (max-width: 767px) { .markdown-body { padding: 15px; } }
         </shadow-style>
         <div v-html="docHTML" class="markdown-body"></div>
       </shadow-root>

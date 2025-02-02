@@ -1,6 +1,6 @@
 # Benutzerhandbuch für den MIUI Themes Collector
 
-Willkommen beim MIUI Themes Collector! Dieses Handbuch hilft Ihnen, dieses Tool zu verstehen und zu nutzen. Der MIUI Themes Collector wurde entwickelt, um mit nur einem Link und wenigen Klicks eine Datenseite und eine Themenseite zu erstellen, Theme-Bilder auf XYY HuijiWiki hochzuladen und die Original-Theme-Datei auf GitHub zu sichern. Also lehnen Sie sich zurück und legen wir los!
+Willkommen beim [MIUI Themes Collector](#miui-themes)! Dieses Handbuch hilft Ihnen, dieses Tool zu verstehen und zu nutzen. Der MIUI Themes Collector wurde entwickelt, um mit nur einem Link und wenigen Klicks eine Datenseite und eine Themenseite zu erstellen, Theme-Bilder auf XYY HuijiWiki hochzuladen und die Original-Theme-Datei auf GitHub zu sichern. Also lehnen Sie sich zurück und legen wir los!
 
 > [!NOTE] HINWEIS
 > Dieses Tool ist ausschließlich für MIUI-Themes gedacht, nicht für HyperOS-Themes, auch wenn beide zu Xiaomi gehören.

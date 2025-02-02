@@ -1,6 +1,6 @@
 # MIUI Themes Collector User Guide
 
-Welcome to the MIUI Themes Collector! This guide will help you understand how to use this tool, designed to create a data page, a theme page, upload theme images to XYY huijiwiki, and back up the original theme file to GitHub with only a link and a few clicks. Just pop the kettle on, and let’s begin!
+Welcome to the [MIUI Themes Collector](#miui-themes)! This guide will help you understand how to use this tool, designed to create a data page, a theme page, upload theme images to XYY huijiwiki, and back up the original theme file to GitHub with only a link and a few clicks. Just pop the kettle on, and let’s begin!
 
 > [!NOTE] NOTE
 > This tool is for MIUI themes only, not for HyperOS themes, though they both belong to Xiaomi.

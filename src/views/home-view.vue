@@ -117,9 +117,6 @@
     <router-link to="/check-revisions">
       <n-button>check-revisions</n-button>
     </router-link>
-    <!-- test -->
-    <img :src="testImgUrl" class="hidden" />
-    <img :src="absolutTestImgUrl" class="hidden" />
   </n-space>
 </template>
 
@@ -127,9 +124,6 @@
 import { useI18n } from 'vue-i18n'
 import { Github } from '@vicons/fa'
 import MiLogoSvg from '@/assets/mi-logo.svg'
-import testImgUrl from '../locales/docs/img/IMG_20250202_125125.png?url'
-
-let absolutTestImgUrl = new URL(testImgUrl, import.meta.url).href
 
 const { t } = useI18n()
 </script>

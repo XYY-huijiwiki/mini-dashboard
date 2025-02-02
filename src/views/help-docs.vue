@@ -58,14 +58,10 @@ onMounted(async () => {
               token.children.forEach((child) => {
                 if (child.type === 'image') {
                   const orgSrc = child.attrGet('src')
-                  let newOrigin = import.meta.env.DEV
-                    ? new URL(import.meta.url).origin
-                    : import.meta.env.BASE_URL
+                  let newOrigin = import.meta.env.DEV ? new URL(import.meta.url).origin : ''
                   let newPath =
                     imgs[new URL(`http://localhost/src/locales/docs/img/${orgSrc}`).pathname]
-                  if (newPath) {
-                    child.attrSet('src', newOrigin + newPath)
-                  }
+                  child.attrSet('src', newOrigin + newPath)
                 }
               })
             }

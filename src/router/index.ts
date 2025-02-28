@@ -54,14 +54,14 @@ const routes: Array<RouteRecordRaw> = [
     component: views['/src/views/check-revisions.vue'],
   },
   {
-    path: '/github-files',
-    name: 'github-files',
-    component: views['/src/views/github-files.vue'],
-  },
-  {
     path: '/miui-themes',
     name: 'miui-themes',
     component: views['/src/views/miui-themes/index.vue'],
+  },
+  {
+    path: '/github-file/:fileName',
+    name: 'github-file',
+    component: views['/src/views/github-file.vue'],
   },
 ]
 

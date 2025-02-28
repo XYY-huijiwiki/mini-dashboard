@@ -25,30 +25,6 @@
   <n-divider></n-divider>
   <n-thing content-indented>
     <template #header-extra>
-      <help-btn link="github-files" />
-    </template>
-    <template #avatar>
-      <n-avatar>
-        <n-icon><Github /></n-icon>
-      </n-avatar>
-    </template>
-    <template #header> {{ t('home.text-github-files-title') }} </template>
-    <template #description>
-      {{ t('home.text-github-files-description') }}
-    </template>
-    <template #action>
-      <n-space>
-        <router-link :to="{ name: 'github-files' }">
-          <n-button size="small">
-            {{ t('github-files.title') }}
-          </n-button>
-        </router-link>
-      </n-space>
-    </template>
-  </n-thing>
-  <n-divider></n-divider>
-  <n-thing content-indented>
-    <template #header-extra>
       <help-btn link="cartoon-data" />
     </template>
     <template #avatar>

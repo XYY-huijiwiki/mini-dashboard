@@ -62,48 +62,6 @@ declare global {
   declare const $loadingBar: LoadingBarApi
   declare const $notification: NotificationApi
 
-  // FileMetadata
-  interface FileMetadata {
-    file: {
-      name: string
-      type: string
-      size: number
-    }
-    // legacy
-    video?: {
-      length: number
-      frameWidth: number
-      frameHeight: number
-    }
-    // legacy
-    audio?: IAudioMetadata
-    // legacy
-    origin?: {
-      publisher: string
-      encodedBy: string
-      authorURL: string
-      copyright: string
-    }
-    mediaInfo?: MediaType
-    wiki: {
-      fileSource: string
-      fileLicense: string
-      uploader: string
-      uploadTime: Date
-    }
-    model?: {
-      animations: string[]
-      asset: {
-        generator: string
-        version: string
-      }
-    }
-  }
-
-  interface RetrievedDataItem extends FileMetadata {
-    _id: string
-  }
-
   // MIDIjs api
   declare const MIDIjs: {
     play: (url: string) => void
@@ -114,39 +72,21 @@ declare global {
 
   interface Window {
     RufflePlayer: any
-    dev: string | false
   }
 
-  type WarningType = 'unused' | 'wanted' | 'no source' | 'no license' | 'asset broken'
-  interface FileDetail {
-    name: string
-    type: string | null
-    size: number
-    html_url: string
-    thumb_url: string
-    download_url: string
-    desc: string
-    updated_at: string
-    uploader: string
-    uploader_html_url: string
-    warnings: WarningType[]
-  }
-  interface FileDetailFromGithub {
+  type FileInfo = {
     id: number
-    tag_name: string
-    html_url: string
-    body: string
-    assets_broken: boolean
-    assets: {
-      id: number
-      name: string
-      size: number
-      browser_download_url: string
-      updated_at: string
-      uploader: {
-        login: string
-        html_url: string
-      }
-    }[]
+    file_name: string
+    file_name_base62: string
+    file_size: number
+    content_type: string
+    updated_at: string
+    wikitext: string
+    licence: string
+    source: string
+    uploader: string
+    is_deleted: null | 1
+    file_name_before_deleted: null | string
+    deleted_at: null | string
   }
 }

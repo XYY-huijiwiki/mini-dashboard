@@ -123,7 +123,7 @@ async function clickNext() {
         squareImgLink: res.downloadUrl,
       }
     }
-    let corsProxy = 'https://jolly-shape-d597.karsten-zhou.workers.dev/'
+    let corsProxy = 'https://cors-proxy.24218079.xyz/'
     let link = cleanURL(themeInput.value.link || '')
     let url = new URL(link)
     url.searchParams.delete('miref')

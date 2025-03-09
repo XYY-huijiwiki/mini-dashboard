@@ -1,5 +1,5 @@
 async function getMTZFile(link: string, name: string): Promise<File> {
-  let corsProxy = 'https://jolly-shape-d597.karsten-zhou.workers.dev/'
+  let corsProxy = 'https://cors-proxy.24218079.xyz/'
   let res = await fetch(`${corsProxy}${link}`)
   let mtzBlob = await res.blob()
   let mtzFile = new File([mtzBlob], `${name}.mtz`)

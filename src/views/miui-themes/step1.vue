@@ -23,7 +23,7 @@ import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
 
 let emits = defineEmits(['next'])
-let serverlessURL = 'https://github-auth-pine-1dfd.karsten-zhou.workers.dev/'
+let serverlessURL = 'https://r-drive.24218079.xyz/'
 let { settings } = storeToRefs(useSettingsStore())
 let loading = ref(true)
 
@@ -36,19 +36,13 @@ async function login() {
 
 onMounted(async () => {
   try {
-    // check if a code is returned from GitHub
-    let code = new URLSearchParams(location.search).get('code')
-    if (code) {
-      let url = new URL(serverlessURL + 'callback')
-      url.searchParams.set('code', code)
-      url.searchParams.set('redirect_uri', location.href)
-      console.log(url.href)
-      let res = await fetch(url.href)
-      let data = await res.json()
-      settings.value.ghToken = data.access_token
+    // check if `access_token` is returned from GitHub
+    let accessToken = new URLSearchParams(location.search).get('access_token')
+    if (accessToken) {
+      settings.value.ghToken = accessToken
       location.href = (() => {
         const url = new URL(location.href)
-        url.searchParams.delete('code')
+        url.searchParams.delete('access_token')
         return url.href
       })()
     }

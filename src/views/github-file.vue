@@ -37,7 +37,6 @@
       <div v-else-if="fileInfo?.content_type?.startsWith('model')" class="w-full aspect-video">
         <model-viewer
           autoplay
-          auto-rotate
           :src="genRawFileUrl(fileInfo)"
           camera-controls
           touch-action="pan-y"

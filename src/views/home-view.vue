@@ -98,7 +98,6 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import { Github } from '@vicons/fa'
 import MiLogoSvg from '@/assets/mi-logo.svg'
 
 const { t } = useI18n()

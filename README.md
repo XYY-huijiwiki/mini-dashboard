@@ -1,5 +1,9 @@
 # mini-dashboard
 
+> [!Important]
+>
+> [Project:迷你控制中心](https://xyy.huijiwiki.com/wiki/Project:迷你控制中心)现已升级为[Project:控制中心](https://xyy.huijiwiki.com/wiki/Project:控制中心)。新代码位于[XYY-huijiwiki/dashboard](https://github.com/XYY-huijiwiki/dashboard)中。请前往新项目查看最新信息。
+
 羊羊百科的迷你控制中心。目前的主要功能有：
 
 - 导入和导出动画剧集数据。
